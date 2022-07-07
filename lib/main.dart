@@ -29,7 +29,7 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' 0705 LAMEMOPOLE ' + myPerso.myPseudo,
+          ' 0707  TEST VERSION  ' + myPerso.myPseudo,
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),

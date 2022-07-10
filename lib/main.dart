@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:gameover/admin/admingame.dart';
 import 'package:gameover/connectgame.dart';
+import 'package:gameover/gamemanager.dart';
+import 'package:gameover/gameuser.dart';
 import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/mementoes.dart';
 import 'package:gameover/memolike.dart';
@@ -9,6 +12,8 @@ import 'package:gameover/userconnect.dart';
 import 'package:gameover/usercreate.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MaterialApp(title: 'Navigation Basics', home: MenoPaul()));
@@ -19,17 +24,21 @@ class MenoPaul extends StatefulWidget {
   State<MenoPaul> createState() => _MenoPaulState();
 }
 class _MenoPaulState extends State<MenoPaul> {
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  //
   bool isAdmin = false;
   bool isGamer = false;
   String connectedGuy = "";
   List<MemopolUsers> listMemopolUsers = [];
-GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
+GameCommons myPerso = GameCommons("xxxx", 0,0) ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' 0707  TEST VERSION  ' + myPerso.myPseudo,
+          ' 0707-1800  Version Test ' + myPerso.myPseudo+' '+ _connectionStatus.toString(),
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -61,6 +70,7 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Visibility(
                   visible: !isGamer,
                   child: Padding(
@@ -108,7 +118,8 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ConnectGame()),
+                            //      builder: (context) => const ConnectGame()),
+                                  builder: (context) => const GameUser()),
                             );
                           },
                         ),
@@ -208,23 +219,51 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: !isGamer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ElevatedButton(
-                      child: Text(
-                        'NEW GAMER',
-                        style: GoogleFonts.averageSans(fontSize: 25.0),
+                Row(
+                  children: [
+                    Visibility(
+                      visible: !isGamer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            'NEW GAMER',
+                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CreatePage()),
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CreatePage()),
-                        );
-                      },
                     ),
-                  ),
+
+                    Visibility(
+                      visible: isGamer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            'NEW GAME',
+                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>  GameManager(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -232,13 +271,17 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
         ),
       ),
       bottomNavigationBar: Visibility(
-        visible: false,
+        visible: true,
         child: IconButton(
             icon: const Icon(Icons.refresh),
-            iconSize: 35,
+            /*     showSimpleNotification(
+                  Text("this is a message from simple notification"),
+                  background: Colors.green);*/ iconSize: 35,
             color: Colors.green,
             tooltip: 'Unused',
             onPressed: () {
+
+
               setState(() {});
             }),
       ),
@@ -248,11 +291,48 @@ GameCommons myPerso = new GameCommons("xxxx", 0,0) ;
   @override
   void initState() {
     super.initState();
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+
     setState(() {
       isAdmin = false;
       isGamer = false;
-     // myPerso=GameCommons(" ", 0);
 
     });
   }
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print ('Couldn\'t check connectivity status');
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
 }

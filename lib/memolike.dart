@@ -1,10 +1,9 @@
 // FAVORI
 // 5 Juillet
 //  Lire  les Favoris et in les Note
+import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
-
-import 'dart:async';
 
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +28,12 @@ class _MemolikeState extends State<Memolike> {
   String memeLegende = "";
   bool readMemolikeState = false;
   bool readMemolikeVoteState = false;
-  bool listCheckMlvuState=false;
+  bool listCheckMlvuState = false;
   int getMemolikeError = 0;
   List<MemoLike> listMemoLike = [];
   List<int> listCountEmo = [];
   List<CheckVotePlus> listCheckVote = [];
-  List<CheckMLVU>listCheckMlvu = [];
+  List<CheckMLVU> listCheckMlvu = [];
   int thatFavori = 1;
   int cestCeluiLa = 0;
   bool repaintPRL = true;
@@ -257,6 +256,23 @@ class _MemolikeState extends State<Memolike> {
     });
   }
 
+  //CheckMLVU
+  Future getMLVU() async {
+    Uri url = Uri.parse(pathPHP + "getMLVU.php");
+    listCheckMlvuState = false;
+
+    http.Response response = await http.post(url);
+    if (response.body.toString() == 'ERR_1001') {}
+    if (response.statusCode == 200 && (getMemolikeError != 1001)) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        listCheckMlvu =
+            datamysql.map((xJson) => CheckMLVU.fromJson(xJson)).toList();
+        listCheckMlvuState = true;
+      });
+    } else {}
+  }
+
   @override
   void initState() {
     super.initState();
@@ -275,14 +291,12 @@ class _MemolikeState extends State<Memolike> {
           updateThisMli(listMemoLike[cestCeluiLa].memolikeid);
           repaintPRL = true;
         }
-        ;
       }
     });
 
     Timer.periodic(Duration(seconds: 100), (timer) {
       print(DateTime.now());
     });
-
   }
 
   nextPRL() {
@@ -335,7 +349,6 @@ class _MemolikeState extends State<Memolike> {
             datamysql.map((xJson) => MemoLike.fromJson(xJson)).toList();
         readMemolikeState = true;
         readMemolikeVote();
-        print("  readMemolikeState" + readMemolikeState.toString());
       });
     } else {}
   }
@@ -346,20 +359,20 @@ class _MemolikeState extends State<Memolike> {
     var data = {
       "MEMOLIKEID": listMemoLike[cestCeluiLa].memolikeid.toString(),
     };
-    print("MEMOLIKEID = " + listMemoLike[cestCeluiLa].memolikeid.toString());
+
     var res = await http.post(url, body: data);
     var datamysql = jsonDecode(res.body) as List;
     setState(() {
       listCheckVote =
           datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
       readMemolikeVoteState = true;
-      print("  readMemolikeVoteState" + readMemolikeVoteState.toString());
+
       thatAverage =
           (updateThisMli(listMemoLike[cestCeluiLa].memolikeid)).toDouble();
     });
   }
 
-  int updateThisMli(int _memolikeid) {
+int updateThisMli(int _memolikeid) {
     // Repartion  des Like
     int _thatNote = 0;
     int inote = 0;
@@ -379,24 +392,4 @@ class _MemolikeState extends State<Memolike> {
     int calcul = _thatNote * 10 ~/ inote;
     return (calcul);
   }
-//CheckMLVU
-  Future getMLVU() async {
-    Uri url = Uri.parse(pathPHP + "getMLVU.php");
-    listCheckMlvuState=false;
-
-    http.Response response = await http.post(url);
-    if (response.body.toString() == 'ERR_1001') {
-
-    }
-    if (response.statusCode == 200 && (getMemolikeError != 1001)) {
-      var datamysql = jsonDecode(response.body) as List;
-      setState(() {
-
-        listCheckMlvu =
-            datamysql.map((xJson) => CheckMLVU.fromJson(xJson)).toList();
-        listCheckMlvuState=true;
-      });
-    } else {}
-  }
-
 }

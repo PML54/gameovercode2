@@ -218,7 +218,7 @@ class _RandoMemeState extends State<RandoMeme> {
       "MEMOSTOCK": memeLegendeUser,
     };
     if (memeLegendeUser.length > 2 && memeLegendeUser.length < 250) {
-      var res = await http.post(url, body: data);
+  await http.post(url, body: data);
     }
 
     setState(() {
@@ -238,7 +238,7 @@ class _RandoMemeState extends State<RandoMeme> {
       "MEMOLIKEUSER": myPseudo,
     };
 
-    var res = await http.post(url, body: data);
+  await http.post(url, body: data);
 
     //
     setState(() {

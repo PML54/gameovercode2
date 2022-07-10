@@ -28,7 +28,7 @@ class _ConnectGameState extends State<ConnectGame> {
   bool gmConnected = false;
   bool guConnected = false;
   TextEditingController gameNameController = TextEditingController();
-  String msgButton1 = "";
+  String msgButton1 = "Bizarre";
   String msgButton10 = "Valider";
   String msgButton11 = "Press ";
 
@@ -159,27 +159,7 @@ class _ConnectGameState extends State<ConnectGame> {
                           )),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => {
-                      // Valide
-                      whatChecker()
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 10),
-                        textStyle: const TextStyle(
-                            fontSize: 10,
-                            backgroundColor: Colors.green,
-                            fontWeight: FontWeight.bold)),
-                    child: Text(msgButton1,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.normal,
-                        )),
-                  ),
+
                 ],
               ),
               dispRow(1, 2, 3),
@@ -242,6 +222,7 @@ class _ConnectGameState extends State<ConnectGame> {
           ),
         ));
   }
+/*
 
   Future checkCodeMaster(String _thatcode) async {
     playSound(2);
@@ -274,6 +255,7 @@ class _ConnectGameState extends State<ConnectGame> {
       });
     }
   }
+*/
 
   Future checkCodePlayer(String _thatcode) async {
     // playSound(2);
@@ -456,10 +438,11 @@ class _ConnectGameState extends State<ConnectGame> {
   }
 
   //
-  void whatChecker() {
+ /* void whatChecker() {
+    print ("--> Inside x-whatChecker");
     if (isGm) checkCodeMaster(numTape);
     if (isGu) checkCodePlayer(numTape);
-  }
+  }*/
 
   pressContinue() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {

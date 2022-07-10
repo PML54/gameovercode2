@@ -7,7 +7,7 @@ import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:http/http.dart' as http;
 class GameUser extends StatefulWidget {
-  GameUser({Key? key}) : super(key: key);
+  const GameUser({Key? key}) : super(key: key);
 
   @override
   State<GameUser> createState() => _GameUserState();
@@ -340,7 +340,7 @@ class _GameUserState extends State<GameUser> {
       };
 
       if (_brocky.memetempo.length > 1) {
-        var res = await http.post(url, body: data);
+   await http.post(url, body: data);
       }
       //<TODO>  relecture
     }

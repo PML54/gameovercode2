@@ -23,11 +23,17 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   List<PhotoBase> listPhotoBase = [];
   List<PhotoBase> listPhotoBaseReduce = [];
   List<GamePhotoSelect> listGamePhotoSelect = [];
-  String thatGM = PhlCommons.listThatGM[0].gmpseudo;
-
+  String thatGM = "xx";
+  int thatGmid = 0;
+  int getGamePhotoSelectError  =0;
+  bool getGamePhotoSelectState =false;
+  GameCommons myPerso = GameCommons("xxxx", 0,0) ;
   @override
   Widget build(BuildContext context) {
     mafoto = 'assets/oursmacron.png';
+   myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
+    thatGmid = myPerso.myUid;
+    thatGM = myPerso.myPseudo;
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(actions: <Widget>[
@@ -59,15 +65,14 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
           ),
         ),
       ]),
-
       body: SafeArea(
         child: Row(children: <Widget>[
-          getListViewSelected(),
           getListView(),
+          getListViewSelected(),
+
           //   getListView(),
         ]),
       ),
-      //Container(child: getListViewReduce()),
       bottomNavigationBar: IconButton(
           icon: const Icon(Icons.save),
           iconSize: 35,
@@ -75,7 +80,6 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
           tooltip: 'Save Selection',
           onPressed: () {
             PhlCommons.nbFotosGame = listPhotoBaseReduce.length;
-
             updateSelection();
           }),
     ));
@@ -84,12 +88,26 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   Future getGamePhotoSelect() async {
     // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
     Uri url = Uri.parse(pathPHP + "readGAMEPHOTOSELECT.php");
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
+
+    var data = {
+      //<TODO>
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+    };
+    getGamePhotoSelectState =false;
+    http.Response response = await http.post(url, body: data);
+    getGamePhotoSelectError  =0;
+    if (response.body.toString() == 'ERR_1001') {
+
+      getGamePhotoSelectError = 1001;
+    }
+
+    if (response.statusCode == 200  && getGamePhotoSelectError ==0 )  {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
+        getGamePhotoSelectState =true;
         listGamePhotoSelect =
             datamysql.map((xJson) => GamePhotoSelect.fromJson(xJson)).toList();
+
       });
     } else {}
   }
@@ -169,8 +187,6 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
                     decoration: BoxDecoration(
                         color: listPhotoBaseReduce[index].extraColor,
                         border: Border.all()),
-
-                    // child: Image.network(mafoto,
                     child: Image.network(
                         "upload/" +
                             listPhotoBaseReduce[index].photofilename +
@@ -193,7 +209,6 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
                 });
               });
         });
-
     return (Expanded(child: listView));
   }
 
@@ -216,14 +231,14 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   void initState() {
     super.initState();
     getGamePhotoSelect();
+
     getPhotoBase();
-    thatGM = PhlCommons.listThatGM[0].gmpseudo;
   }
 
   void updateSelection() async {
     String thisParam = "";
 
-    int _gameid = PhlCommons.thisGameCode;
+    int _gamecode = PhlCommons.thisGameCode;
     for (PhotoBase _brocky in listPhotoBase) {
       if (_brocky.isSelected) {
         thisParam = thisParam + "|" + _brocky.photoid.toString();
@@ -232,10 +247,10 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     Uri url = Uri.parse(pathPHP + "updateGAMEPHOTOSELECT.php");
     var data = {
       //<TODO>
-      "GAMEID": _gameid.toString(),
+      "GAMECODE": _gamecode.toString(),
       "GROUPSEL": thisParam,
     };
-    var res = await http.post(url, body: data);
+    await http.post(url, body: data);
     Navigator.pop(context);
   }
 }

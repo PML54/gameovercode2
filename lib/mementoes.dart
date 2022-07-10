@@ -25,7 +25,7 @@ class _MementoState extends State<Memento> {
   Widget build(BuildContext context) {
     final myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
     myUid = myPerso.myUid;
-print ("--->>"+myUid.toString());
+
     mafoto = 'assets/oursmacron.png';
     return MaterialApp(
         home: Scaffold(
@@ -83,7 +83,7 @@ print ("--->>"+myUid.toString());
       "MEMOSTOCK": memeLegende,
     };
     if (memeLegende.length > 2 && memeLegende.length < 250) {
-      var res = await http.post(url, body: data);
+   await http.post(url, body: data);
     }
   }
 

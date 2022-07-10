@@ -1,5 +1,154 @@
 import 'dart:core';
+
 import 'package:flutter/material.dart';
+
+class CheckMLVU {
+  //"SELECT MEMOLIKEID,UID, MLVPOINTS  from MEMOLIKEVOTE  order by MEMOLIKEID";
+  int memolikeid = 0;
+  int mlvpoints = 0;
+  int uid = 0; //nb Votes avec cette nore
+
+  CheckMLVU({
+    required this.memolikeid,
+    required this.mlvpoints,
+    required this.uid,
+  });
+
+  factory CheckMLVU.fromJson(Map<String, dynamic> json) {
+    return CheckMLVU(
+      memolikeid: int.parse(json['MEMOLIKEID']),
+      mlvpoints: int.parse(json['MLVPOINTS']),
+      uid: int.parse(json['UID']),
+    );
+  }
+}
+
+class CheckVote {
+  int cosum = 0;
+
+  CheckVote({
+    required this.cosum,
+  });
+
+  factory CheckVote.fromJson(Map<String, dynamic> json) {
+    return CheckVote(
+      cosum: int.parse(json['COSUM']),
+    );
+  }
+}
+
+class CheckVotePlus {
+  //
+  // SELECT MEMOLIKEID ,MLVPOINTS, COUNT(MLVPOINTS) AS 'CUMU'
+  // from MEMOLIKEVOTE GROUP BY MEMOLIKEID,MLVPOINTS
+  // order by MEMOLIKEID,MLVPOINTS;
+  int memolikeid = 0;
+  int mlvpoints = 0;
+  int cumu = 0; //nb Votes avec cette nore
+
+  CheckVotePlus(
+      {required this.memolikeid, required this.mlvpoints, required this.cumu});
+
+  factory CheckVotePlus.fromJson(Map<String, dynamic> json) {
+    return CheckVotePlus(
+      memolikeid: int.parse(json['MEMOLIKEID']),
+      mlvpoints: int.parse(json['MLVPOINTS']),
+      cumu: int.parse(json['CUMU']),
+    );
+  }
+}
+
+//------------>   ClefCodes N°7
+class ClefCodes {
+  String clefcode = "XXX";
+  int clefcodeid = 0;
+
+  ClefCodes({
+    required this.clefcode,
+    required this.clefcodeid,
+  });
+
+  factory ClefCodes.fromJson(Map<String, dynamic> json) {
+    return ClefCodes(
+      clefcode: json['CLEFCODE'] as String,
+      clefcodeid: int.parse(json['CLEFCODEID']),
+    );
+  }
+}
+
+//------------>  Evaluations N°6
+class Evaluations {
+  int evalpoints = 0;
+  int gameid = 0;
+  int memeid = 0;
+  String guimarker = "XXX";
+  String guiwriter = "XXX";
+
+  Evaluations({
+    required this.evalpoints,
+    required this.gameid,
+    required this.memeid,
+    required this.guimarker,
+    required this.guiwriter,
+  });
+
+  factory Evaluations.fromJson(Map<String, dynamic> json) {
+    return Evaluations(
+      evalpoints: int.parse(json['EVALPOINTS']),
+      gameid: int.parse(json['GAMEID']),
+      memeid: int.parse(json['MEMEID']),
+      guimarker: json['GUIMARKER'] as String,
+      guiwriter: json['GUIWRITER'] as String,
+    );
+  }
+}
+
+//------------>  GameMasters N°2
+class GameMasters {
+  int gmid = 0; // Auto
+  String gmpseudo = "XXXX";
+  String gmname = "zzzzz";
+  String gmpwd = "YYYYY";
+  String gmlast = "2022-05-05";
+  String gmipv4 = "**.**.**.**";
+
+  GameMasters(
+      {required this.gmid,
+      required this.gmpseudo,
+      required this.gmname,
+      required this.gmpwd,
+      required this.gmlast,
+      required this.gmipv4});
+
+  factory GameMasters.fromJson(Map<String, dynamic> json) {
+    return GameMasters(
+        gmid: int.parse(json['GMID']),
+        gmpseudo: json['GMPSEUDO'] as String,
+        gmname: json['GMNAME'] as String,
+        gmpwd: json['GMPWD'] as String,
+        gmlast: json['GMLAST'] as String,
+        gmipv4: json['GMIPV4'] as String);
+  }
+}
+
+//------------>  GamePhotoSelect N°8
+class GamePhotoSelect {
+  int gamecode = 0;
+  int photoid = 0;
+
+  GamePhotoSelect({
+    required this.gamecode,
+    required this.photoid,
+  });
+
+  factory GamePhotoSelect.fromJson(Map<String, dynamic> json) {
+    return GamePhotoSelect(
+      gamecode: int.parse(json['GAMECODE']),
+      photoid: int.parse(json['PHOTOID']),
+    );
+  }
+}
+
 class Games {
   int gameid = 0; // Auto
   int gamecode = 0;
@@ -57,34 +206,6 @@ class Games {
   }
 } // Games
 
-//------------>  GameMasters N°2
-class GameMasters {
-  int gmid = 0; // Auto
-  String gmpseudo = "XXXX";
-  String gmname = "zzzzz";
-  String gmpwd = "YYYYY";
-  String gmlast = "2022-05-05";
-  String gmipv4 = "**.**.**.**";
-
-  GameMasters(
-      {required this.gmid,
-      required this.gmpseudo,
-      required this.gmname,
-      required this.gmpwd,
-      required this.gmlast,
-      required this.gmipv4});
-
-  factory GameMasters.fromJson(Map<String, dynamic> json) {
-    return GameMasters(
-        gmid: int.parse(json['GMID']),
-        gmpseudo: json['GMPSEUDO'] as String,
-        gmname: json['GMNAME'] as String,
-        gmpwd: json['GMPWD'] as String,
-        gmlast: json['GMLAST'] as String,
-        gmipv4: json['GMIPV4'] as String);
-  }
-}
-
 //------------>  GameUsers N°3
 class GameUsers {
   int guid = 0;
@@ -111,54 +232,6 @@ class GameUsers {
       guipv4: json['GUIPV4'] as String,
       gudate: json['GULAST'] as String,
       gupseudo: json['GUPSEUDO'] as String,
-    );
-  }
-}
-
-//------------>  PhotoBase  N°4
-class PhotoBase {
-  int photofilesize = 0;
-  int photoheight = 0;
-  int photoid = 0;
-  int photoinode = 0;
-  int photowidth = 0;
-  String photocat = "NOT";
-  String photouploader = "YYY";
-  String photodate = "05-05-2022";
-  String photofilename = "FFFF";
-  String photofiletype = "TTT";
-  String memetempo = ""; // <TODO> Le ptit plu
-  // Add
-  bool isSelected = false;
-  double extraWidth = 100;
-  double extraHeight = 100;
-  Color extraColor = Colors.grey;
-
-  PhotoBase({
-    required this.photofilesize,
-    required this.photoheight,
-    required this.photoid,
-    required this.photoinode,
-    required this.photowidth,
-    required this.photocat,
-    required this.photouploader,
-    required this.photodate,
-    required this.photofilename,
-    required this.photofiletype,
-  });
-
-  factory PhotoBase.fromJson(Map<String, dynamic> json) {
-    return PhotoBase(
-      photofilesize: int.parse(json['PHOTOFILESIZE']),
-      photoheight: int.parse(json['PHOTOHEIGHT']),
-      photoid: int.parse(json['PHOTOID']),
-      photoinode: int.parse(json['PHOTOINODE']),
-      photowidth: int.parse(json['PHOTOWIDTH']),
-      photocat: json['PHOTOCAT'] as String,
-      photouploader: json['PHOTOUPLOADER'] as String,
-      photodate: json['PHOTODATE'] as String,
-      photofilename: json['PHOTOFILENAME'] as String,
-      photofiletype: json['PHOTOFILETYPE'] as String,
     );
   }
 }
@@ -190,157 +263,10 @@ class Memes {
   }
 }
 
-//------------>  Evaluations N°6
-class Evaluations {
-  int evalpoints = 0;
-  int gameid = 0;
-  int memeid = 0;
-  String guimarker = "XXX";
-  String guiwriter = "XXX";
-
-  Evaluations({
-    required this.evalpoints,
-    required this.gameid,
-    required this.memeid,
-    required this.guimarker,
-    required this.guiwriter,
-  });
-
-  factory Evaluations.fromJson(Map<String, dynamic> json) {
-    return Evaluations(
-      evalpoints: int.parse(json['EVALPOINTS']),
-      gameid: int.parse(json['GAMEID']),
-      memeid: int.parse(json['MEMEID']),
-      guimarker: json['GUIMARKER'] as String,
-      guiwriter: json['GUIWRITER'] as String,
-    );
-  }
-}
-
-//------------>   ClefCodes N°7
-class ClefCodes {
-  String clefcode = "XXX";
-  int clefcodeid = 0;
-
-  ClefCodes({
-    required this.clefcode,
-    required this.clefcodeid,
-  });
-
-  factory ClefCodes.fromJson(Map<String, dynamic> json) {
-    return ClefCodes(
-      clefcode: json['CLEFCODE'] as String,
-      clefcodeid: int.parse(json['CLEFCODEID']),
-    );
-  }
-}
-
-//------------>  GamePhotoSelect N°8
-class GamePhotoSelect {
-  int gameid = 0;
-  int photoid = 0;
-
-  GamePhotoSelect({
-    required this.gameid,
-    required this.photoid,
-  });
-
-  factory GamePhotoSelect.fromJson(Map<String, dynamic> json) {
-    return GamePhotoSelect(
-      gameid: int.parse(json['GAMEID']),
-      photoid: int.parse(json['PHOTOID']),
-    );
-  }
-}
-
-//------------>    PhotoClefs  N°9
-class PhotoClefs {
-  int photoid = 0;
-  int clefcodeid = 0;
-
-  PhotoClefs({
-    required this.photoid,
-    required this.clefcodeid,
-  });
-
-  factory PhotoClefs.fromJson(Map<String, dynamic> json) {
-    return PhotoClefs(
-      photoid: int.parse(json['PHOTOID']),
-      clefcodeid: int.parse(json['CLEFCODEID']),
-    );
-  }
-}
-
-//------------>  GameMasters N°2
-class PhotoCat {
-  String photocat = "XXXX";
-  String photocast = "XXXX";
-  int nbphotos = 0;
-  int selected = 0;
-  int firstphotoid = 0;
-
-  PhotoCat({
-    required this.photocat,
-  });
-
-  factory PhotoCat.fromJson(Map<String, dynamic> json) {
-    return PhotoCat(
-      photocat: json['PHOTOCAT'] as String,
-    );
-  }
-
-  supMM() {
-    photocast = photocat.substring(3);
-  }
-
-  setphotoid(_thatphotoid) {
-    firstphotoid = _thatphotoid;
-  }
-
-  setSelected(int _selected) {
-    selected = _selected;
-  }
-
-  setNumber(int _number) {
-    nbphotos = _number;
-  }
-}
-
-class PhotoRandomLive {
-  int photoid = 0;
-  String photomemelive = "XXXX";
-
-  PhotoRandomLive({
-    required this.photoid,
-    required this.photomemelive,
-  });
-}
-
-class Memoto {
-  // En cours
-  int memostockid = 0;
-  String memostock = "..";
-  String memocat = "..";
-
-  Memoto({
-    required this.memostockid,
-    required this.memostock,
-    required this.memocat,
-  });
-
-  factory Memoto.fromJson(Map<String, dynamic> json) {
-    return Memoto(
-      memostockid: int.parse(json['MEMOSTOCKID']),
-      memostock: json['MEMOSTOCK'] as String,
-      memocat: json['MEMOCAT'] as String,
-    );
-  }
-}
-
 ///PHOTOID | MEMOSTOCKID | PHOTOFILENAME                  | PHOTOFILETYPE | MEMOSTOCK
 class MemoLike {
   // En cours
-  int memolikeid=0;
+  int memolikeid = 0;
   int memostockid = 0;
   int photoid = 0;
   String memostock = "..";
@@ -350,7 +276,7 @@ class MemoLike {
 
   MemoLike(
       {required this.memolikeid,
-        required this.memostockid,
+      required this.memostockid,
       required this.photoid,
       required this.memostock,
       required this.photofilename,
@@ -417,74 +343,158 @@ class MemopolUsers {
   }
 }
 
-class CheckVote {
-  int cosum = 0;
-
-
-  CheckVote({
-    required this.cosum,
-
-  });
-
-  factory CheckVote.fromJson(Map<String, dynamic> json) {
-    return CheckVote(
-      cosum: int.parse(json['COSUM']),
-
-    );
-  }
-
-
-}
-
-class CheckVotePlus {
-  //
-  // SELECT MEMOLIKEID ,MLVPOINTS, COUNT(MLVPOINTS) AS 'CUMU'
-  // from MEMOLIKEVOTE GROUP BY MEMOLIKEID,MLVPOINTS
-  // order by MEMOLIKEID,MLVPOINTS;
-  int memolikeid = 0;
-  int mlvpoints =0;
-  int cumu=0; //nb Votes avec cette nore
-
-CheckVotePlus({
-required this.memolikeid,
-required this.mlvpoints,
-required this.cumu
-  });
-
-  factory CheckVotePlus.fromJson(Map<String, dynamic> json) {
-    return CheckVotePlus(
-      memolikeid: int.parse(json['MEMOLIKEID']),
-      mlvpoints: int.parse(json['MLVPOINTS']),
-      cumu: int.parse(json['CUMU']),
-
-    );
-  }
-
-
-}
-
-
-
-class CheckMLVU {
- //"SELECT MEMOLIKEID,UID, MLVPOINTS  from MEMOLIKEVOTE  order by MEMOLIKEID";
-  int memolikeid = 0;
-  int mlvpoints =0;
-  int uid=0; //nb Votes avec cette nore
-
-  CheckMLVU({
-    required this.memolikeid,
-    required this.mlvpoints,
+class MemopolUsersReduce {
+  int uid = 0;
+  int ustatus = 0;
+  int uprofile = 0;
+  String uname = "UNAMEX";
+  Color extraColor = Colors.grey;
+  bool isSelected = false;
+  MemopolUsersReduce({
     required this.uid,
+    required this.ustatus,
+    required this.uprofile,
+    required this.uname,
   });
 
-  factory CheckMLVU.fromJson(Map<String, dynamic> json) {
-    return CheckMLVU(
-      memolikeid: int.parse(json['MEMOLIKEID']),
-      mlvpoints: int.parse(json['MLVPOINTS']),
+  factory MemopolUsersReduce.fromJson(Map<String, dynamic> json) {
+    return MemopolUsersReduce(
       uid: int.parse(json['UID']),
+      ustatus: int.parse(json['USTATUS']),
+      uprofile: int.parse(json['UPROFILE']),
+      uname: json['UNAME'] as String,
+    );
+  }
+}
 
+class Memoto {
+  // En cours
+  int memostockid = 0;
+  String memostock = "..";
+  String memocat = "..";
+
+  Memoto({
+    required this.memostockid,
+    required this.memostock,
+    required this.memocat,
+  });
+
+  factory Memoto.fromJson(Map<String, dynamic> json) {
+    return Memoto(
+      memostockid: int.parse(json['MEMOSTOCKID']),
+      memostock: json['MEMOSTOCK'] as String,
+      memocat: json['MEMOCAT'] as String,
+    );
+  }
+}
+
+//------------>  PhotoBase  N°4
+class PhotoBase {
+  int photofilesize = 0;
+  int photoheight = 0;
+  int photoid = 0;
+  int photoinode = 0;
+  int photowidth = 0;
+  String photocat = "NOT";
+  String photouploader = "YYY";
+  String photodate = "05-05-2022";
+  String photofilename = "FFFF";
+  String photofiletype = "TTT";
+  String memetempo = ""; // <TODO> Le ptit plu
+  // Add
+  bool isSelected = false;
+  double extraWidth = 100;
+  double extraHeight = 100;
+  Color extraColor = Colors.grey;
+
+  PhotoBase({
+    required this.photofilesize,
+    required this.photoheight,
+    required this.photoid,
+    required this.photoinode,
+    required this.photowidth,
+    required this.photocat,
+    required this.photouploader,
+    required this.photodate,
+    required this.photofilename,
+    required this.photofiletype,
+  });
+
+  factory PhotoBase.fromJson(Map<String, dynamic> json) {
+    return PhotoBase(
+      photofilesize: int.parse(json['PHOTOFILESIZE']),
+      photoheight: int.parse(json['PHOTOHEIGHT']),
+      photoid: int.parse(json['PHOTOID']),
+      photoinode: int.parse(json['PHOTOINODE']),
+      photowidth: int.parse(json['PHOTOWIDTH']),
+      photocat: json['PHOTOCAT'] as String,
+      photouploader: json['PHOTOUPLOADER'] as String,
+      photodate: json['PHOTODATE'] as String,
+      photofilename: json['PHOTOFILENAME'] as String,
+      photofiletype: json['PHOTOFILETYPE'] as String,
+    );
+  }
+}
+
+//------------>  GameMasters N°2
+class PhotoCat {
+  String photocat = "XXXX";
+  String photocast = "XXXX";
+  int nbphotos = 0;
+  int selected = 0;
+  int firstphotoid = 0;
+
+  PhotoCat({
+    required this.photocat,
+  });
+
+  factory PhotoCat.fromJson(Map<String, dynamic> json) {
+    return PhotoCat(
+      photocat: json['PHOTOCAT'] as String,
     );
   }
 
+  setNumber(int _number) {
+    nbphotos = _number;
+  }
 
+  setphotoid(_thatphotoid) {
+    firstphotoid = _thatphotoid;
+  }
+
+  setSelected(int _selected) {
+    selected = _selected;
+  }
+
+  supMM() {
+    photocast = photocat.substring(3);
+  }
+}
+
+//------------>    PhotoClefs  N°9
+class PhotoClefs {
+  int photoid = 0;
+  int clefcodeid = 0;
+
+  PhotoClefs({
+    required this.photoid,
+    required this.clefcodeid,
+  });
+
+  factory PhotoClefs.fromJson(Map<String, dynamic> json) {
+    return PhotoClefs(
+      photoid: int.parse(json['PHOTOID']),
+      clefcodeid: int.parse(json['CLEFCODEID']),
+    );
+  }
+}
+
+class PhotoRandomLive {
+  int photoid = 0;
+  String photomemelive = "XXXX";
+
+  PhotoRandomLive({
+    required this.photoid,
+    required this.photomemelive,
+  });
 }

@@ -112,11 +112,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'GAME        ',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -139,11 +139,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'VOTE   ',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -369,8 +369,8 @@ class _MenoPaulState extends State<MenoPaul> {
       if ( _connectionStatus.toString()  == "ConnectivityResult.wifi" ) {
         dispConnectivity="Wifi";
       }
-
-
+else
+        dispConnectivity=result.toString();
 
     });
   }

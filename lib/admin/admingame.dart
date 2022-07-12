@@ -9,7 +9,6 @@ class AdminGame extends StatefulWidget {
   @override
   State<AdminGame> createState() => _AdminGameState();
 }
-
 class _AdminGameState extends State<AdminGame> {
   bool isAdmin = false;
   String connectedGuy = "";

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:gameover/admin/admingame.dart';
-import 'package:gameover/connectgame.dart';
 import 'package:gameover/gamemanager.dart';
 import 'package:gameover/gameuser.dart';
 import 'package:gameover/gamephlclass.dart';
+import 'package:gameover/gamevote.dart';
 import 'package:gameover/mementoes.dart';
 import 'package:gameover/memolike.dart';
 import 'package:gameover/randomeme.dart';
@@ -25,20 +25,25 @@ class MenoPaul extends StatefulWidget {
 }
 class _MenoPaulState extends State<MenoPaul> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  String dispConnectivity="";
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  //
+
   bool isAdmin = false;
   bool isGamer = false;
   String connectedGuy = "";
   List<MemopolUsers> listMemopolUsers = [];
-GameCommons myPerso = GameCommons("xxxx", 0,0) ;
+   GameCommons myPerso = GameCommons("xxxx", 0,0) ;
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent
+          //color set to transperent or set your own color
+        ));
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' 0707-1800  Version Test ' + myPerso.myPseudo+' '+ _connectionStatus.toString(),
+          ' 0712 Test ' + myPerso.myPseudo+' '+dispConnectivity,
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -88,7 +93,6 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         setState(() {
                           connectedGuy = listMemopolUsers[0].uname;
 
-
                           if (listMemopolUsers[0].uprofile & 128 == 128) {
                             isAdmin = true;
                           }
@@ -111,7 +115,7 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         padding: const EdgeInsets.all(15.0),
                         child: ElevatedButton(
                           child: Text(
-                            'GAME   ',
+                            'GAME        ',
                             style: GoogleFonts.averageSans(fontSize: 25.0),
                           ),
                           onPressed: () {
@@ -119,30 +123,40 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                               context,
                               MaterialPageRoute(
                             //      builder: (context) => const ConnectGame()),
-                                  builder: (context) => const GameUser()),
+                                  builder: (context) => const GameUser(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+
+                              ),
+
                             );
                           },
                         ),
                       ),
                     ),
+
                     Visibility(
                       visible: isGamer,
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: ElevatedButton(
                           child: Text(
-                            'RANDOM',
+                            'VOTE   ',
                             style: GoogleFonts.averageSans(fontSize: 25.0),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  RandoMeme(),
+                                //      builder: (context) => const ConnectGame()),
+                                builder: (context) => const GameVote(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
+
                               ),
+
                             );
                           },
                         ),
@@ -158,14 +172,14 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         padding: const EdgeInsets.all(15.0),
                         child: ElevatedButton(
                           child: Text(
-                            'CAPTION',
+                            'NEW GAME',
                             style: GoogleFonts.averageSans(fontSize: 25.0),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  Memento(),
+                                builder: (context) =>  GameManager(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
@@ -175,6 +189,7 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         ),
                       ),
                     ),
+
                     Visibility(
                       visible: isGamer,
                       child: Padding(
@@ -222,7 +237,7 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                 Row(
                   children: [
                     Visibility(
-                      visible: !isGamer,
+                      visible: !isGamer && false,
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: ElevatedButton(
@@ -239,6 +254,29 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         ),
                       ),
                     ),
+                    Visibility(
+                      visible: isGamer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            'CAPTION',
+                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>  Memento(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
 
                     Visibility(
                       visible: isGamer,
@@ -246,14 +284,14 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
                         padding: const EdgeInsets.all(15.0),
                         child: ElevatedButton(
                           child: Text(
-                            'NEW GAME',
+                            'RANDOM',
                             style: GoogleFonts.averageSans(fontSize: 25.0),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  GameManager(),
+                                builder: (context) =>  RandoMeme(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
@@ -293,15 +331,11 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
     super.initState();
     super.initState();
     initConnectivity();
-
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
-
+     _connectivitySubscription =
+     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     setState(() {
       isAdmin = false;
       isGamer = false;
-
     });
   }
   @override
@@ -332,6 +366,12 @@ GameCommons myPerso = GameCommons("xxxx", 0,0) ;
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     setState(() {
       _connectionStatus = result;
+      if ( _connectionStatus.toString()  == "ConnectivityResult.wifi" ) {
+        dispConnectivity="Wifi";
+      }
+
+
+
     });
   }
 

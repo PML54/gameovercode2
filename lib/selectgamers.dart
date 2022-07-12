@@ -1,26 +1,28 @@
 import 'dart:convert';
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/phlcommons.dart';
-import 'package:http/http.dart' as http;
-import 'package:overlay_support/overlay_support.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
 
 // Creer une Liste de GUID Parmi les Gens qui on un compte
 class SelectGamers extends StatefulWidget {
   const SelectGamers({Key? key}) : super(key: key);
+
   @override
   State<SelectGamers> createState() => _SelectGamersState();
 }
+
 class _SelectGamersState extends State<SelectGamers> {
   bool selMemopolUsersState = false;
   int selMemopolUsersError = 0;
   List<MemopolUsersReduce> listMemopolUsers = [];
   List<MemopolUsersReduce> listMemopolUsersReduce = [];
   List<GamePhotoSelect> listGamePhotoSelect = [];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,9 +58,8 @@ class _SelectGamersState extends State<SelectGamers> {
           color: Colors.red,
           tooltip: 'Save Selection',
           onPressed: () {
-
             PhlCommons.nbGamersGame = listMemopolUsersReduce.length;
-            // updateSelection();
+            updateSelectionGamers();
           }),
     ));
   }
@@ -66,7 +67,9 @@ class _SelectGamersState extends State<SelectGamers> {
   Expanded getListView() {
     setState(() {});
 
-    if (!selMemopolUsersState) return (const Expanded(child: Text("Je Joue ........")));
+    if (!selMemopolUsersState) {
+      return (const Expanded(child: Text("Je Joue ........")));
+    }
     var listView = ListView.builder(
         itemCount: listMemopolUsers.length,
         controller: ScrollController(),
@@ -77,15 +80,18 @@ class _SelectGamersState extends State<SelectGamers> {
                 children: [
                   Expanded(
                     child: Container(
-                        margin: const EdgeInsets.all(2.0),
-                        padding: const EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                            color: listMemopolUsers[index].extraColor,
-                            border: Border.all()),
-
-                         child:  Text (listMemopolUsers[index].uname ,style: GoogleFonts.averageSans(fontSize: 15.0),),
+                      margin: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                          color: listMemopolUsers[index].extraColor,
+                          border: Border.all()),
+                      child: Text(
+                        listMemopolUsers[index].uname,
+                        style: GoogleFonts.averageSans(fontSize: 15.0),
+                      ),
                     ),
-                  )],
+                  )
+                ],
               ),
               onTap: () {
                 setState(() {
@@ -102,6 +108,7 @@ class _SelectGamersState extends State<SelectGamers> {
 
     return (Expanded(child: listView));
   }
+
   Expanded getListViewSelected() {
     setState(() {});
     if (!selMemopolUsersState) return (const Expanded(child: Text(".......")));
@@ -128,8 +135,8 @@ class _SelectGamersState extends State<SelectGamers> {
                     decoration: BoxDecoration(
                         color: listMemopolUsersReduce[index].extraColor,
                         border: Border.all()),
-
-                        child:  Text (listMemopolUsersReduce[index].uname,style: GoogleFonts.averageSans(fontSize: 15.0)),
+                    child: Text(listMemopolUsersReduce[index].uname,
+                        style: GoogleFonts.averageSans(fontSize: 15.0)),
                   )),
                 ],
               ),
@@ -147,28 +154,13 @@ class _SelectGamersState extends State<SelectGamers> {
         });
     return (Expanded(child: listView));
   }
+
   @override
   void initState() {
     super.initState();
     selMemopolUsers();
   }
-  void updateSelection() async {
-    String thisParam = "";
-    int _gamecode = PhlCommons.thisGameCode;
-    for (MemopolUsersReduce _brocky in listMemopolUsers) {
-      if (_brocky.isSelected) {
-        thisParam = thisParam + "|" + _brocky.uid.toString();
-      }
-    }
-    Uri url = Uri.parse(pathPHP + "updateGAMEPHOTOSELECT.php");
-    var data = {
-      //<TODO>
-      "GAMECODE": _gamecode.toString(),
-      "GROUPSEL": thisParam,
-    };
-    //await http.post(url, body: data);
-    Navigator.pop(context);
-  }
+
   Future selMemopolUsers() async {
     // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
     Uri url = Uri.parse(pathPHP + "selMEMOPOLUSERS.php");
@@ -181,7 +173,7 @@ class _SelectGamersState extends State<SelectGamers> {
     selMemopolUsersState = false;
     http.Response response = await http.post(url, body: data);
     selMemopolUsersError = 0;
-    print ("  selMEMOPOLUSERS.php");
+
     if (response.body.toString() == 'ERR_1001') {
       selMemopolUsersError = 1001;
     }
@@ -190,9 +182,29 @@ class _SelectGamersState extends State<SelectGamers> {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         selMemopolUsersState = true;
-        listMemopolUsers=
-            datamysql.map((xJson) => MemopolUsersReduce.fromJson(xJson)).toList();
+        listMemopolUsers = datamysql
+            .map((xJson) => MemopolUsersReduce.fromJson(xJson))
+            .toList();
       });
     } else {}
+  }
+
+  void updateSelectionGamers() async {
+    String thisParam = "";
+    int _gamecode = PhlCommons.thisGameCode;
+    for (MemopolUsersReduce _brocky in listMemopolUsers) {
+      if (_brocky.isSelected) {
+        thisParam = thisParam + "|" + _brocky.uid.toString();
+      }
+    }
+
+    Uri url = Uri.parse(pathPHP + "updateGAMEGAMERSSELECT.php");
+    var data = {
+      //<TODO>
+      "GAMECODE": _gamecode.toString(),
+      "GROUPSEL": thisParam,
+    };
+    await http.post(url, body: data);
+    Navigator.pop(context);
   }
 }

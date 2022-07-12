@@ -12,6 +12,8 @@ class PhlCommons {
   static List<GameMasters> listThatGM = [];
   static List<Games> listThatGame= [];
   static  int  isAdmin = 0;
+  static int thatUid=0;
+
   PhlCommons(this.numiro);
 
   static Games gameActif = Games(

@@ -350,6 +350,7 @@ class MemopolUsersReduce {
   String uname = "UNAMEX";
   Color extraColor = Colors.grey;
   bool isSelected = false;
+
   MemopolUsersReduce({
     required this.uid,
     required this.ustatus,
@@ -497,4 +498,54 @@ class PhotoRandomLive {
     required this.photoid,
     required this.photomemelive,
   });
+}
+
+class GameByUser {
+  int uid = 0;
+  int gamecode = 0;
+  int status = 0;
+
+  GameByUser({
+    required this.uid,
+    required this.gamecode,
+  });
+
+  factory GameByUser.fromJson(Map<String, dynamic> json) {
+    return GameByUser(
+      uid: int.parse(json['UID']),
+      gamecode: int.parse(json['GAMECODE']),
+    );
+  }
+}
+
+class GameLike {
+  int memeid = 0; //  C'est un index à Conserver
+  int photoid = 0;
+  int uid = 0; // Celui Qui
+  int gamecode = 0; // En plus
+  String photofilename = "FFFF";
+  String photofiletype = "TTT";
+  String memetext = "FFFF";
+
+  GameLike(
+      {required this.memeid,
+      required this.photoid,
+      required this.uid,
+      required this.gamecode,
+      required this.photofilename,
+      required this.photofiletype,
+      required this.memetext
+      });
+
+  factory GameLike.fromJson(Map<String, dynamic> json) {
+    return GameLike(
+      memeid: int.parse(json['MEMEID']),
+      photoid: int.parse(json['PHOTOID']),
+      uid: int.parse(json['UID']),
+      gamecode: int.parse(json['GAMECODE']),
+      photofilename: json['PHOTOFILENAME'] as String,
+      photofiletype: json['PHOTOFILETYPE'] as String,
+      memetext: json['MEMETEXT'] as String,
+    );
+  }
 }

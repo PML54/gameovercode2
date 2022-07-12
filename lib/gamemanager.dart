@@ -173,187 +173,213 @@ class _GameManagerState extends State<GameManager> {
             ),
           ]),
           //  ECRAN PRINCIP
-          body: Column(
-            children: [
-              SafeArea(
-                child: Column(children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        const Text('Public'),
-                        Checkbox(
-                          value: isPublic,
-                          onChanged: (value) {
-                            setState(() {
-                              isPublic = !isPublic;
-                            });
-                          },
-                        ),
-                        const Text('Private'),
-                        Checkbox(
-                          value: !isPublic,
-                          onChanged: (value) {
-                            setState(() {
-                              isPublic = !isPublic;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
+          body: Container(
 
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        Text(dispNbFotosGame +
-                            '/' +
-                            nbPhotos.toString() +
-                            " Photos"),
-                        Slider(
-                          label: 'Photos ',
-                          activeColor: Colors.blueGrey,
-                          divisions: 10,
-                          min: 1,
-                          max: 10,
-                          value: nbPhotos,
-                          onChanged: (double newValue) {
-                            setState(() {
-                              newValue = newValue.round() as double;
-                              if (newValue != nbPhotos) nbPhotos = newValue;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    // Slider N°1 Gamers
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        Text(PhlCommons.nbGamersGame.toString() +
-                            '/' +
-                            nbGamers.toString() +
-                            " Gamers"),
-                        Slider(
-                          label: 'Gamers ',
-                          activeColor: Colors.orange,
-                          divisions: 20,
-                          min: 1,
-                          max: 20,
-                          value: nbGamers,
-                          onChanged: (double newValue) {
-                            setState(() {
-                              newValue = newValue.round() as double;
-                              if (newValue != nbGamers) nbGamers = newValue;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    // Slider N° 3   Sec/Mem
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      children: [
-                        Text(nbSecMeme.toString() + " Sec/Mem"),
-                        Slider(
-                          label: 'Sec/ Meme ',
-                          activeColor: Colors.orange,
-                          divisions: 20,
-                          min: 20,
-                          max: 420,
-                          value: nbSecMeme,
-                          onChanged: (double newValue) {
-                            setState(() {
-                              //     dispNbFotosGame = PhlCommons.nbFotosGame.toString(); // <TODO>
-                              newValue = newValue.round() as double;
-                              if (newValue != nbSecMeme) nbSecMeme = newValue;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Text(nbSecVote.toString() + " Sec /Vote"),
-                        Slider(
-                          label: 'Votes ',
-                          activeColor: Colors.orange,
-                          divisions: 20,
-                          min: 10,
-                          max: 110,
-                          value: nbSecVote,
-                          onChanged: (double newValue) {
-                            setState(() {
-                              newValue = newValue.round() as double;
-                              if (newValue != nbSecVote) nbSecVote = newValue;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: !isGameValidated,
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () => {overSelectPhotosPhl()},
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 10,
-                                    backgroundColor: Colors.red,
-                                    fontWeight: FontWeight.bold)),
-                            child: const Text('Photos')),
-                        ElevatedButton(
-                            onPressed: () => {overSelectGamersPhl()},
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 10,
-                                    backgroundColor: Colors.red,
-                                    fontWeight: FontWeight.bold)),
-                            child: const Text('Gamers')),
-                        Visibility(
-                          visible: isValidatedOk(),
-                          child: ElevatedButton(
-                            onPressed: () => {newGame()},
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.green,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 25, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 10,
-                                    backgroundColor: Colors.green,
-                                    fontWeight: FontWeight.bold)),
-                            child: const Text('Valider',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.normal,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                          ),
-                          //createGameState
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
+            constraints:
+            BoxConstraints(minHeight: MediaQuery.of(context).size.height
+              //set minimum height equal to 100% of VH
+            ),
+            width: MediaQuery.of(context).size.width,
+            //make width of outer wrapper to 100%
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.orange,
+                  Colors.deepOrangeAccent,
+                  Colors.red,
+                  Colors.redAccent,
+                ],
               ),
-            ],
+            ),
+            //show linear gradient background of page
+
+            padding: const EdgeInsets.all(20),
+
+            child: Column(
+
+              children: [
+                SafeArea(
+                  child: Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: [
+                          const Text('Public'),
+                          Checkbox(
+                            value: isPublic,
+                            onChanged: (value) {
+                              setState(() {
+                                isPublic = !isPublic;
+                              });
+                            },
+                          ),
+                          const Text('Private'),
+                          Checkbox(
+                            value: !isPublic,
+                            onChanged: (value) {
+                              setState(() {
+                                isPublic = !isPublic;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: [
+                          Text(dispNbFotosGame +
+                              '/' +
+                              nbPhotos.toString() +
+                              " Photos"),
+                          Slider(
+                            label: 'Photos ',
+                            activeColor: Colors.blueGrey,
+                            divisions: 10,
+                            min: 1,
+                            max: 10,
+                            value: nbPhotos,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                newValue = newValue.round() as double;
+                                if (newValue != nbPhotos) nbPhotos = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      // Slider N°1 Gamers
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: [
+                          Text(PhlCommons.nbGamersGame.toString() +
+                              '/' +
+                              nbGamers.toString() +
+                              " Gamers"),
+                          Slider(
+                            label: 'Gamers ',
+                            activeColor: Colors.orange,
+                            divisions: 20,
+                            min: 1,
+                            max: 20,
+                            value: nbGamers,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                newValue = newValue.round() as double;
+                                if (newValue != nbGamers) nbGamers = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      // Slider N° 3   Sec/Mem
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        children: [
+                          Text(nbSecMeme.toString() + " Sec/Mem"),
+                          Slider(
+                            label: 'Sec/ Meme ',
+                            activeColor: Colors.orange,
+                            divisions: 20,
+                            min: 20,
+                            max: 420,
+                            value: nbSecMeme,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                //     dispNbFotosGame = PhlCommons.nbFotosGame.toString(); // <TODO>
+                                newValue = newValue.round() as double;
+                                if (newValue != nbSecMeme) nbSecMeme = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        children: [
+                          Text(nbSecVote.toString() + " Sec /Vote"),
+                          Slider(
+                            label: 'Votes ',
+                            activeColor: Colors.orange,
+                            divisions: 20,
+                            min: 10,
+                            max: 110,
+                            value: nbSecVote,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                newValue = newValue.round() as double;
+                                if (newValue != nbSecVote) nbSecVote = newValue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: !isGameValidated,
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                              onPressed: () => {overSelectPhotosPhl()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child: const Text('Photos')),
+                          ElevatedButton(
+                              onPressed: () => {overSelectGamersPhl()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child: const Text('Gamers')),
+                          Visibility(
+                            visible: isValidatedOk(),
+                            child: ElevatedButton(
+                              onPressed: () => {newGame()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.green,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 10,
+                                      backgroundColor: Colors.green,
+                                      fontWeight: FontWeight.bold)),
+                              child: const Text('Valider',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                    fontStyle: FontStyle.normal,
+                                  )),
+                            ),
+                            //createGameState
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -582,8 +608,7 @@ class _GameManagerState extends State<GameManager> {
     Uri url = Uri.parse(pathPHP + "createGAME.php");
     createGameState = false;
     createGameError = -1;
-// Mise au Propre
-    print ("GMID -----"+  myPerso.myUid.toString());
+
     var data = {
       "GAMECODE": PhlCommons.gameActif.gamecode.toString(),
       "GAMEMODE": PhlCommons.gameActif.gamemode.toString(),

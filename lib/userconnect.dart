@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
+import 'package:gameover/phlcommons.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -203,6 +204,8 @@ class _LoginPage extends State<LoginPage> {
         listMemopolUsers =
             datamysql.map((xJson) => MemopolUsers.fromJson(xJson)).toList();
         getMemopolUserState = true;
+        PhlCommons.thatUid=listMemopolUsers[0].uid;
+
         Navigator.pop(context, listMemopolUsers);
       });
     } else {}

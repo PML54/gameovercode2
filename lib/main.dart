@@ -79,11 +79,11 @@ class _MenoPaulState extends State<MenoPaul> {
                 Visibility(
                   visible: !isGamer,
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: ElevatedButton(
                       child: Text(
                         'CONNEXION',
-                        style: GoogleFonts.averageSans(fontSize: 25.0),
+                        style: GoogleFonts.averageSans(fontSize: 20.0),
                       ),
                       onPressed: () async {
                         listMemopolUsers = await (Navigator.push(
@@ -169,11 +169,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'NEW GAME',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -193,11 +193,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'FAVORI',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -218,11 +218,11 @@ class _MenoPaulState extends State<MenoPaul> {
                 Visibility(
                   visible: isAdmin,
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: ElevatedButton(
                       child: Text(
                         'ADMIN',
-                        style: GoogleFonts.averageSans(fontSize: 25.0),
+                        style: GoogleFonts.averageSans(fontSize: 20.0),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -239,11 +239,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: !isGamer && false,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'NEW GAMER',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -257,11 +257,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'CAPTION',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -281,11 +281,11 @@ class _MenoPaulState extends State<MenoPaul> {
                     Visibility(
                       visible: isGamer,
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
                             'RANDOM',
-                            style: GoogleFonts.averageSans(fontSize: 25.0),
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -370,8 +370,9 @@ class _MenoPaulState extends State<MenoPaul> {
         dispConnectivity="Wifi";
       }
 else
-        dispConnectivity=result.toString();
+      //  dispConnectivity=result.toString();
 
+        dispConnectivity="***";
     });
   }
 

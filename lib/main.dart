@@ -11,6 +11,7 @@ import 'package:gameover/randomeme.dart';
 import 'package:gameover/userconnect.dart';
 import 'package:gameover/usercreate.dart';
 import 'package:gameover/phlcommons.dart';
+import 'package:gameover/supervisorgames.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
@@ -91,6 +92,7 @@ class _MenoPaulState extends State<MenoPaul> {
                           MaterialPageRoute(builder: (context) => LoginPage()),
                         ));
                         setState(() {
+
                           connectedGuy = listMemopolUsers[0].uname;
 
                           if (listMemopolUsers[0].uprofile & 128 == 128) {
@@ -122,8 +124,65 @@ class _MenoPaulState extends State<MenoPaul> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
+                                //      builder: (context) => const ConnectGame()),
+                                builder: (context) => const GameUser(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+
+                              ),
+
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: isGamer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            'VOTE   ',
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                //      builder: (context) => const ConnectGame()),
+                                builder: (context) => const GameVote(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+
+                              ),
+
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Visibility(
+                      visible: isGamer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          child: Text(
+                            'My GAMES',
+                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
                             //      builder: (context) => const ConnectGame()),
-                                  builder: (context) => const GameUser(),
+                                  builder: (context) => const GameSupervisor(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
@@ -348,6 +407,8 @@ class _MenoPaulState extends State<MenoPaul> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await _connectivity.checkConnectivity();
+
+
     } on PlatformException catch (e) {
       print ('Couldn\'t check connectivity status');
       return;
@@ -364,9 +425,14 @@ class _MenoPaulState extends State<MenoPaul> {
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+
+    print (" result =" +result.toString());
     setState(() {
       _connectionStatus = result;
-      if ( _connectionStatus.toString()  == "ConnectivityResult.wifi" ) {
+
+      dispConnectivity="***";
+
+      if ( result.toString()  == "ConnectivityResult.wifi" ) {
         dispConnectivity="Wifi";
       }
 else

@@ -103,6 +103,56 @@ class Evaluations {
   }
 }
 
+class GameByUser {
+  int uid = 0;
+  int gamecode = 0;
+  int status = 0;
+  bool isSelected = false;
+  Color extraColor = Colors.grey;
+  GameByUser({
+    required this.uid,
+    required this.gamecode,
+  });
+
+  factory GameByUser.fromJson(Map<String, dynamic> json) {
+    return GameByUser(
+      uid: int.parse(json['UID']),
+      gamecode: int.parse(json['GAMECODE']),
+    );
+  }
+}
+
+class GameLike {
+  int memeid = 0; //  C'est un index à Conserver
+  int photoid = 0;
+  int uid = 0; // Celui Qui
+  int gamecode = 0; // En plus
+  String photofilename = "FFFF";
+  String photofiletype = "TTT";
+  String memetext = "FFFF";
+
+  GameLike(
+      {required this.memeid,
+      required this.photoid,
+      required this.uid,
+      required this.gamecode,
+      required this.photofilename,
+      required this.photofiletype,
+      required this.memetext});
+
+  factory GameLike.fromJson(Map<String, dynamic> json) {
+    return GameLike(
+      memeid: int.parse(json['MEMEID']),
+      photoid: int.parse(json['PHOTOID']),
+      uid: int.parse(json['UID']),
+      gamecode: int.parse(json['GAMECODE']),
+      photofilename: json['PHOTOFILENAME'] as String,
+      photofiletype: json['PHOTOFILETYPE'] as String,
+      memetext: json['MEMETEXT'] as String,
+    );
+  }
+}
+
 //------------>  GameMasters N°2
 class GameMasters {
   int gmid = 0; // Auto
@@ -167,6 +217,8 @@ class Games {
   int gametimer = 0;
 
   int gameopen = 0;
+  bool isSelected = false;
+  Color extraColor = Colors.grey;
 
   Games(
       {required this.gameid,
@@ -215,6 +267,7 @@ class GameUsers {
   String gudate = "05-05-2022";
   String gupseudo = "FFFF";
 
+
   GameUsers({
     required this.guid,
     required this.gamecode,
@@ -222,6 +275,7 @@ class GameUsers {
     required this.guipv4,
     required this.gudate,
     required this.gupseudo,
+
   });
 
   factory GameUsers.fromJson(Map<String, dynamic> json) {
@@ -241,14 +295,14 @@ class Memes {
   int memeid = 0;
   int photoid = 0;
   int gamecode = 0;
-  String gupseudo = "XXX";
+  int uid = 0;
   String memetext = "";
 
   Memes({
     required this.memeid,
     required this.photoid,
     required this.gamecode,
-    required this.gupseudo,
+    required this.uid,
     required this.memetext,
   });
 
@@ -257,7 +311,7 @@ class Memes {
       memeid: int.parse(json['MEMEID']),
       photoid: int.parse(json['PHOTOID']),
       gamecode: int.parse(json['GAMECODE']),
-      gupseudo: json['GUPSEUDO'] as String,
+      uid: int.parse(json['UID']),
       memetext: json['MEMETEXT'] as String,
     );
   }
@@ -498,54 +552,4 @@ class PhotoRandomLive {
     required this.photoid,
     required this.photomemelive,
   });
-}
-
-class GameByUser {
-  int uid = 0;
-  int gamecode = 0;
-  int status = 0;
-
-  GameByUser({
-    required this.uid,
-    required this.gamecode,
-  });
-
-  factory GameByUser.fromJson(Map<String, dynamic> json) {
-    return GameByUser(
-      uid: int.parse(json['UID']),
-      gamecode: int.parse(json['GAMECODE']),
-    );
-  }
-}
-
-class GameLike {
-  int memeid = 0; //  C'est un index à Conserver
-  int photoid = 0;
-  int uid = 0; // Celui Qui
-  int gamecode = 0; // En plus
-  String photofilename = "FFFF";
-  String photofiletype = "TTT";
-  String memetext = "FFFF";
-
-  GameLike(
-      {required this.memeid,
-      required this.photoid,
-      required this.uid,
-      required this.gamecode,
-      required this.photofilename,
-      required this.photofiletype,
-      required this.memetext
-      });
-
-  factory GameLike.fromJson(Map<String, dynamic> json) {
-    return GameLike(
-      memeid: int.parse(json['MEMEID']),
-      photoid: int.parse(json['PHOTOID']),
-      uid: int.parse(json['UID']),
-      gamecode: int.parse(json['GAMECODE']),
-      photofilename: json['PHOTOFILENAME'] as String,
-      photofiletype: json['PHOTOFILETYPE'] as String,
-      memetext: json['MEMETEXT'] as String,
-    );
-  }
 }

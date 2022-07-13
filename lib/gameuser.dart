@@ -94,14 +94,14 @@ bool changeStatusGameUserState=false;
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
-              Text(' ' + totalSeconds.toString())
+              Text(PhlCommons.thisGameCode.toString()+'   ' + totalSeconds.toString()+'s')
             ],
           ),
         ),
       ]),
       body: SafeArea(
         child: Row(children: <Widget>[
-          Align(child: buildTime()),
+        Align(child: buildTime()),
           getget(),
           getListView(),
         ]),
@@ -171,30 +171,27 @@ bool changeStatusGameUserState=false;
   }
 
   Future getGamebyUid() async {
-    bool gameCodeFound = true;
-    Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
 
+
+
+    Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
     var data = {
       "UID": PhlCommons.thatUid.toString(),
     };
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
-      gameCodeFound = false;
+
       getGamebyUidState = false;
       getGamebyUidError = 1001;
-    } else {
-      gameCodeFound = true;
     }
-    if (response.statusCode == 200 && (gameCodeFound)) {
+    if (response.statusCode == 200 && (getGamebyUidError !=1001)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
 
-        PhlCommons.thisGameCode = myGames.last.gamecode;
+        //PhlCommons.thisGameCode = myGames.last.gamecode;
         getGamePhotoSelect(); // Il faut le GameCore
-        getMemeUser(); // Des doutes
-        getGamebyCode(); // H-eu
-
+     getGamebyCode(); // H-eu
         getGamebyUidState = true;
         getGamebyUidError = 0;
       });
@@ -206,7 +203,7 @@ bool changeStatusGameUserState=false;
     getGamePhotoSelectError = -1;
 
     Uri url = Uri.parse(pathPHP + "getGAMEPHOTOS.php");
-print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
+
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
     };
@@ -218,6 +215,10 @@ print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
             datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
         getGamePhotoSelectState = true;
         getGamePhotoSelectError = 0;
+        // On Empie c'est bon
+     getMemeUser();
+
+
       });
     } else {
       getGamePhotoSelectError = 2001;
@@ -225,7 +226,7 @@ print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
   }
 
   Expanded getget() {
-    if (!getGamebyUidState) {
+    if  (!getGamebyUidState || !getGamePhotoSelectState) {
       return Expanded(
         child: Column(
           children: const [
@@ -273,7 +274,7 @@ print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
 
   Expanded getListView() {
     setState(() {});
-    if (!getGamebyUidState) {
+    if (!getGamebyUidState || !getGamePhotoSelectState) {
       return (const Expanded(child: Text(".............")));
     }
     //
@@ -346,6 +347,7 @@ print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
       setState(() {
         myGuMeme = datamysql.map((xJson) => Memes.fromJson(xJson)).toList();
         getMemeUserState = true;
+         print (" myGuMeme lengyth ="+myGuMeme.length.toString());
       });
     } else {
 
@@ -356,7 +358,10 @@ print (" getGamePhotoSelect GAMECODE "+PhlCommons.thisGameCode.toString() );
   void initState() {
     super.initState();
     reset();
-    getGamebyUid();
+    getGamebyUidState = true;
+    //getGamebyUid();
+    getGamePhotoSelect(); // Il faut le GameCore
+    getGamebyCode(); // H-eu
   }
   void reset() {
     if (countDown) {

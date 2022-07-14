@@ -43,7 +43,8 @@ class _GameUserState extends State<GameUser> {
   int cestCeluiLa = 0;
   bool getGamebyCodeState = false;
   int getGamebyCodeError = 0;
-bool changeStatusGameUserState=false;
+  bool changeStatusGameUserState = false;
+
   //  Chrono
   Duration countdownDuration = const Duration(seconds: 40);
   Duration duration = const Duration();
@@ -94,14 +95,17 @@ bool changeStatusGameUserState=false;
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
-              Text(PhlCommons.thisGameCode.toString()+'   ' + totalSeconds.toString()+'s')
+              Text(PhlCommons.thisGameCode.toString() +
+                  '   ' +
+                  totalSeconds.toString() +
+                  's')
             ],
           ),
         ),
       ]),
       body: SafeArea(
         child: Row(children: <Widget>[
-        Align(child: buildTime()),
+          Align(child: buildTime()),
           getget(),
           getListView(),
         ]),
@@ -118,6 +122,7 @@ bool changeStatusGameUserState=false;
               createMeme();
               stopTimer();
               changeStatusGameUser(2);
+              Navigator.pop(context);
             }),
       ),
     ));
@@ -125,6 +130,18 @@ bool changeStatusGameUserState=false;
 
   buildTime() {
     totalSeconds = duration.inMinutes * 60 + duration.inSeconds;
+  }
+
+  Future changeStatusGameUser(int _status) async {
+    Uri url = Uri.parse(pathPHP + "changeStatusGameUser.php");
+    changeStatusGameUserState = false;
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+      "UID": PhlCommons.thatUid.toString(),
+      "GUSTATUS": _status.toString(),
+    };
+    await http.post(url, body: data);
+    changeStatusGameUserState = true;
   }
 
   Future createMeme() async {
@@ -137,14 +154,13 @@ bool changeStatusGameUserState=false;
         "MEMETEXT": _brocky.memetempo,
       };
 
-
-
       if (_brocky.memetempo.length > 1) {
         await http.post(url, body: data);
       }
       //<TODO>  relecture
     }
   }
+
   Future getGamebyCode() async {
     int _thisGameCode = PhlCommons.thisGameCode;
     bool gameCodeFound = true;
@@ -171,27 +187,23 @@ bool changeStatusGameUserState=false;
   }
 
   Future getGamebyUid() async {
-
-
-
     Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
     var data = {
       "UID": PhlCommons.thatUid.toString(),
     };
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
-
       getGamebyUidState = false;
       getGamebyUidError = 1001;
     }
-    if (response.statusCode == 200 && (getGamebyUidError !=1001)) {
+    if (response.statusCode == 200 && (getGamebyUidError != 1001)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
 
         //PhlCommons.thisGameCode = myGames.last.gamecode;
         getGamePhotoSelect(); // Il faut le GameCore
-     getGamebyCode(); // H-eu
+        getGamebyCode(); // H-eu
         getGamebyUidState = true;
         getGamebyUidError = 0;
       });
@@ -216,9 +228,7 @@ bool changeStatusGameUserState=false;
         getGamePhotoSelectState = true;
         getGamePhotoSelectError = 0;
         // On Empie c'est bon
-     getMemeUser();
-
-
+        getMemeUser();
       });
     } else {
       getGamePhotoSelectError = 2001;
@@ -226,7 +236,7 @@ bool changeStatusGameUserState=false;
   }
 
   Expanded getget() {
-    if  (!getGamebyUidState || !getGamePhotoSelectState) {
+    if (!getGamebyUidState || !getGamePhotoSelectState) {
       return Expanded(
         child: Column(
           children: const [
@@ -340,18 +350,15 @@ bool changeStatusGameUserState=false;
     };
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
-       getMemeUserError = 1001;
+      getMemeUserError = 1001;
     }
     if (response.statusCode == 200 && (getMemeUserError != 1001)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGuMeme = datamysql.map((xJson) => Memes.fromJson(xJson)).toList();
         getMemeUserState = true;
-         print (" myGuMeme lengyth ="+myGuMeme.length.toString());
       });
-    } else {
-
-    }
+    } else {}
   }
 
   @override
@@ -363,6 +370,7 @@ bool changeStatusGameUserState=false;
     getGamePhotoSelect(); // Il faut le GameCore
     getGamebyCode(); // H-eu
   }
+
   void reset() {
     if (countDown) {
       setState(() => duration = countdownDuration);
@@ -381,16 +389,4 @@ bool changeStatusGameUserState=false;
     }
     setState(() => timer?.cancel());
   }
-  Future changeStatusGameUser( int _status) async {
-    Uri url = Uri.parse(pathPHP + "changeStatusGameUser.php");
-    changeStatusGameUserState=false;
-    var data = {
-        "GAMECODE": PhlCommons.thisGameCode.toString(),
-        "UID": PhlCommons.thatUid.toString(),
-         "GUSTATUS": _status.toString(),
-      };
-        await http.post(url, body: data);
-        changeStatusGameUserState=true;
-  }
-
 }

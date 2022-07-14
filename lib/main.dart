@@ -44,7 +44,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' 0712 Test ' + myPerso.myPseudo+' '+dispConnectivity,
+          ' 0714  ' + myPerso.myPseudo+' '+dispConnectivity,
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -195,7 +195,7 @@ class _MenoPaulState extends State<MenoPaul> {
                       ),
                     ),
 
-                    Visibility(
+                /*    Visibility(
                       visible: isGamer,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -220,7 +220,7 @@ class _MenoPaulState extends State<MenoPaul> {
                           },
                         ),
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
                 Row(
@@ -426,7 +426,6 @@ class _MenoPaulState extends State<MenoPaul> {
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
 
-    print (" result =" +result.toString());
     setState(() {
       _connectionStatus = result;
 

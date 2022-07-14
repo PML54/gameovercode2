@@ -351,7 +351,7 @@ class _GameVoteState extends State<GameVote> {
     var data = {
       "GAMECODE":  PhlCommons.thisGameCode.toString(),
     };
-print ('Dans readGameLike');
+
     http.Response response  = await http.post(url, body: data);
      if (response.body.toString() == 'ERR_1001') {
       readGameLikeError = 1001; //Not Found
@@ -430,8 +430,6 @@ print ('Dans readGameLike');
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
 
         PhlCommons.thisGameCode = myGames.last.gamecode;
- print  ("   PhlCommons.thisGameCode"+ PhlCommons.thisGameCode.toString());
-
         getGamebyUidState = true;
         getGamebyUidError = 0;
 // tout est vert on Y va

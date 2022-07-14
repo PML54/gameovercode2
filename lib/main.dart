@@ -47,7 +47,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '140-' + myPerso.myPseudo+' ' +'>'+gameCodeFetched.toString(),
+          '141-' + myPerso.myPseudo+' ' +'>'+gameCodeFetched.toString(),
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -138,7 +138,6 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
-
                     Visibility(
                       visible: isGamer,
                       child: Padding(
@@ -165,6 +164,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
+
                   ],
                 ),
                 Row(
@@ -195,45 +195,22 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
-
-                /*    Visibility(
-                      visible: isGamer,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton(
-                          child: Text(
-                            'VOTE   ',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                //      builder: (context) => const ConnectGame()),
-                                builder: (context) => const GameVote(),
-                                settings: RouteSettings(
-                                  arguments: myPerso,
-                                ),
-
-                              ),
-
-                            );
-                          },
-                        ),
-                      ),
-                    ),*/
-                  ],
-                ),
-                Row(
-                  children: [
                     Visibility(
                       visible: isGamer,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
-                            'NEW GAME',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                              'NEW GAME',
+                              //style: GoogleFonts.averageSans(fontSize: 20.0),
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                  fontStyle: FontStyle.normal,
+                                  backgroundColor: Colors.green
+
+                              )
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -250,20 +227,24 @@ class _MenoPaulState extends State<MenoPaul> {
                       ),
                     ),
 
+                  ],
+                ),
+                Row(
+                  children: [
                     Visibility(
                       visible: isGamer,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
-                            'FAVORI',
+                            'CAPTION',
                             style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  Memolike(),
+                                builder: (context) =>  Memento(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
@@ -314,20 +295,21 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
+
                     Visibility(
                       visible: isGamer,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
-                            'CAPTION',
+                            'FAVORI',
                             style: GoogleFonts.averageSans(fontSize: 20.0),
                           ),
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>  Memento(),
+                                builder: (context) =>  Memolike(),
                                 settings: RouteSettings(
                                   arguments: myPerso,
                                 ),
@@ -337,7 +319,6 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
-
                     Visibility(
                       visible: isGamer,
                       child: Padding(

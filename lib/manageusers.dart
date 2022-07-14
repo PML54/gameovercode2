@@ -177,6 +177,7 @@ class _ManageUsers extends State<ManageUsers>{
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
                         fontStyle: FontStyle.normal,
+
                       )),
                   IconButton(
                       icon: const Icon(Icons.save),

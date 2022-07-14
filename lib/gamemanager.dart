@@ -88,8 +88,6 @@ class _GameManagerState extends State<GameManager> {
     });
   }
 
-  //
-
   @override
   Widget build(BuildContext context) {
     // Attention mal  placé
@@ -158,7 +156,7 @@ class _GameManagerState extends State<GameManager> {
                       ),
                       Visibility(
                         visible: isGameValidated,
-                        child: Text(" is Running..",
+                        child: Text(" is READY",
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
@@ -174,11 +172,10 @@ class _GameManagerState extends State<GameManager> {
           ]),
           //  ECRAN PRINCIP
           body: Container(
-
             constraints:
-            BoxConstraints(minHeight: MediaQuery.of(context).size.height
-              //set minimum height equal to 100% of VH
-            ),
+                BoxConstraints(minHeight: MediaQuery.of(context).size.height
+                    //set minimum height equal to 100% of VH
+                    ),
             width: MediaQuery.of(context).size.width,
             //make width of outer wrapper to 100%
             decoration: const BoxDecoration(
@@ -198,7 +195,6 @@ class _GameManagerState extends State<GameManager> {
             padding: const EdgeInsets.all(20),
 
             child: Column(
-
               children: [
                 SafeArea(
                   child: Column(children: <Widget>[
@@ -228,7 +224,6 @@ class _GameManagerState extends State<GameManager> {
                       ),
                     ),
                     Padding(
-
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
                         children: [
@@ -542,7 +537,9 @@ class _GameManagerState extends State<GameManager> {
   bool isValidatedOk() {
     //PhlCommons.nbFotosGame
     bool _isOK = false;
-    _isOK = (nbPhotos == PhlCommons.nbFotosGame) && (nbGamers==PhlCommons.nbGamersGame) && !isGameValidated;
+    _isOK = (nbPhotos == PhlCommons.nbFotosGame) &&
+        (nbGamers == PhlCommons.nbGamersGame) &&
+        !isGameValidated;
 
     return (_isOK);
   }
@@ -615,7 +612,8 @@ class _GameManagerState extends State<GameManager> {
       "GAMESTATUS": PhlCommons.gameActif.gamestatus.toString(),
       "GAMENAME": PhlCommons.gameActif.gamename,
       "GAMEDATE": PhlCommons.gameActif.gamedate,
-      "GMID": myPerso.myUid.toString(), // Garde UID de celui qui se connecte Pas de Doublons
+      "GMID": myPerso.myUid.toString(),
+      // Garde UID de celui qui se connecte Pas de Doublons
       "GAMENBGAMERS": PhlCommons.gameActif.gamenbgamers.toString(),
       "GAMENBPHOTOS": PhlCommons.gameActif.gamenbphotos.toString(),
       "GAMENBGAMERSACTIFS": PhlCommons.gameActif.gamenbgamersactifs.toString(),
@@ -644,6 +642,7 @@ class _GameManagerState extends State<GameManager> {
     } else {}
     //  getGmGames();
   }
+
   Future overSelectGamersPhl() async {
     await (Navigator.push(
       context,

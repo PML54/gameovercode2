@@ -38,7 +38,6 @@ class CheckVote {
 }
 
 class CheckVotePlus {
-  //
   // SELECT MEMOLIKEID ,MLVPOINTS, COUNT(MLVPOINTS) AS 'CUMU'
   // from MEMOLIKEVOTE GROUP BY MEMOLIKEID,MLVPOINTS
   // order by MEMOLIKEID,MLVPOINTS;
@@ -48,7 +47,6 @@ class CheckVotePlus {
 
   CheckVotePlus(
       {required this.memolikeid, required this.mlvpoints, required this.cumu});
-
   factory CheckVotePlus.fromJson(Map<String, dynamic> json) {
     return CheckVotePlus(
       memolikeid: int.parse(json['MEMOLIKEID']),

@@ -239,6 +239,8 @@ class _MemolikeState extends State<Memolike> {
     };
     var res = await http.post(url, body: data);
     var datamysql = jsonDecode(res.body) as List;
+
+    print (" OK for Create");
     setState(() {
       getMLVU();
       listCheckVote =
@@ -258,7 +260,7 @@ class _MemolikeState extends State<Memolike> {
 
   //CheckMLVU
   Future getMLVU() async {
-    Uri url = Uri.parse(pathPHP + "getMLVU.php");
+    Uri url = Uri.parse(pathPHP + "getMLV.php");
     listCheckMlvuState = false;
 
     http.Response response = await http.post(url);
@@ -356,20 +358,28 @@ class _MemolikeState extends State<Memolike> {
   Future readMemolikeVote() async {
     Uri url = Uri.parse(pathPHP + "getMLV.php");
     readMemolikeVoteState = false;
+    int readMemolikeVoteError=0;
     var data = {
       "MEMOLIKEID": listMemoLike[cestCeluiLa].memolikeid.toString(),
     };
-
-    var res = await http.post(url, body: data);
-    var datamysql = jsonDecode(res.body) as List;
-    setState(() {
-      listCheckVote =
-          datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
-      readMemolikeVoteState = true;
-
-      thatAverage =
-          (updateThisMli(listMemoLike[cestCeluiLa].memolikeid)).toDouble();
-    });
+   http.Response res = await http.post(url, body: data);
+    String riponse = res.body.toString().trim();
+    if ('ERROR_1000'.compareTo (riponse) == 0) {
+      readMemolikeVoteError = 1000; //Not Found
+      readMemolikeVoteState = true; // Vide Mais corect
+    }
+     if (res.statusCode == 200 && (readMemolikeVoteError != 1000)) {
+      var datamysql = jsonDecode(res.body) as List;
+      setState(() {
+        print (" Avant decodage");
+        listCheckVote =
+            datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
+        readMemolikeVoteState = true;
+            thatAverage =
+            (updateThisMli(listMemoLike[cestCeluiLa].memolikeid)).toDouble();
+      });
+      print (" Apres decodage");
+    }
   }
 
 int updateThisMli(int _memolikeid) {

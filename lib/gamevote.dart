@@ -12,7 +12,6 @@
 // MEMETEXT | varchar(50) | YES  |     | NULL    |                |
 //listMemoLike[cestCeluiLa].photofilename +
 //listMemoLike[cestCeluiLa].photofiletype,
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
@@ -23,14 +22,12 @@ import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
 class GameVote extends StatefulWidget {
   const GameVote({Key? key}) : super(key: key);
 
   @override
   State<GameVote> createState() => _GameVoteState();
 }
-
 class _GameVoteState extends State<GameVote> {
   TextEditingController legendeController = TextEditingController();
   String mafoto = 'assets/oursmacron.png';
@@ -61,12 +58,10 @@ class _GameVoteState extends State<GameVote> {
   int thatCount = 0;
   double thatAverage = 0;
   late int myUid;
-
   @override
   Widget build(BuildContext context) {
     final myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
     myUid = myPerso.myUid;
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(actions: <Widget>[
@@ -111,9 +106,7 @@ class _GameVoteState extends State<GameVote> {
             ),
           ),
         ]),
-
-        //body: readMemolikeVoteState
-        body: readGameLikeState
+              body: readGameLikeState
             ? SafeArea(
           child: Column(children: <Widget>[
             Container(
@@ -245,9 +238,13 @@ class _GameVoteState extends State<GameVote> {
       ),
     );
   }
-  Future createMemolikeVote(int _myUid, int _points) async {
-    Uri url = Uri.parse(pathPHP + "createMLV.php");
+  Future createGameVote(int _myUid, int _points) async {
+    //Uri url = Uri.parse(pathPHP + "createMLV.php");
+    Uri url = Uri.parse(pathPHP + "createGameVote.php");
+
+    print ("PhlCommons.thisGameCode.toString()"+PhlCommons.thisGameCode.toString());
     var data = {
+      "GAMECODE":PhlCommons.thisGameCode.toString(),
       "MLVPOINTS": _points.toString(),
       "MLVDATE": now.toString(),
       "MEMOLIKEID": listGameLike[cestCeluiLa].memeid.toString(),
@@ -256,7 +253,8 @@ class _GameVoteState extends State<GameVote> {
     var res = await http.post(url, body: data);
     var datamysql = jsonDecode(res.body) as List;
     setState(() {
-      getMLVU();
+      print (" IBN Yes");
+      readGameVote();
       listCheckVote =
           datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
       updateThisMli(listGameLike[cestCeluiLa].memeid);
@@ -270,8 +268,8 @@ class _GameVoteState extends State<GameVote> {
       ipv4name = ipv4;
     });
   }
-  Future getMLVU() async {
-    Uri url = Uri.parse(pathPHP + "getMLVU.php");
+  Future readGameVote() async {
+    Uri url = Uri.parse(pathPHP + "readGameVote.php");
     listCheckMlvuState = false;
 
     http.Response response = await http.post(url);
@@ -329,7 +327,7 @@ class _GameVoteState extends State<GameVote> {
   }
   pressEmoticone(int _myUid, int lequel) {
     setState(() {
-      createMemolikeVote(_myUid, lequel);
+      createGameVote(_myUid, lequel);
     });
   }
   prevPRL() {
@@ -408,7 +406,6 @@ class _GameVoteState extends State<GameVote> {
     int calcul = _thatNote * 10 ~/ inote;
     return (calcul);
   }
-
   Future getGamebyUid() async {
     bool gameCodeFound = true;
     Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");

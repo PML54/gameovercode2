@@ -46,6 +46,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 iconSize: 30.0,
                 tooltip: 'Home',
                 onPressed: () {
+                  PhlCommons.thisGameCode =takeThisGameCode;
+                  print (" takeThisGameCode"+takeThisGameCode.toString());
                   Navigator.pop(context);
                 },
               ),
@@ -174,6 +176,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
                     takeThisGameCode= myGames[index].gamecode;
+                    PhlCommons.thisGameCode =takeThisGameCode ;
                     myGames[index].extraColor = Colors.green;
                     int jj = 0;
                     for (GameByUser _brocky in myGames) {
@@ -182,6 +185,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         _brocky.extraColor = Colors.grey;
                       }
                     }
+                 // Au Ac ous
                   } else {
                     myGames[index].extraColor = Colors.grey;
                   }

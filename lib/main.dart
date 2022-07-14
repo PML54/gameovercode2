@@ -29,14 +29,17 @@ class _MenoPaulState extends State<MenoPaul> {
   String dispConnectivity="";
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
   bool isAdmin = false;
   bool isGamer = false;
+  int gameCodeFetched=0;
   String connectedGuy = "";
   List<MemopolUsers> listMemopolUsers = [];
    GameCommons myPerso = GameCommons("xxxx", 0,0) ;
   @override
   Widget build(BuildContext context) {
+    setState(() {  gameCodeFetched =PhlCommons.thisGameCode ;  });
+
+
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent
           //color set to transperent or set your own color
@@ -44,7 +47,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' 0714  ' + myPerso.myPseudo+' '+dispConnectivity,
+          '140-' + myPerso.myPseudo+' ' +'>'+gameCodeFetched.toString(),
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -92,9 +95,7 @@ class _MenoPaulState extends State<MenoPaul> {
                           MaterialPageRoute(builder: (context) => LoginPage()),
                         ));
                         setState(() {
-
                           connectedGuy = listMemopolUsers[0].uname;
-
                           if (listMemopolUsers[0].uprofile & 128 == 128) {
                             isAdmin = true;
                           }
@@ -112,7 +113,7 @@ class _MenoPaulState extends State<MenoPaul> {
                 Row(
                   children: [
                     Visibility(
-                      visible: isGamer,
+                      visible: isGamer ,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(

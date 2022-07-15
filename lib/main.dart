@@ -48,7 +48,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '141-' + myPerso.myPseudo+' ' +'>'+gameCodeFetched.toString(),
+          'V15.1 : ' + myPerso.myPseudo,
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),

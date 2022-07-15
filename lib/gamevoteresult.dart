@@ -110,11 +110,13 @@ class _GameVoteResultState extends State<GameVoteResult> {
                     ),
                   ),
                   Center(
-                      child: Text('By ' +myPerso.myPseudo
+                      child: Text('By ' + listGameLike[cestCeluiLa].uid.toString()
                            +
                           '--> ' +
                           listGameLike[cestCeluiLa].mynote.toString() +
-                          " Points")),
+                          " Points",
+                          style: TextStyle(fontSize: 22, color: Colors.red),
+                      )),
                 ]),
               )
             : Text(''),

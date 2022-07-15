@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:gameover/admin/admingame.dart';
+import 'package:gameover/gamehelp.dart';
 import 'package:gameover/gamemanager.dart';
 import 'package:gameover/gameuser.dart';
 import 'package:gameover/gamephlclass.dart';
@@ -381,7 +382,7 @@ class _MenoPaulState extends State<MenoPaul> {
       bottomNavigationBar: Visibility(
         visible: true,
         child: IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.help_center),
             /*     showSimpleNotification(
                   Text("this is a message from simple notification"),
                   background: Colors.green);*/ iconSize: 35,
@@ -389,9 +390,20 @@ class _MenoPaulState extends State<MenoPaul> {
             tooltip: 'Unused',
             onPressed: () {
 
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  GameHelp(),
+                    settings: RouteSettings(
+                      arguments: myPerso,
+                    ),
+                  ),
+                );
+              },
 
-              setState(() {});
-            }),
+
+
+            ),
       ),
     );
   }

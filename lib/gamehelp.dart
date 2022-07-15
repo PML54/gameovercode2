@@ -1,0 +1,125 @@
+// FAVORI
+// 5 Juillet
+
+// On Va boucler sur la TAble MEMEID
+
+//  On prend la Partie   gameecode    concernée
+
+//MEMEID   | int         | NO   | PRI | NULL    | auto_increment |
+//PHOTOID  | int         | NO   |     | NULL    |                |
+//GAMECODE | int         | NO   | MUL | NULL    |                |
+// UID      | int         | NO   |     | NULL    |                |
+// MEMETEXT | varchar(50) | YES  |     | NULL    |                |
+//listMemoLike[cestCeluiLa].photofilename +
+//listMemoLike[cestCeluiLa].photofiletype,
+import 'dart:async';
+import 'dart:convert';
+import 'dart:core';
+
+import 'package:dart_ipify/dart_ipify.dart';
+import 'package:flutter/material.dart';
+import 'package:gameover/configgamephl.dart';
+import 'package:gameover/gamephlclass.dart';
+import 'package:gameover/phlcommons.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+
+// Ici  On entre avec Un gamecode
+class GameHelp extends StatefulWidget {
+  const GameHelp({Key? key}) : super(key: key);
+
+  @override
+  State<GameHelp> createState() => _GameHelpState();
+}
+
+class _GameHelpState extends State<GameHelp> {
+
+
+  int cestCeluiLa = 1;
+  bool repaintPRL = true;
+String   monaide="help/Help110.png";
+
+  @override
+  Widget build(BuildContext context) {
+    final myPerso = ModalRoute
+        .of(context)!
+        .settings
+        .arguments as GameCommons;
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(actions: <Widget>[
+          Expanded(
+              child: Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () => {Navigator.pop(context)},
+
+                        child: const Text('Exit')),
+                  ]))
+        ]),
+
+        body:
+        Column(children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            child: Image.network(
+                monaide
+            ),
+          ),
+
+        ]),
+
+
+        bottomNavigationBar: Row(children: [
+          IconButton(
+              icon: const Icon(Icons.arrow_back),
+              iconSize: 35,
+              color: Colors.blue,
+              tooltip: 'Prev',
+              onPressed: () {
+                prevPRL();
+              }),
+
+          IconButton(
+              icon: const Icon(Icons.arrow_forward),
+              iconSize: 35,
+              color: Colors.blue,
+              tooltip: 'Next',
+              onPressed: () {
+                nextPRL();
+              }),
+
+        ]),
+
+      ),
+    );
+  }
+
+@override
+void initState() {
+  super.initState();
+  cestCeluiLa = 0;
+}
+prevPRL() {
+  setState(() {
+    cestCeluiLa--;
+    if (cestCeluiLa < 1) cestCeluiLa = 1;
+    repaintPRL = true;
+    int nu=10*  cestCeluiLa+100;
+    monaide ="help/Help"+nu.toString()+".png";
+  });
+}
+  nextPRL() {
+    setState(() {
+     cestCeluiLa++;
+      if (cestCeluiLa >9 ) cestCeluiLa =9;
+      int nu=10*  cestCeluiLa+100;
+  monaide ="help/Help"+nu.toString()+".png";
+
+    });
+  }
+
+
+
+}

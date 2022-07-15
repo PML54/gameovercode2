@@ -189,7 +189,6 @@ class _LoginPage extends State<LoginPage> {
       ]),
     );
   }
-
   Future getMemopolUser() async {
     Uri url = Uri.parse(pathPHP + "readMEMOPOLUSERS.php");
     var data = {"UNAME": username, "UPASS": password};
@@ -205,12 +204,10 @@ class _LoginPage extends State<LoginPage> {
             datamysql.map((xJson) => MemopolUsers.fromJson(xJson)).toList();
         getMemopolUserState = true;
         PhlCommons.thatUid=listMemopolUsers[0].uid;
-
         Navigator.pop(context, listMemopolUsers);
       });
     } else {}
   }
-
   @override
   void initState() {
     username = "";

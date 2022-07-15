@@ -113,7 +113,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
     await http.post(url, body: data);
     changeStatusGameUserState = true;
   }
-
   Future getGamebyUid() async {
     bool gameCodeFound = true;
     Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
@@ -138,7 +137,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
       });
     } else {}
   }
-
   Expanded getListGame() {
     setState(() {});
     if (!getGamebyUidState) {

@@ -23,6 +23,7 @@ import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+
 // Ici  On entre avec Un gamecode
 class GameVote extends StatefulWidget {
   const GameVote({Key? key}) : super(key: key);
@@ -30,9 +31,7 @@ class GameVote extends StatefulWidget {
   @override
   State<GameVote> createState() => _GameVoteState();
 }
-// Gamecode
-// Uid
-//  Liste
+
 class _GameVoteState extends State<GameVote> {
   TextEditingController legendeController = TextEditingController();
   String mafoto = 'assets/oursmacron.png';
@@ -45,13 +44,13 @@ class _GameVoteState extends State<GameVote> {
   List<GameLike> listGameLike = [];
   bool readGameVoteState = false;
   bool readGameVoteVoteState = false;
-  bool listCheckMlvuState = false;
+
   bool readGameLikeVoteState = false;
   List<int> listCountEmo = [];
   List<CheckVotePlus> listCheckVote = [];
-  List<CheckMLVU> listCheckMlvu = [];
+
   List<GameByUser> myGames = [];
-  int cecodegame = PhlCommons.thisGameCode;
+
   int cestCeluiLa = 0;
   bool repaintPRL = true;
   bool boolTexfield = true;
@@ -88,6 +87,7 @@ class _GameVoteState extends State<GameVote> {
                   myPerso.myPseudo + " ",
                   style: GoogleFonts.averageSans(fontSize: 18.0),
                 ),
+                Text(PhlCommons.thisGameCode.toString()),
                 Visibility(
                   visible: booLike,
                   child: IconButton(
@@ -129,32 +129,20 @@ class _GameVoteState extends State<GameVote> {
                           listGameLike[cestCeluiLa].photofiletype,
                     ),
                   ),
-                  readGameLikeVoteState|| true
+                  readGameLikeVoteState || true
                       ? Row(
                           children: <Widget>[
                             //🤣
                             Column(
                               children: [
                                 TextButton(
-                                  onPressed: () => {pressEmoticone(myUid, 0)},
+                                  onPressed: () => {pressEmoticone(myUid, 1)},
                                   child: const Text(
                                     '🙁',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ),
-                                Text((listCountEmo[0]).toString())
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                TextButton(
-                                  onPressed: () => {pressEmoticone(myUid, 1)},
-                                  child: const Text(
-                                    '😐',
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                ),
-                                Text((listCountEmo[1]).toString())
+                                (listGameLike[cestCeluiLa].mynote == 1)?Text( "1") : Text ("0"),
                               ],
                             ),
                             Column(
@@ -162,11 +150,11 @@ class _GameVoteState extends State<GameVote> {
                                 TextButton(
                                   onPressed: () => {pressEmoticone(myUid, 2)},
                                   child: const Text(
-                                    '🙂',
+                                    '😐',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ),
-                                Text((listCountEmo[2]).toString())
+                                (listGameLike[cestCeluiLa].mynote == 2)?Text( "1") : Text ("0"),
                               ],
                             ),
                             Column(
@@ -174,11 +162,11 @@ class _GameVoteState extends State<GameVote> {
                                 TextButton(
                                   onPressed: () => {pressEmoticone(myUid, 3)},
                                   child: const Text(
-                                    '😄',
+                                    '🙂',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ),
-                                Text((listCountEmo[3]).toString())
+                                (listGameLike[cestCeluiLa].mynote == 3)?Text( "1") : Text ("0"),
                               ],
                             ),
                             Column(
@@ -186,11 +174,11 @@ class _GameVoteState extends State<GameVote> {
                                 TextButton(
                                   onPressed: () => {pressEmoticone(myUid, 4)},
                                   child: const Text(
-                                    '😆',
+                                    '😄',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ),
-                                Text((listCountEmo[4]).toString())
+                                (listGameLike[cestCeluiLa].mynote == 4)?Text( "1") : Text ("0"),
                               ],
                             ),
                             Column(
@@ -198,11 +186,23 @@ class _GameVoteState extends State<GameVote> {
                                 TextButton(
                                   onPressed: () => {pressEmoticone(myUid, 5)},
                                   child: const Text(
+                                    '😆',
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                ),
+                                (listGameLike[cestCeluiLa].mynote == 5)?Text( "1") : Text ("0"),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                TextButton(
+                                  onPressed: () => {pressEmoticone(myUid, 6)},
+                                  child: const Text(
                                     '🤣',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ),
-                                Text((listCountEmo[5]).toString())
+                                (listGameLike[cestCeluiLa].mynote == 6)?Text( "1") : Text ("0"),
                               ],
                             )
                           ],
@@ -243,60 +243,41 @@ class _GameVoteState extends State<GameVote> {
       ),
     );
   }
-
   Future createGameVote(int _myUid, int _points) async {
-    //Uri url = Uri.parse(pathPHP + "createMLV.php");
+
     Uri url = Uri.parse(pathPHP + "createGameVote.php");
 
-    print("PhlCommons.thisGameCode.toString()" +
-        PhlCommons.thisGameCode.toString());
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
-      "MLVPOINTS": _points.toString(),
-      "MLVDATE": now.toString(),
-      "MEMOLIKEID": listGameLike[cestCeluiLa].memeid.toString(),
+      "GVPOINTS": _points.toString(),
+      "GVLAST": now.toString(),
+      "MEMEID": listGameLike[cestCeluiLa].memeid.toString(),
       "UID": _myUid.toString()
     };
     var res = await http.post(url, body: data);
     var datamysql = jsonDecode(res.body) as List;
     setState(() {
-       readGameVote();
-      listCheckVote =
-          datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
-      updateThisMli(listGameLike[cestCeluiLa].memeid);
-      thatAverage =
-          (updateThisMli(listGameLike[cestCeluiLa].memeid)).toDouble();
+
     });
+
+
   }
 
-  /*Future getGamebyUid() async {
-    bool gameCodeFound = true;
-    Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
+  Future createGameVoteAll(int _myUid) async {
+    //Uri url = Uri.parse(pathPHP + "createMLV.php");
+    Uri url = Uri.parse(pathPHP + "createGameVoteAll.php");
 
-    var data = {
-      "UID": PhlCommons.thatUid.toString(),
-    };
-    http.Response response = await http.post(url, body: data);
-    if (response.body.toString() == 'ERR_1001') {
-      gameCodeFound = false;
-      getGamebyUidState = false;
-      getGamebyUidError = 1001;
-    } else {
-      gameCodeFound = true;
+    for (GameLike _thisVote in listGameLike) {
+      var data = {
+        "GAMECODE": PhlCommons.thisGameCode.toString(),
+        "MLVPOINTS":  _thisVote.mynote.toString(),
+        "MLVDATE": now.toString(),
+        "MEMOLIKEID":  _thisVote.memeid.toString(),
+        "UID": myUid.toString()
+      };
+        await http.post(url, body: data);
     }
-    if (response.statusCode == 200 && (gameCodeFound)) {
-      var datamysql = jsonDecode(response.body) as List;
-      setState(() {
-        myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
-
-        PhlCommons.thisGameCode = myGames.last.gamecode;
-        getGamebyUidState = true;
-        getGamebyUidError = 0;
-// tout est vert on Y va
-        readGameLike(); // Seule Lecture
-      });
-    } else {}
-  }*/
+  }
 
   Future getIP() async {
     final ipv4 = await Ipify.ipv4();
@@ -304,7 +285,6 @@ class _GameVoteState extends State<GameVote> {
       ipv4name = ipv4;
     });
   }
-
   @override
   void initState() {
     super.initState();
@@ -320,7 +300,6 @@ class _GameVoteState extends State<GameVote> {
     setState(() {
       if (readGameLikeState) {
         if (readGameLikeVoteState) {
-          updateThisMli(listGameLike[cestCeluiLa].memeid);
           repaintPRL = true;
         }
       }
@@ -330,43 +309,32 @@ class _GameVoteState extends State<GameVote> {
       print(DateTime.now());
     });
   }
-
   nextPRL() {
     setState(() {
-      thatSum = 0;
-      thatCount = 0;
-      booLike = false;
       cestCeluiLa++;
       if (cestCeluiLa >= listGameLike.length) {
         cestCeluiLa = listGameLike.length - 1;
       }
-
-     // readGameLikeVote();
       repaintPRL = true;
-      updateThisMli(listGameLike[cestCeluiLa].memeid);
     });
   }
-
   pressEmoticone(int _myUid, int lequel) {
     setState(() {
-      createGameVote(_myUid, lequel);
+       if ( listGameLike[cestCeluiLa].mynote==lequel)  listGameLike[cestCeluiLa].mynote=0;
+       else listGameLike[cestCeluiLa].mynote=lequel;
+        createGameVote(_myUid, lequel);
+        nextPRL();
+
+
     });
   }
-
   prevPRL() {
     setState(() {
-      thatSum = 0;
-      thatCount = 0;
-      booLike = false;
       cestCeluiLa--;
       if (cestCeluiLa < 0) cestCeluiLa = 0;
-
-     // readGameLikeVote();
       repaintPRL = true;
-      updateThisMli(listGameLike[cestCeluiLa].memeid);
     });
   }
-
   Future readGameLike() async {
     Uri url = Uri.parse(pathPHP + "readGAMELIKE.php");
     readGameLikeState = false;
@@ -377,8 +345,7 @@ class _GameVoteState extends State<GameVote> {
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
       readGameLikeError = 1001; //Not Found
-      print('Dans readGameLike 1001');
-    }
+   }
     if (response.statusCode == 200 && (readGameLikeError != 1001)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
@@ -386,68 +353,24 @@ class _GameVoteState extends State<GameVote> {
         listGameLike =
             datamysql.map((xJson) => GameLike.fromJson(xJson)).toList();
         readGameLikeState = true;
-
-        print("listGameLike" + listGameLike.length.toString());
-        //  readGameLikeVote();  // ??
       });
     } else {}
   }
-
- /* Future readGameLikeVote( ) async {
-    Uri url = Uri.parse(pathPHP + "getMLV.php");
-    readGameLikeVoteState = false;
-    var data = {
-      "MEMOLIKEID": listGameLike[cestCeluiLa].memeid.toString(),
-    };
-print (" Dans listGameLike[cestCeluiLa].memeid"+ listGameLike[cestCeluiLa].memeid.toString());
-    var res = await http.post(url, body: data);
-    var datamysql = jsonDecode(res.body) as List;
-
-    print  (" ON ALu readGameLikeVote ");
-    setState(() {
-      listCheckVote =
-          datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
-      readGameLikeVoteState = true;
-
-      thatAverage =
-          (updateThisMli(listGameLike[cestCeluiLa].memeid)).toDouble();
-    });
-  }*/
-
   Future readGameVote() async {
     Uri url = Uri.parse(pathPHP + "readGameVote.php");
-    listCheckMlvuState = false;
+
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+      "UID": PhlCommons.thatUid.toString()
+    };
 
     http.Response response = await http.post(url);
     if (response.body.toString() == 'ERR_1001') {}
     if (response.statusCode == 200 && (readGameLikeError != 1001)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
-        listCheckMlvu =
-            datamysql.map((xJson) => CheckMLVU.fromJson(xJson)).toList();
-        listCheckMlvuState = true;
+
       });
     } else {}
-  }
-
-  int updateThisMli(int _memolikeid) {
-    // Repartion  des Like
-    int _thatNote = 0;
-    int inote = 0;
-    listCountEmo.clear();
-    for (int i = 0; i < 6; i++) {
-      listCountEmo.add(0);
-    }
-    for (CheckVotePlus _cvp in listCheckVote) {
-      if (_cvp.memolikeid == _memolikeid) {
-        int suiCi = _cvp.mlvpoints;
-        _thatNote = _thatNote + suiCi;
-        inote++;
-        listCountEmo[suiCi] = _cvp.cumu;
-      }
-    }
-    if (inote == 0) inote = 1;
-    int calcul = _thatNote * 10 ~/ inote;
-    return (calcul);
   }
 }

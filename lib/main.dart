@@ -12,6 +12,7 @@ import 'package:gameover/userconnect.dart';
 import 'package:gameover/usercreate.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:gameover/supervisorgames.dart';
+import 'package:gameover/gamevoteresult.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
@@ -164,6 +165,34 @@ class _MenoPaulState extends State<MenoPaul> {
                         ),
                       ),
                     ),
+                    Visibility(
+                      visible: isGamer ,
+                      child: IconButton(
+                          icon: const Icon(Icons.favorite_rounded),
+                          /*     showSimpleNotification(
+                  Text("this is a message from simple notification"),
+                  background: Colors.green);*/
+                          iconSize: 35,
+                          color: Colors.blue,
+                          tooltip: 'Unused',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                //      builder: (context) => const ConnectGame()),
+                                builder: (context) => const   GameVoteResult(),
+                                settings: RouteSettings(
+                                  arguments: myPerso,
+                                ),
+
+                              ),
+
+                            );
+
+
+
+                          }),
+                    ),
 
                   ],
                 ),
@@ -238,7 +267,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         child: ElevatedButton(
                           child: Text(
                             'CAPTION',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            style: GoogleFonts.averageSans(fontSize: 15.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -263,7 +292,7 @@ class _MenoPaulState extends State<MenoPaul> {
                     child: ElevatedButton(
                       child: Text(
                         'ADMIN',
-                        style: GoogleFonts.averageSans(fontSize: 20.0),
+                        style: GoogleFonts.averageSans(fontSize: 15.0),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -284,7 +313,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         child: ElevatedButton(
                           child: Text(
                             'NEW GAMER',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            style: GoogleFonts.averageSans(fontSize: 15.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -303,7 +332,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         child: ElevatedButton(
                           child: Text(
                             'FAVORI',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            style: GoogleFonts.averageSans(fontSize: 15.0),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -326,7 +355,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         child: ElevatedButton(
                           child: Text(
                             'RANDOM',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            style: GoogleFonts.averageSans(fontSize: 15.0),
                           ),
                           onPressed: () {
                             Navigator.push(

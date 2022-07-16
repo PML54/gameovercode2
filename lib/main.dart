@@ -127,7 +127,7 @@ class _MenoPaulState extends State<MenoPaul> {
                   ),
                   Row(
                     children: [
-                      Visibility(
+                  /*    Visibility(
                         visible: isGamer ,
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -153,7 +153,7 @@ class _MenoPaulState extends State<MenoPaul> {
                             },
                           ),
                         ),
-                      ),
+                      ),*/
                       Visibility(
                         visible: isGamer,
                         child: Padding(

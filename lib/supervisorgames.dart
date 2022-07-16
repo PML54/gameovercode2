@@ -232,11 +232,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 children: [
                   Expanded(
                     child: Container(
-                        margin: const EdgeInsets.all(2.0),
+                        /*margin: const EdgeInsets.all(2.0),
                         padding: const EdgeInsets.all(2.0),
                         decoration: BoxDecoration(
                             color: listPhotoBase[index].extraColor,
-                            border: Border.all()),
+                            border: Border.all()),*/
                         child: Column(
                           children: [
                             Image.network(

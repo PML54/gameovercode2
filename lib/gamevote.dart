@@ -323,7 +323,7 @@ class _GameVoteState extends State<GameVote> {
        if ( listGameLike[cestCeluiLa].mynote==lequel)  listGameLike[cestCeluiLa].mynote=0;
        else listGameLike[cestCeluiLa].mynote=lequel;
         createGameVote(_myUid, lequel);
-        nextPRL();
+        //nextPRL();
 
 
     });

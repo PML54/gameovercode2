@@ -96,7 +96,7 @@ class _MemolikeState extends State<Memolike> {
         ]),
 
         //body: readMemolikeVoteState
-        body: readMemolikeState
+        body: readMemolikeState|true
             ? SafeArea(
                 child: Column(children: <Widget>[
                   Container(

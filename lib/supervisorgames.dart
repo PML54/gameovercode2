@@ -8,6 +8,7 @@ import 'package:gameover/phlcommons.dart';
 import 'package:gameover/gameuser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:gameover/main.dart';
 
 class GameSupervisor extends StatefulWidget {
   const GameSupervisor({Key? key}) : super(key: key);
@@ -24,6 +25,15 @@ class GameSupervisor extends StatefulWidget {
 class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
   List<Games> myGuGame = []; //  only one Games
+  //
+  bool myBool = false;
+  bool feuOrange = true;
+
+  bool getGamePhotoSelectState = false;
+  int getGamePhotoSelectError = -1;
+  List<PhotoBase> listPhotoBase = [];
+
+  //
   bool getGamebyUidState = false;
   int getGamebyUidError = 0;
   List<GameByUser> myGames = [];
@@ -47,6 +57,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 tooltip: 'Home',
                 onPressed: () {
                   PhlCommons.thisGameCode =takeThisGameCode;
+                  print  (" PhlCommons.thisGameCode-->"+PhlCommons.thisGameCode.toString());
                   print (" takeThisGameCode"+takeThisGameCode.toString());
                   Navigator.pop(context);
                 },
@@ -69,6 +80,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       body: SafeArea(
         child: Row(children: <Widget>[
           getListGame(),
+          getListView()
         ]),
       ),
       bottomNavigationBar: Visibility(
@@ -78,7 +90,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
           padding: const EdgeInsets.all(10.0),
           child: ElevatedButton(
             child: Text(
-              'Press for --->'+takeThisGameCode.toString(),
+              'Join LOBBY N°'+takeThisGameCode.toString(),
               style: GoogleFonts.averageSans(fontSize: 20.0),
             ),
             onPressed: () {
@@ -173,8 +185,10 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 setState(() {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
+                    getGamePhotoSelect();
                     takeThisGameCode= myGames[index].gamecode;
                     PhlCommons.thisGameCode =takeThisGameCode ;
+                    myPerso.myGame=takeThisGameCode;
                     myGames[index].extraColor = Colors.green;
                     int jj = 0;
                     for (GameByUser _brocky in myGames) {
@@ -198,4 +212,78 @@ class _GameSupervisorState extends State<GameSupervisor> {
     super.initState();
     getGamebyUid();
   }
+
+
+  Expanded getListView() {
+    setState(() {});
+    if (  !getGamePhotoSelectState) {
+      return (const Expanded(child: Text(".............")));
+    }
+    //
+
+    var listView = ListView.builder(
+        itemCount: listPhotoBase.length,
+        controller: ScrollController(),
+        itemBuilder: (context, index) {
+          return ListTile(
+              dense: true,
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                            color: listPhotoBase[index].extraColor,
+                            border: Border.all()),
+                        child: Column(
+                          children: [
+                            Image.network(
+                              "upload/" +
+                                  listPhotoBase[index].photofilename +
+                                  "." +
+                                  listPhotoBase[index].photofiletype,
+                              width: (listPhotoBase[index].extraWidth),
+                              height: (listPhotoBase[index].extraHeight),
+                            ),
+                          ],
+                        )),
+                  ),
+                ],
+              ),
+              onTap: () {
+                setState(() {
+                  cestCeluiLa = index;
+                });
+              });
+        });
+    return (Expanded(child: listView));
+  }
+
+  Future getGamePhotoSelect() async {
+    getGamePhotoSelectState = false;
+    getGamePhotoSelectError = -1;
+
+    Uri url = Uri.parse(pathPHP + "getGAMEPHOTOS.php");
+
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+    if (response.statusCode == 200) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        listPhotoBase =
+            datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
+        getGamePhotoSelectState = true;
+        getGamePhotoSelectError = 0;
+        // On Empie c'est bon
+
+      });
+    } else {
+      getGamePhotoSelectError = 2001;
+    }
+  }
+
+
 }

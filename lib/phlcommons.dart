@@ -2,7 +2,7 @@ import 'dart:core';
 import 'package:gameover/gamephlclass.dart';
 class PhlCommons {
   int numiro;
- static  int thisGameCode =0;
+ static  int  thisGameCode=0;
   static int thisGameId = 0;
   static int nbtic = 0;
   static int lastmodify = 1;
@@ -37,6 +37,7 @@ class GameCommons {
  int myProfile;
  String myPseudo="";
 int myUid;
+int myGame=0;
  GameCommons(this.myPseudo,this.myProfile, this.myUid);
 
 

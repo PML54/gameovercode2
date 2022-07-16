@@ -12,17 +12,15 @@
 // MEMETEXT | varchar(50) | YES  |     | NULL    |                |
 //listMemoLike[cestCeluiLa].photofilename +
 //listMemoLike[cestCeluiLa].photofiletype,
-import 'dart:async';
-import 'dart:convert';
+
+
 import 'dart:core';
 
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
-import 'package:gameover/configgamephl.dart';
-import 'package:gameover/gamephlclass.dart';
+
+
 import 'package:gameover/phlcommons.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
+
 
 // Ici  On entre avec Un gamecode
 class GameHelp extends StatefulWidget {

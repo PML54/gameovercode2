@@ -185,6 +185,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 setState(() {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
+                    getGamePhotoSelectState=false;
                     getGamePhotoSelect();
                     takeThisGameCode= myGames[index].gamecode;
                     PhlCommons.thisGameCode =takeThisGameCode ;

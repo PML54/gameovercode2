@@ -182,6 +182,7 @@ class _GameUserState extends State<GameUser> {
         myGuGame = datamysql.map((xJson) => Games.fromJson(xJson)).toList();
         getGamebyCodeState = true;
         getGamebyCodeError = 0;
+        getGamePhotoSelect(); // Il faut le GameCore
       });
     } else {}
   }
@@ -311,23 +312,20 @@ class _GameUserState extends State<GameUser> {
                 children: [
                   Expanded(
                     child: Container(
-                        margin: const EdgeInsets.all(2.0),
-                        padding: const EdgeInsets.all(2.0),
+                      /*margin: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(2.0),0
                         decoration: BoxDecoration(
                             color: listPhotoBase[index].extraColor,
-                            border: Border.all()),
-                        child: Column(
-                          children: [
-                            Image.network(
-                              "upload/" +
-                                  listPhotoBase[index].photofilename +
-                                  "." +
-                                  listPhotoBase[index].photofiletype,
-                              width: (listPhotoBase[index].extraWidth),
-                              height: (listPhotoBase[index].extraHeight),
-                            ),
-                          ],
-                        )),
+                            border: Border.all()),*/
+                      child: Image.network(
+                        "upload/" +
+                            listPhotoBase[index].photofilename +
+                            "." +
+                            listPhotoBase[index].photofiletype,
+                        /*width: (listPhotoBase[index].extraWidth),
+                              height: (listPhotoBase[index].extraHeight),*/
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -367,7 +365,6 @@ class _GameUserState extends State<GameUser> {
     reset();
     getGamebyUidState = true;
     //getGamebyUid();
-    getGamePhotoSelect(); // Il faut le GameCore
     getGamebyCode(); // H-eu
   }
 

@@ -14,7 +14,6 @@ List statusGame = [
   "MEMECLOSED",
   "VOTING",
   "VOTECLOSED",
-  "GAMEOVER",
   "ABORTED"
 ];
 List modeGame = ["PUBLIC", "PRIVATE"];

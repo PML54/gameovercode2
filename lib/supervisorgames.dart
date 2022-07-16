@@ -26,6 +26,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
   List<Games> myGuGame = []; //  only one Games
   //
+ bool  promoteGameState = false;
   bool myBool = false;
   bool feuOrange = true;
 
@@ -62,6 +63,17 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   Navigator.pop(context);
                 },
               ),
+              ElevatedButton(
+                child: Text(
+                  'PROMOTE GAME N°'+takeThisGameCode.toString(),
+                  style: GoogleFonts.averageSans(fontSize: 20.0),
+                ),
+                onPressed: () {
+              promoteGame();
+
+                },
+              ),
+
               ElevatedButton(
                   onPressed: () => {null},
                   style: ElevatedButton.styleFrom(
@@ -186,6 +198,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
                     getGamePhotoSelectState=false;
+                    cestCeluiLa = index;
                     getGamePhotoSelect();
                     takeThisGameCode= myGames[index].gamecode;
                     PhlCommons.thisGameCode =takeThisGameCode ;
@@ -233,28 +246,26 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   Expanded(
                     child: Container(
                         /*margin: const EdgeInsets.all(2.0),
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(2.0),0
                         decoration: BoxDecoration(
                             color: listPhotoBase[index].extraColor,
                             border: Border.all()),*/
-                        child: Column(
-                          children: [
+                        child:
                             Image.network(
                               "upload/" +
                                   listPhotoBase[index].photofilename +
                                   "." +
                                   listPhotoBase[index].photofiletype,
-                              width: (listPhotoBase[index].extraWidth),
-                              height: (listPhotoBase[index].extraHeight),
+                              /*width: (listPhotoBase[index].extraWidth),
+                              height: (listPhotoBase[index].extraHeight),*/
                             ),
-                          ],
-                        )),
+                        ),
                   ),
                 ],
               ),
               onTap: () {
                 setState(() {
-                  cestCeluiLa = index;
+                 // cestCeluiLa = index;
                 });
               });
         });
@@ -285,6 +296,35 @@ class _GameSupervisorState extends State<GameSupervisor> {
       getGamePhotoSelectError = 2001;
     }
   }
+
+  Future promoteGame() async {
+    promoteGameState = false;
+    int _status =  myGames[cestCeluiLa].status;
+
+    if (_status == 6 ) return;
+    _status=_status+1;
+    myGames[cestCeluiLa].status=_status;
+    //myGames[cestCeluiLa].status
+    Uri url = Uri.parse(pathPHP + "promoteGAME.php");
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+      "GAMESTATUS": _status.toString(),
+      "GAMEDATE":DateTime.now().toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+    if (response.statusCode == 200) {
+
+      setState(() {
+
+        promoteGameState =  true;
+
+
+      });
+    } else {
+
+    }
+  }
+
 
 
 }

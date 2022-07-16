@@ -62,7 +62,7 @@ class _MenoPaulState extends State<MenoPaul> {
  Scaffold(
         appBar: AppBar(
           title: Text(
-            'V15.1 : ' + myPerso.myPseudo + ' '  ,
+            'V16.2 : ' + myPerso.myPseudo + ' '  ,
             style: GoogleFonts.averageSans(fontSize: 18.0),
           ),
         ),

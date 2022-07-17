@@ -215,7 +215,7 @@ class _GameVoteResultState extends State<GameVoteResult> {
     };
 
     http.Response response = await http.post(url, body: data);
-    print(" response.statusCode" + response.statusCode.toString());
+
     if (response.statusCode == 200) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
@@ -228,11 +228,11 @@ class _GameVoteResultState extends State<GameVoteResult> {
           for (GameLike _gamelike in listGameLike) {
             if (_gamelike.memeid == _thisVote.memeid) {
               _gamelike.mynote = _thisVote.sumg;
-              print("_thisVote.sumg " + _thisVote.sumg.toString());
+
             }
           }
         }
-       // listGameLike.sort((a, b) => b.mynote.compareTo(a.mynote));
+       listGameLike.sort((a, b) => b.mynote.compareTo(a.mynote));
       });
     } else {}
   }

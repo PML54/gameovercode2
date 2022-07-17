@@ -1,14 +1,14 @@
-
 import 'dart:convert';
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
-import 'package:gameover/phlcommons.dart';
 import 'package:gameover/gameuser.dart';
+import 'package:gameover/main.dart';
+import 'package:gameover/phlcommons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:gameover/main.dart';
 
 class GameSupervisor extends StatefulWidget {
   const GameSupervisor({Key? key}) : super(key: key);
@@ -20,28 +20,22 @@ class GameSupervisor extends StatefulWidget {
 // Permettre au GAmer  identifié par son UID
 //List statusGame = ["CREATED" , "READY" , "MEMING","MEMECLOSED","VOTING" ,
 // "VOTECLOSED","GAMEOVER","ABORTED"]
-
-
 class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
-  List<Games> myGuGame = []; //  only one Games
-  //
- bool  promoteGameState = false;
-  bool myBool = false;
-  bool feuOrange = true;
 
+  bool promoteGameState = false;
+  bool isGmid = false;
   bool getGamePhotoSelectState = false;
   int getGamePhotoSelectError = -1;
   List<PhotoBase> listPhotoBase = [];
-
-  //
   bool getGamebyUidState = false;
   int getGamebyUidError = 0;
   List<GameByUser> myGames = [];
   String thatPseudo = PhlCommons.thatPseudo;
   int cestCeluiLa = 0;
   bool changeStatusGameUserState = false;
- int takeThisGameCode=0;
+  int takeThisGameCode = 0;
+
   @override
   Widget build(BuildContext context) {
     myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
@@ -57,23 +51,21 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 iconSize: 30.0,
                 tooltip: 'Home',
                 onPressed: () {
-                  PhlCommons.thisGameCode =takeThisGameCode;
-                  print  (" PhlCommons.thisGameCode-->"+PhlCommons.thisGameCode.toString());
-                  print (" takeThisGameCode"+takeThisGameCode.toString());
+                  PhlCommons.thisGameCode = takeThisGameCode;
                   Navigator.pop(context);
                 },
               ),
-              ElevatedButton(
-                child: Text(
-                  'PROMOTE GAME N°'+takeThisGameCode.toString(),
-                  style: GoogleFonts.averageSans(fontSize: 20.0),
+              Visibility(visible: isGmid,
+                child: ElevatedButton(
+                  child: Text(
+                    'PROMOTE GAME N°' + takeThisGameCode.toString(),
+                    style: GoogleFonts.averageSans(fontSize: 20.0),
+                  ),
+                  onPressed: () {
+                    promoteGame();
+                  },
                 ),
-                onPressed: () {
-              promoteGame();
-
-                },
               ),
-
               ElevatedButton(
                   onPressed: () => {null},
                   style: ElevatedButton.styleFrom(
@@ -90,36 +82,33 @@ class _GameSupervisorState extends State<GameSupervisor> {
         ),
       ]),
       body: SafeArea(
-        child: Row(children: <Widget>[
-          getListGame(),
-          getListView()
-        ]),
+        child: Row(children: <Widget>[getListGame(), getListView()]),
       ),
       bottomNavigationBar: Visibility(
-        // visible: !timeOut,
         visible: true,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ElevatedButton(
-            child: Text(
-              'Join LOBBY N°'+takeThisGameCode.toString(),
-              style: GoogleFonts.averageSans(fontSize: 20.0),
-            ),
-            onPressed: () {
-              PhlCommons.thisGameCode =takeThisGameCode;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  //      builder: (context) => const ConnectGame()),
-                  builder: (context) => const GameUser(),
-                  settings: RouteSettings(
-                    arguments: myPerso,
+        child: Visibility(
+          visible:  takeThisGameCode>0,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              child: Text(
+                'Join LOBBY N°' + takeThisGameCode.toString(),
+                style: GoogleFonts.averageSans(fontSize: 20.0),
+              ),
+              onPressed: () {
+                PhlCommons.thisGameCode = takeThisGameCode;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    //      builder: (context) => const ConnectGame()),
+                    builder: (context) => const GameUser(),
+                    settings: RouteSettings(
+                      arguments: myPerso,
+                    ),
                   ),
-
-                ),
-
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -137,6 +126,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
     await http.post(url, body: data);
     changeStatusGameUserState = true;
   }
+
   Future getGamebyUid() async {
     bool gameCodeFound = true;
     Uri url = Uri.parse(pathPHP + "getGAMEBYUID.php");
@@ -161,6 +151,28 @@ class _GameSupervisorState extends State<GameSupervisor> {
       });
     } else {}
   }
+
+  Future getGamePhotoSelect() async {
+    getGamePhotoSelectState = false;
+    getGamePhotoSelectError = -1;
+    Uri url = Uri.parse(pathPHP + "getGAMEPHOTOS.php");
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+    if (response.statusCode == 200) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        listPhotoBase =
+            datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
+        getGamePhotoSelectState = true;
+        getGamePhotoSelectError = 0;
+      });
+    } else {
+      getGamePhotoSelectError = 2001;
+    }
+  }
+
   Expanded getListGame() {
     setState(() {});
     if (!getGamebyUidState) {
@@ -197,12 +209,15 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 setState(() {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
-                    getGamePhotoSelectState=false;
+                    //
+                    isGmid=false;
+                    isGmid= (PhlCommons.thatUid == myGames[index].gmid);
+                    getGamePhotoSelectState = false;
                     cestCeluiLa = index;
                     getGamePhotoSelect();
-                    takeThisGameCode= myGames[index].gamecode;
-                    PhlCommons.thisGameCode =takeThisGameCode ;
-                    myPerso.myGame=takeThisGameCode;
+                    takeThisGameCode = myGames[index].gamecode;
+                    PhlCommons.thisGameCode = takeThisGameCode;
+                    myPerso.myGame = takeThisGameCode;
                     myGames[index].extraColor = Colors.green;
                     int jj = 0;
                     for (GameByUser _brocky in myGames) {
@@ -211,11 +226,42 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         _brocky.extraColor = Colors.grey;
                       }
                     }
-                 // Au Ac ous
                   } else {
                     myGames[index].extraColor = Colors.grey;
                   }
                 });
+              });
+        });
+    return (Expanded(child: listView));
+  }
+
+  Expanded getListView() {
+    setState(() {});
+    if (!getGamePhotoSelectState) {
+      return (const Expanded(child: Text(".............")));
+    }
+    var listView = ListView.builder(
+        itemCount: listPhotoBase.length,
+        controller: ScrollController(),
+        itemBuilder: (context, index) {
+          return ListTile(
+              dense: true,
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Image.network(
+                        "upload/" +
+                            listPhotoBase[index].photofilename +
+                            "." +
+                            listPhotoBase[index].photofiletype,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                setState(() {});
               });
         });
     return (Expanded(child: listView));
@@ -227,104 +273,23 @@ class _GameSupervisorState extends State<GameSupervisor> {
     getGamebyUid();
   }
 
-
-  Expanded getListView() {
-    setState(() {});
-    if (  !getGamePhotoSelectState) {
-      return (const Expanded(child: Text(".............")));
-    }
-    //
-
-    var listView = ListView.builder(
-        itemCount: listPhotoBase.length,
-        controller: ScrollController(),
-        itemBuilder: (context, index) {
-          return ListTile(
-              dense: true,
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                        /*margin: const EdgeInsets.all(2.0),
-                        padding: const EdgeInsets.all(2.0),0
-                        decoration: BoxDecoration(
-                            color: listPhotoBase[index].extraColor,
-                            border: Border.all()),*/
-                        child:
-                            Image.network(
-                              "upload/" +
-                                  listPhotoBase[index].photofilename +
-                                  "." +
-                                  listPhotoBase[index].photofiletype,
-                              /*width: (listPhotoBase[index].extraWidth),
-                              height: (listPhotoBase[index].extraHeight),*/
-                            ),
-                        ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                setState(() {
-                 // cestCeluiLa = index;
-                });
-              });
-        });
-    return (Expanded(child: listView));
-  }
-
-  Future getGamePhotoSelect() async {
-    getGamePhotoSelectState = false;
-    getGamePhotoSelectError = -1;
-
-    Uri url = Uri.parse(pathPHP + "getGAMEPHOTOS.php");
-
-    var data = {
-      "GAMECODE": PhlCommons.thisGameCode.toString(),
-    };
-    http.Response response = await http.post(url, body: data);
-    if (response.statusCode == 200) {
-      var datamysql = jsonDecode(response.body) as List;
-      setState(() {
-        listPhotoBase =
-            datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
-        getGamePhotoSelectState = true;
-        getGamePhotoSelectError = 0;
-        // On Empie c'est bon
-
-      });
-    } else {
-      getGamePhotoSelectError = 2001;
-    }
-  }
-
   Future promoteGame() async {
     promoteGameState = false;
-    int _status =  myGames[cestCeluiLa].status;
-
-    if (_status == 6 ) return;
-    _status=_status+1;
-    myGames[cestCeluiLa].status=_status;
-    //myGames[cestCeluiLa].status
+    int _status = myGames[cestCeluiLa].status;
+    if (_status == 6) return;
+    _status = _status + 1;
+    myGames[cestCeluiLa].status = _status;
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "GAMESTATUS": _status.toString(),
-      "GAMEDATE":DateTime.now().toString(),
+      "GAMEDATE": DateTime.now().toString(),
     };
     http.Response response = await http.post(url, body: data);
     if (response.statusCode == 200) {
-
       setState(() {
-
-        promoteGameState =  true;
-
-
+        promoteGameState = true;
       });
-    } else {
-
-    }
+    } else {}
   }
-
-
-
 }

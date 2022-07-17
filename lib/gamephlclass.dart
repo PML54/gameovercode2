@@ -106,18 +106,21 @@ class GameByUser {
   int uid = 0;
   int gamecode = 0;
   int status = 0;
+  int gmid=0;
   bool isSelected = false;
   Color extraColor = Colors.grey;
 
   GameByUser({
     required this.uid,
     required this.gamecode,
+    required this.gmid,
   });
 
   factory GameByUser.fromJson(Map<String, dynamic> json) {
     return GameByUser(
       uid: int.parse(json['UID']),
       gamecode: int.parse(json['GAMECODE']),
+      gmid:int.parse(json['GMID']),
     );
   }
 }

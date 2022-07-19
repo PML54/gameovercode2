@@ -246,7 +246,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     }
     Uri url = Uri.parse(pathPHP + "updateGAMEPHOTOSELECT.php");
     var data = {
-      //<TODO>
+
       "GAMECODE": _gamecode.toString(),
       "GROUPSEL": thisParam,
     };

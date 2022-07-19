@@ -106,7 +106,7 @@ class GameByUser {
   int uid = 0;
   int gamecode = 0;
   int status = 0;
-  int gmid=0;
+  int gmid = 0;
   bool isSelected = false;
   Color extraColor = Colors.grey;
 
@@ -120,7 +120,7 @@ class GameByUser {
     return GameByUser(
       uid: int.parse(json['UID']),
       gamecode: int.parse(json['GAMECODE']),
-      gmid:int.parse(json['GMID']),
+      gmid: int.parse(json['GMID']),
     );
   }
 }
@@ -265,22 +265,26 @@ class Games {
 //------------>  GameUsers N°3
 class GameUsers {
   int guid = 0;
-  int uid=0;
+  int uid = 0;
   int gamecode = 0;
   int gustatus = 0;
   String guipv4 = "**.**.**.**";
   String gulast = "05-05-2022";
+  String uname = "***";
+  int uprofile = 0;
 
-
-  GameUsers({
-    required this.guid,
-    required this.uid,
-    required this.gamecode,
-    required this.gustatus,
-    required this.guipv4,
-    required this.gulast,
-
-  });
+/*
+ GUID | UID | GAMECODE | GUIPV4 | GULAST              | UNAME     | UPROFILE |
+ */
+  GameUsers(
+      {required this.guid,
+      required this.uid,
+      required this.gamecode,
+      required this.gustatus,
+      required this.guipv4,
+      required this.gulast,
+      required this.uname,
+      required this.uprofile});
 
   factory GameUsers.fromJson(Map<String, dynamic> json) {
     return GameUsers(
@@ -290,7 +294,8 @@ class GameUsers {
       gustatus: int.parse(json['GUSTATUS']),
       guipv4: json['GUIPV4'] as String,
       gulast: json['GULAST'] as String,
-
+      uname: json['UNAME'] as String,
+      uprofile: int.parse(json['UPROFILE']),
     );
   }
 }
@@ -325,7 +330,7 @@ class GameVotes {
 class GameVotesResult {
   int memeid = 0;
   int gamecode = 0;
-  int  sumg = 0;
+  int sumg = 0;
 
   GameVotesResult({
     required this.memeid,
@@ -341,7 +346,6 @@ class GameVotesResult {
     );
   }
 }
-
 
 //------------>  Memes N°5
 class Memes {
@@ -458,6 +462,7 @@ class MemopolUsersReduce {
   Color extraColor = Colors.grey;
   bool isSelected = false;
 
+  //GUID,GAMEUSERS.UID,GAMECODE,GUIPV4,GULAST,UNAME,UPROFILE
   MemopolUsersReduce({
     required this.uid,
     required this.ustatus,

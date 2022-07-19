@@ -265,29 +265,32 @@ class Games {
 //------------>  GameUsers N°3
 class GameUsers {
   int guid = 0;
+  int uid=0;
   int gamecode = 0;
   int gustatus = 0;
   String guipv4 = "**.**.**.**";
-  String gudate = "05-05-2022";
-  String gupseudo = "FFFF";
+  String gulast = "05-05-2022";
+
 
   GameUsers({
     required this.guid,
+    required this.uid,
     required this.gamecode,
     required this.gustatus,
     required this.guipv4,
-    required this.gudate,
-    required this.gupseudo,
+    required this.gulast,
+
   });
 
   factory GameUsers.fromJson(Map<String, dynamic> json) {
     return GameUsers(
       guid: int.parse(json['GUID']),
+      uid: int.parse(json['UID']),
       gamecode: int.parse(json['GAMECODE']),
       gustatus: int.parse(json['GUSTATUS']),
       guipv4: json['GUIPV4'] as String,
-      gudate: json['GULAST'] as String,
-      gupseudo: json['GUPSEUDO'] as String,
+      gulast: json['GULAST'] as String,
+
     );
   }
 }

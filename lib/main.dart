@@ -62,7 +62,7 @@ class _MenoPaulState extends State<MenoPaul> {
  Scaffold(
         appBar: AppBar(
           title: Text(
-            'V16.2 : ' + myPerso.myPseudo + ' '  ,
+            'V19.1 : ' + myPerso.myPseudo + ' '  ,
             style: GoogleFonts.averageSans(fontSize: 18.0),
           ),
         ),
@@ -125,90 +125,7 @@ class _MenoPaulState extends State<MenoPaul> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                  /*    Visibility(
-                        visible: isGamer ,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ElevatedButton(
-                            child: Text(
-                              PhlCommons.thisGameCode.toString()
-                              ,
-                              style: GoogleFonts.averageSans(fontSize: 20.0),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  //      builder: (context) => const ConnectGame()),
-                                  builder: (context) => const GameUser(),
-                                  settings: RouteSettings(
-                                    arguments: myPerso,
-                                  ),
 
-                                ),
-
-                              );
-                            },
-                          ),
-                        ),
-                      ),*/
-                      Visibility(
-                        visible: isGamer,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ElevatedButton(
-                            child: Text(
-                              'VOTE   ',
-                              style: GoogleFonts.averageSans(fontSize: 20.0),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  //      builder: (context) => const ConnectGame()),
-                                  builder: (context) => const GameVote(),
-                                  settings: RouteSettings(
-                                    arguments: myPerso,
-                                  ),
-
-                                ),
-
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: isGamer ,
-                        child: IconButton(
-                            icon: const Icon(Icons.favorite_rounded),
-                            /*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*/
-                            iconSize: 35,
-                            color: Colors.blue,
-                            tooltip: 'Unused',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  //      builder: (context) => const ConnectGame()),
-                                  builder: (context) => const   GameVoteResult(),
-                                  settings: RouteSettings(
-                                    arguments: myPerso,
-                                  ),
-
-                                ),
-
-                              );
-
-                            }),
-                      ),
-
-                    ],
-                  ),
                   Row(
                     children: [
                       Visibility(
@@ -245,16 +162,9 @@ class _MenoPaulState extends State<MenoPaul> {
                           padding: const EdgeInsets.all(10.0),
                           child: ElevatedButton(
                             child: Text(
-                                'New LOBBY',
-                                //style: GoogleFonts.averageSans(fontSize: 20.0),
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.normal,
-                                    backgroundColor: Colors.green
+                                'Create New  LOBBY',
+                                style: GoogleFonts.averageSans(fontSize: 20.0),
 
-                                )
                             ),
                             onPressed: () {
                               Navigator.push(

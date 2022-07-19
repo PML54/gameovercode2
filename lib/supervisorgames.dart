@@ -22,7 +22,9 @@ class GameSupervisor extends StatefulWidget {
 // "VOTECLOSED","GAMEOVER","ABORTED"]
 class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
-
+  bool getGameUsersByCodeState =false;
+  int getGameUsersByCodeError=0;
+  List<GameUsers> Gamers= [];
   bool promoteGameState = false;
   bool isGmid = false;
   bool getGamePhotoSelectState = false;
@@ -82,7 +84,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
         ),
       ]),
       body: SafeArea(
-        child: Row(children: <Widget>[getListGame(), getListView()]),
+        child: Row(children: <Widget>[
+
+          getListGame(),
+          getListGameUsers(),
+          getListView()]),
       ),
       bottomNavigationBar: Visibility(
         visible: true,
@@ -210,6 +216,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   myGames[index].isSelected = !myGames[index].isSelected;
                   if (myGames[index].isSelected) {
                     //
+                    getGameUsersByCode();
+                    //
                     isGmid=false;
                     isGmid= (PhlCommons.thatUid == myGames[index].gmid);
                     getGamePhotoSelectState = false;
@@ -292,4 +300,70 @@ class _GameSupervisorState extends State<GameSupervisor> {
       });
     } else {}
   }
+  Future getGameUsersByCode() async {
+    int _thisGameCode = PhlCommons.thisGameCode;
+    print ("_thisGameCode"+_thisGameCode.toString());
+    bool gameCodeFound = true;
+    Uri url = Uri.parse(pathPHP + "readGAMEUSERSBYCODE.php");
+    var data = {
+      "GAMECODE": _thisGameCode.toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+   /* if (response.body.toString() == 'ERR_1001') {
+      gameCodeFound = false;
+      getGameUsersByCodeState = false;
+      getGameUsersByCodeError = 1001;
+    } else {
+      gameCodeFound = true;
+    }*/
+    if (response.statusCode == 200 && (gameCodeFound)) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+       Gamers = datamysql.map((xJson) => GameUsers.fromJson(xJson)).toList();
+        getGameUsersByCodeState = true;
+        getGameUsersByCodeError = 0;
+print (" OK getGameUsersByCodeState "+getGameUsersByCodeState.toString());
+      });
+    } else {}
+  }
+  Expanded getListGameUsers() {
+    setState(() {});
+    if (!getGameUsersByCodeState) {
+      return (const Expanded(child: Text(".............")));
+    }
+    var listView = ListView.builder(
+        itemCount: listPhotoBase.length,
+        controller: ScrollController(),
+        itemBuilder: (context, index) {
+          return ListTile(
+              dense: true,
+              title: Row(
+                children: [
+
+
+                  Container(
+                      margin: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                          //color: Gamers[index].extraColor,
+                          border: Border.all()),
+                      child: Column(
+                        children: [
+                          Text(
+
+                                Gamers[index].guid.toString() + ':'+
+                                 Gamers[index].gustatus.toString()
+                          )
+                        ],
+                      )),
+
+                ],
+              ),
+              onTap: () {
+                setState(() {});
+              });
+        });
+    return (Expanded(child: listView));
+  }
+
 }

@@ -1,5 +1,9 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:async';
+
+
+
 
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
@@ -37,6 +41,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
   int cestCeluiLa = 0;
   bool changeStatusGameUserState = false;
   int takeThisGameCode = 0;
+  String greeting="";
+  Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +85,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
+              Text ( greeting),
             ],
           ),
         ),
@@ -279,6 +286,15 @@ class _GameSupervisorState extends State<GameSupervisor> {
   void initState() {
     super.initState();
     getGamebyUid();
+
+   _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        greeting = "After Some time ${DateTime.now().second}";
+        getListGameUsers();
+      });
+    });
+
+
   }
 
   Future promoteGame() async {
@@ -302,27 +318,21 @@ class _GameSupervisorState extends State<GameSupervisor> {
   }
   Future getGameUsersByCode() async {
     int _thisGameCode = PhlCommons.thisGameCode;
-    print ("_thisGameCode"+_thisGameCode.toString());
+
     bool gameCodeFound = true;
     Uri url = Uri.parse(pathPHP + "readGAMEUSERSBYCODE.php");
     var data = {
       "GAMECODE": _thisGameCode.toString(),
     };
     http.Response response = await http.post(url, body: data);
-   /* if (response.body.toString() == 'ERR_1001') {
-      gameCodeFound = false;
-      getGameUsersByCodeState = false;
-      getGameUsersByCodeError = 1001;
-    } else {
-      gameCodeFound = true;
-    }*/
+
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
        Gamers = datamysql.map((xJson) => GameUsers.fromJson(xJson)).toList();
         getGameUsersByCodeState = true;
         getGameUsersByCodeError = 0;
-print (" OK getGameUsersByCodeState "+getGameUsersByCodeState.toString());
+
       });
     } else {}
   }
@@ -365,5 +375,6 @@ print (" OK getGameUsersByCodeState "+getGameUsersByCodeState.toString());
         });
     return (Expanded(child: listView));
   }
+
 
 }

@@ -388,10 +388,9 @@ class _GameVoteState extends State<GameVote> {
         getGamebyCodeError = 0;
         // On le met à  la source
         timerVoteGame = myGuGame[0].gametimevote;
-        print("timerVoteGame " + timerVoteGame.toString());
-        //countdownDuration = const Duration(seconds: 100);
+
         countdownDuration = Duration(seconds: timerVoteGame);
-        //getGamePhotoSelect(); // Il faut le GameCore
+
       });
     } else {}
   }

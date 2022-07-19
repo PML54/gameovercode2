@@ -289,8 +289,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
 
    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
-        greeting = "After Some time ${DateTime.now().second}";
-        getListGameUsers();
+        greeting = "Check ${DateTime.now().second}";
+
+        getGameUsersByCode();
       });
     });
 

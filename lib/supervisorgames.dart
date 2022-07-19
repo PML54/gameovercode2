@@ -343,7 +343,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       return (const Expanded(child: Text(".............")));
     }
     var listView = ListView.builder(
-        itemCount: listPhotoBase.length,
+        itemCount: Gamers.length,
         controller: ScrollController(),
         itemBuilder: (context, index) {
           return ListTile(
@@ -371,6 +371,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 ],
               ),
               onTap: () {
+
+
+
+
+                
                 setState(() {});
               });
         });

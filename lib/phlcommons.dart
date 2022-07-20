@@ -13,6 +13,7 @@ class PhlCommons {
   static List<Games> listThatGame= [];
   static  int  isAdmin = 0;
   static int thatUid=0;
+  static int thatStatus=0;
 
   PhlCommons(this.numiro);
 

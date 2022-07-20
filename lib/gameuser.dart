@@ -47,10 +47,11 @@ class _GameUserState extends State<GameUser> {
   bool getGamebyCodeState = false;
   int getGamebyCodeError = 0;
   bool changeStatusGameUserState = false;
-
+  bool changeStateGameUserState = false;
   bool chronoStart = false;
   Duration countdownDuration = const Duration(seconds: 10000);
   int timerMemeGame = 0;
+
   //Duration countdownDuration = Duration();
   Duration duration = const Duration();
   Timer? timer;
@@ -80,9 +81,7 @@ class _GameUserState extends State<GameUser> {
         Expanded(
           child: Row(
             children: [
-
               ElevatedButton(
-
                   style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                       padding: const EdgeInsets.symmetric(
@@ -92,12 +91,11 @@ class _GameUserState extends State<GameUser> {
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
                   child: Text(' Exit Lobby '),
-
-                onPressed: () {
-
-                  stopTimer();
-                  Navigator.pop(context);
-                }),
+                  onPressed: () {
+                    changeStateGameUser(0);
+                    stopTimer();
+                    Navigator.pop(context);
+                  }),
               ElevatedButton(
                   onPressed: () => {null},
                   style: ElevatedButton.styleFrom(
@@ -142,7 +140,7 @@ class _GameUserState extends State<GameUser> {
                 onPressed: () {
                   createMeme();
                   stopTimer();
-                  changeStatusGameUser(1+4);
+                  changeStatusGameUser(1 + 4);
                   Navigator.pop(context);
                 }),
           ),
@@ -209,12 +207,25 @@ class _GameUserState extends State<GameUser> {
     if (totalSeconds <= 1) {
       createMeme();
       stopTimer();
-      changeStatusGameUser(1+4); //MEME CLOSED
+      changeStatusGameUser(1 + 4); //MEME CLOSED
       Navigator.pop(context);
     }
   }
 
-  Future changeStatusGameUser(int _status ) async {
+  Future changeStateGameUser(int _state) async {
+    Uri url = Uri.parse(pathPHP + "changeStateGameUser.php");
+    changeStateGameUserState = false;
+    var data = {
+      "GAMECODE": PhlCommons.thisGameCode.toString(),
+      "UID": PhlCommons.thatUid.toString(),
+      // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
+      "GUSTATE": (_state).toString(),
+    };
+    await http.post(url, body: data);
+    changeStateGameUserState = true;
+  }
+
+  Future changeStatusGameUser(int _status) async {
     // STATUS ONLINE/OFFINE =BIT 1 on
     // 2 MEMING
     // 4 MEMECLOSED
@@ -226,7 +237,7 @@ class _GameUserState extends State<GameUser> {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
       // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
-      "GUSTATUS": (_status  ).toString(),
+      "GUSTATUS": (_status).toString(),
     };
     await http.post(url, body: data);
     changeStatusGameUserState = true;
@@ -462,7 +473,8 @@ class _GameUserState extends State<GameUser> {
     getGamebyUidState = true;
     getGamebyCode(); // H-eu
     reset();
-    changeStatusGameUser(1+2); //MEMING
+    changeStateGameUser(1); //MEMING
+    changeStatusGameUser(3); //MEMING
   }
 
   void reset() {

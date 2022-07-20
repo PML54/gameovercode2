@@ -334,7 +334,40 @@ class GameVotes {
     );
   }
 }
+class GameAudika {
+ /*
+  | AUDIKAID | CODID | LASTID | GAMECODE | LASTDATE   |
+  +----------+-------+--------+----------+------------+
+  |       96 |     1 |     13 | 80181888 | 2022-07-20 |
+  |       97 |     2 |      0 | 80181888 | 2022-07-20 |
+  |       98 |     3 |      0 | 80181888 | 2022-07-20 |
 
+  */
+  int audikaid = 0;
+  int codid = 0;
+  int lastid =0;
+  int gamecode = 0;
+   String lastdate = "05-05-2022";
+
+  GameAudika({
+    required this.audikaid,
+    required this.codid,
+    required this.lastid,
+    required this.gamecode,
+    required this.lastdate,
+  });
+
+  factory GameAudika.fromJson(Map<String, dynamic> json) {
+    return GameAudika(
+      audikaid: int.parse(json['AUDIKAID']),
+      codid: int.parse(json['CODID']),
+      lastid: int.parse(json['LASTID']),
+      gamecode: int.parse(json['GAMECODE']),
+      lastdate: json['LASTDATE'] as String,
+
+    );
+  }
+}
 class GameVotesResult {
   int memeid = 0;
   int gamecode = 0;

@@ -270,8 +270,10 @@ class GameUsers {
   int gustatus = 0;
   String guipv4 = "**.**.**.**";
   String gulast = "05-05-2022";
+  int gustate=0;
   String uname = "***";
   int uprofile = 0;
+
 
 /*
  GUID | UID | GAMECODE | GUIPV4 | GULAST              | UNAME     | UPROFILE |
@@ -283,8 +285,11 @@ class GameUsers {
       required this.gustatus,
       required this.guipv4,
       required this.gulast,
+        required this.gustate,
       required this.uname,
-      required this.uprofile});
+      required this.uprofile
+
+      });
 
   factory GameUsers.fromJson(Map<String, dynamic> json) {
     return GameUsers(
@@ -294,8 +299,10 @@ class GameUsers {
       gustatus: int.parse(json['GUSTATUS']),
       guipv4: json['GUIPV4'] as String,
       gulast: json['GULAST'] as String,
+      gustate: int.parse(json['GUSTATE']),
       uname: json['UNAME'] as String,
       uprofile: int.parse(json['UPROFILE']),
+
     );
   }
 }
@@ -323,6 +330,7 @@ class GameVotes {
       gamecode: int.parse(json['GAMECODE']),
       gvpoints: int.parse(json['GVPOINTS']),
       gvlast: json['GVLAST'] as String,
+
     );
   }
 }

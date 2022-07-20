@@ -11,6 +11,7 @@ import 'package:gameover/phlcommons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+// A ce niveau On PAsse le Geme Users  à OFFLINE pour tous les Game
 class GameSupervisor extends StatefulWidget {
   const GameSupervisor({Key? key}) : super(key: key);
 
@@ -20,11 +21,13 @@ class GameSupervisor extends StatefulWidget {
 
 class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
+  bool setGuOffGamesState = false;
   bool getGameUsersByCodeState = false;
   int getGameUsersByCodeError = 0;
   List<GameUsers> Gamers = [];
   bool promoteGameState = false;
   bool isGmid = false;
+
   bool getGamePhotoSelectState = false;
   int getGamePhotoSelectError = -1;
   List<PhotoBase> listPhotoBase = [];
@@ -53,6 +56,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 iconSize: 30.0,
                 tooltip: 'Home',
                 onPressed: () {
+//_timer.isActive { _timer.cancel()};
+
+  _timer?.cancel();
+
+
                   PhlCommons.thisGameCode = takeThisGameCode;
                   Navigator.pop(context);
                 },
@@ -105,6 +113,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ),
               onPressed: () {
                 PhlCommons.thisGameCode = takeThisGameCode;
+                _timer?.cancel();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -123,16 +132,24 @@ class _GameSupervisorState extends State<GameSupervisor> {
     ));
   }
 
-  Future changeStatusGameUser(int _status) async {
+  Future changeStatusGameUser(int _status, int _state) async {
     Uri url = Uri.parse(pathPHP + "changeStatusGameUser.php");
+
+    // Limiter à 1 ou 0 les valeurs possibles
+    _state == 1 ? 1 : 0;
+    _state == 0 ? 0 : 1;
+
     changeStatusGameUserState = false;
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
       "GUSTATUS": _status.toString(),
+      'GUSTATE': _state.toString()
     };
     await http.post(url, body: data);
     changeStatusGameUserState = true;
+    // Et On relit
+   if ( PhlCommons.thisGameCode >0 ) getGameUsersByCode();
   }
 
   Future getGamebyUid() async {
@@ -238,6 +255,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     }
                   } else {
                     myGames[index].extraColor = Colors.grey;
+                    PhlCommons.thisGameCode =0;
                   }
                 });
               });
@@ -281,7 +299,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
   void initState() {
     super.initState();
     getGamebyUid();
-
+    SetGuOffGames();
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
         greeting = "Check ${DateTime.now().second}";
@@ -289,6 +307,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
         getGameUsersByCode();
       });
     });
+
+
   }
 
   Future promoteGame() async {
@@ -319,16 +339,34 @@ class _GameSupervisorState extends State<GameSupervisor> {
       "GAMECODE": _thisGameCode.toString(),
     };
     http.Response response = await http.post(url, body: data);
+    if (response.body.toString() == 'ERR_1001') {
+      gameCodeFound = false;
+      getGamebyUidState = false;
+      getGamebyUidError = 1001;
+    } else {
+      gameCodeFound = true;
+    }
 
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         Gamers = datamysql.map((xJson) => GameUsers.fromJson(xJson)).toList();
-        print (" Gamers"+Gamers[0].uname);
-
+        print(" Gamers" + Gamers[0].uname);
         getGameUsersByCodeState = true;
         getGameUsersByCodeError = 0;
       });
+    } else {}
+  }
+
+  Future SetGuOffGames() async {
+    Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
+    var data = {
+      "UID": PhlCommons.thatUid.toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+
+    if (response.statusCode == 200) {
+      setGuOffGamesState = true;
     } else {}
   }
 
@@ -353,12 +391,33 @@ class _GameSupervisorState extends State<GameSupervisor> {
                           border: Border.all()),
                       child: Column(
                         children: [
-                          Text(
-                              Gamers[index].uname +
-                              ':' +
-                              Gamers[index].gustatus.toString())
+                          Text(Gamers[index].uname +" "+Gamers[index].gustatus.toString(),
+                              style: TextStyle(
+                                  color: true ? Colors.blue : Colors.white,
+                                  fontSize: 22)),
+
+
                         ],
                       )),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    iconSize: 20.0,
+                    tooltip: 'Home',
+                    onPressed: () {
+
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chat),
+                    color: Colors.blue,
+                    iconSize: 22.0,
+                    tooltip: 'Home',
+                    onPressed: () {
+
+                    },
+                  ),
+
                 ],
               ),
               onTap: () {

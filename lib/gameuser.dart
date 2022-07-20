@@ -142,7 +142,7 @@ class _GameUserState extends State<GameUser> {
                 onPressed: () {
                   createMeme();
                   stopTimer();
-                  changeStatusGameUser(4);
+                  changeStatusGameUser(1+4);
                   Navigator.pop(context);
                 }),
           ),
@@ -209,12 +209,12 @@ class _GameUserState extends State<GameUser> {
     if (totalSeconds <= 1) {
       createMeme();
       stopTimer();
-      changeStatusGameUser(4); //MEME CLOSED
+      changeStatusGameUser(1+4); //MEME CLOSED
       Navigator.pop(context);
     }
   }
 
-  Future changeStatusGameUser(int _status) async {
+  Future changeStatusGameUser(int _status ) async {
     // STATUS ONLINE/OFFINE =BIT 1 on
     // 2 MEMING
     // 4 MEMECLOSED
@@ -226,7 +226,7 @@ class _GameUserState extends State<GameUser> {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
       // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
-      "GUSTATUS": (_status + 1).toString(),
+      "GUSTATUS": (_status  ).toString(),
     };
     await http.post(url, body: data);
     changeStatusGameUserState = true;
@@ -306,7 +306,6 @@ class _GameUserState extends State<GameUser> {
   Future getGamePhotoSelect() async {
     getGamePhotoSelectState = false;
     getGamePhotoSelectError = -1;
-
     Uri url = Uri.parse(pathPHP + "getGAMEPHOTOS.php");
 
     var data = {
@@ -463,7 +462,7 @@ class _GameUserState extends State<GameUser> {
     getGamebyUidState = true;
     getGamebyCode(); // H-eu
     reset();
-    changeStatusGameUser(2); //MEMING
+    changeStatusGameUser(1+2); //MEMING
   }
 
   void reset() {

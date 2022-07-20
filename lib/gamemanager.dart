@@ -70,23 +70,7 @@ class _GameManagerState extends State<GameManager> {
   int getGmGamesError = -1;
   bool createGameState = false;
   int createGameError = -1;
-  Duration countDownGameDuration = const Duration(seconds: 40);
-  Duration durationGame = const Duration();
-  Timer? timerGame;
-  bool countDownGame = true;
 
-  void addTime() {
-    final addSeconds = countDownGame ? -1 : 1;
-    setState(() {
-      final seconds = durationGame.inSeconds + addSeconds;
-      if (seconds < 0) {
-        timerGame?.cancel();
-        timeOut = true;
-      } else {
-        durationGame = Duration(seconds: seconds);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -379,74 +363,6 @@ class _GameManagerState extends State<GameManager> {
         ));
   }
 
-  Widget buildButtons() {
-    final isRunning = timerGame == null ? false : timerGame!.isActive;
-    final isCompleted = durationGame.inSeconds == 0;
-    return isRunning || isCompleted
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ButtonWidget(
-                  text: 'STOP',
-                  onClicked: () {
-                    if (isRunning) {
-                      stopTimer(resets: false);
-                    }
-                  }),
-              const SizedBox(
-                width: 12,
-              ),
-              ButtonWidget(text: "CANCEL", onClicked: stopTimer),
-            ],
-          )
-        : ButtonWidget(
-            text: "Start Timer!",
-            color: Colors.black,
-            backgroundColor: Colors.white,
-            onClicked: () {
-              startTimer();
-            });
-  }
-
-  Widget buildTime() {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-
-    final minutes = twoDigits(durationGame.inMinutes.remainder(60));
-    final seconds = twoDigits(durationGame.inSeconds.remainder(60));
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      /* buildTimeCard(time: hours, header:''),
-          SizedBox(width: 8,),*/
-      buildTimeCard(time: minutes, header: ''),
-      const SizedBox(
-        width: 8,
-      ),
-      buildTimeCard(time: seconds, header: ''),
-    ]);
-  }
-
-  Widget buildTimeCard({required String time, required String header}) =>
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: Text(
-              time,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 20),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Text(header, style: const TextStyle(color: Colors.black45)),
-        ],
-      );
-
   copyClipBoard(String copire) {
     //  Clipboard.setData(ClipboardData(text: "your text"));
     FlutterClipboard.copy(copire).then((value) => print('copied'));
@@ -671,24 +587,5 @@ class _GameManagerState extends State<GameManager> {
     setState(() {
       dispNbFotosGame = PhlCommons.nbFotosGame.toString(); // <TODO>
     });
-  }
-
-  void reset() {
-    if (countDownGame) {
-      setState(() => durationGame = countDownGameDuration);
-    } else {
-      setState(() => durationGame = const Duration());
-    }
-  }
-
-  void startTimer() {
-    timerGame = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
-  }
-
-  void stopTimer({bool resets = true}) {
-    if (resets) {
-      reset();
-    }
-    setState(() => timerGame?.cancel());
   }
 }

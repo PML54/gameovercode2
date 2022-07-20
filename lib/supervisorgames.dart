@@ -381,44 +381,42 @@ class _GameSupervisorState extends State<GameSupervisor> {
         itemBuilder: (context, index) {
           return ListTile(
               dense: true,
-              title: Row(
-                children: [
-                  Container(
-                      margin: const EdgeInsets.all(2.0),
-                      padding: const EdgeInsets.all(2.0),
-                      decoration: BoxDecoration(
-                          //color: Gamers[index].extraColor,
-                          border: Border.all()),
-                      child: Column(
-                        children: [
-                          Text(Gamers[index].uname +" "+Gamers[index].gustatus.toString(),
-                              style: TextStyle(
-                                  color: true ? Colors.blue : Colors.white,
-                                  fontSize: 22)),
+              title:
+
+              Container(
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(Gamers[index].uname +" "+Gamers[index].gustatus.toString(),
+                            style: TextStyle(
+                                color: true ? Colors.blue : Colors.white,
+                                fontSize: 15)),
 
 
-                        ],
-                      )),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Colors.red,
-                    iconSize: 20.0,
-                    tooltip: 'Home',
-                    onPressed: () {
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      iconSize: 20.0,
+                      tooltip: 'Home',
+                      onPressed: () {
 
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.chat),
-                    color: Colors.blue,
-                    iconSize: 22.0,
-                    tooltip: 'Home',
-                    onPressed: () {
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.chat),
+                      color: Colors.blue,
+                      iconSize: 22.0,
+                      tooltip: 'Home',
+                      onPressed: () {
 
-                    },
-                  ),
+                      },
+                    ),
 
-                ],
+                  ],
+                ),
               ),
               onTap: () {
                 setState(() {});

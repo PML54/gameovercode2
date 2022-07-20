@@ -142,12 +142,16 @@ class _GameSupervisorState extends State<GameSupervisor> {
 
   Future changeStateGameUser(int _state) async {
     Uri url = Uri.parse(pathPHP + "changeStateGameUser.php");
+
+    if (PhlCommons.thisGameCode ==0 )  {
+      return;
+    }
     changeStateGameUserState = false;
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
       // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
-      "GUSTATE": (_state).toString(),
+      "GUSTATE": _state.toString(),
     };
     await http.post(url, body: data);
     changeStateGameUserState = true;
@@ -322,7 +326,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     takeThisGameCode = myGames[index].gamecode;
 
                     PhlCommons.thisGameCode = takeThisGameCode;
-                    changeStateGameUser(1); // <PML>  pas sur
+                  //  changeStateGameUser(1); // <PML>  pas sur
                     myPerso.myGame = takeThisGameCode;
                     myGames[index].extraColor = Colors.green;
                     int jj = 0;
@@ -335,7 +339,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   } else {
                     myGames[index].extraColor = Colors.grey;
                     if (PhlCommons.thisGameCode > 0)
-                      changeStateGameUser(0); // on cancel le dernier
+                    //  changeStateGameUser(0); // on cancel le dernier
                     PhlCommons.thisGameCode = 0;
                   }
                 });
@@ -360,15 +364,21 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   children: [
                     Column(
                       children: [
-                        Text(
-                            Gamers[index].uname +
-                                " " +
-                                Gamers[index].gustatus.toString(),
-                            style: TextStyle(
-                                color: (Gamers[index].gustate == 1)
-                                    ? Colors.green
-                                    : Colors.red,
-                                fontSize: 15)),
+                        ElevatedButton(
+                          child: Text(
+                Gamers[index].uname +
+                " " +
+                Gamers[index].gustatus.toString(),
+                  style: TextStyle(
+                      color: (Gamers[index].gustate == 1)
+                          ? Colors.green
+                          : Colors.red,
+                      fontSize: 15)),
+                          onPressed: () {
+                            print ("Gamers[index].gustate" + Gamers[index].gustatus.toString());
+                          },
+                        ),
+
                       ],
                     ),
                     Visibility(
@@ -378,7 +388,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         color: Colors.red,
                         iconSize: 20.0,
                         tooltip: 'Home',
-                        onPressed: () {},
+                        onPressed: () {
+
+                        },
                       ),
                     ),
                     /*         IconButton(

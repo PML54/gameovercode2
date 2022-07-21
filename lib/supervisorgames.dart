@@ -340,7 +340,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                                  //   + statusGame[myGames[index].status]
                                 ,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18))
+                                    color: Colors.white, fontSize: 16))
                           ],
                         )),
                   ),

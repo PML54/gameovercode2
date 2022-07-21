@@ -140,7 +140,7 @@ class _GameUserState extends State<GameUser> {
                 onPressed: () {
                   createMeme();
                   stopTimer();
-                  changeStatusGameUser(1 + 4);
+                  if (PhlCommons.thatStatus <4 )changeStatusGameUser(4);
                   Navigator.pop(context);
                 }),
           ),
@@ -207,7 +207,7 @@ class _GameUserState extends State<GameUser> {
     if (totalSeconds <= 1) {
       createMeme();
       stopTimer();
-      changeStatusGameUser(1 + 4); //MEME CLOSED
+      if (PhlCommons.thatStatus <4 ) changeStatusGameUser( 4); //MEME CLOSED
       Navigator.pop(context);
     }
   }
@@ -473,8 +473,8 @@ class _GameUserState extends State<GameUser> {
     getGamebyUidState = true;
     getGamebyCode(); // H-eu
     reset();
-    changeStateGameUser(1); //MEMING
-    changeStatusGameUser(3); //MEMING
+    changeStateGameUser(1);
+   if ( PhlCommons.thatStatus < 2)  changeStatusGameUser(2); //MEMING
   }
 
   void reset() {

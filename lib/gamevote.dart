@@ -311,7 +311,7 @@ class _GameVoteState extends State<GameVote> {
     });
     if (totalSeconds <= 1) {
       stopTimer();
-      changeStatusGameUser(5); //MEME CLOSED
+      changeStatusGameUser(16); //has Voted
       Navigator.pop(context);
     }
   }
@@ -410,8 +410,8 @@ class _GameVoteState extends State<GameVote> {
     readGameLike(); // Seule Lecture
 
     getGamebyCode(); // H-eu
+    changeStatusGameUser(8); //Voting
 
-    // changeStatusGameUser(2);
     listCountEmo.clear();
     for (int i = 0; i < 6; i++) {
       listCountEmo.add(0);

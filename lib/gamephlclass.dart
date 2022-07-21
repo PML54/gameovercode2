@@ -57,7 +57,7 @@ class CheckVotePlus {
   }
 }
 
-//------------>   ClefCodes N°7
+
 class ClefCodes {
   String clefcode = "XXX";
   int clefcodeid = 0;
@@ -75,7 +75,6 @@ class ClefCodes {
   }
 }
 
-//------------>  Evaluations N°6
 class Evaluations {
   int evalpoints = 0;
   int gameid = 0;
@@ -157,7 +156,6 @@ class GameLike {
   }
 }
 
-//------------>  GameMasters N°2
 class GameMasters {
   int gmid = 0; // Auto
   String gmpseudo = "XXXX";
@@ -185,7 +183,6 @@ class GameMasters {
   }
 }
 
-//------------>  GamePhotoSelect N°8
 class GamePhotoSelect {
   int gamecode = 0;
   int photoid = 0;
@@ -262,7 +259,6 @@ class Games {
   }
 } // Games
 
-//------------>  GameUsers N°3
 class GameUsers {
   int guid = 0;
   int uid = 0;
@@ -306,7 +302,6 @@ class GameUsers {
     );
   }
 }
-//
 
 class GameVotes {
   int uid = 0;
@@ -388,7 +383,6 @@ class GameVotesResult {
   }
 }
 
-//------------>  Memes N°5
 class Memes {
   int memeid = 0;
   int photoid = 0;
@@ -415,7 +409,6 @@ class Memes {
   }
 }
 
-///PHOTOID | MEMOSTOCKID | PHOTOFILENAME                  | PHOTOFILETYPE | MEMOSTOCK
 class MemoLike {
   // En cours
   int memolikeid = 0;
@@ -542,7 +535,6 @@ class Memoto {
   }
 }
 
-//------------>  PhotoBase  N°4
 class PhotoBase {
   int photofilesize = 0;
   int photoheight = 0;
@@ -590,7 +582,6 @@ class PhotoBase {
   }
 }
 
-//------------>  GameMasters N°2
 class PhotoCat {
   String photocat = "XXXX";
   String photocast = "XXXX";
@@ -625,7 +616,7 @@ class PhotoCat {
   }
 }
 
-//------------>    PhotoClefs  N°9
+
 class PhotoClefs {
   int photoid = 0;
   int clefcodeid = 0;

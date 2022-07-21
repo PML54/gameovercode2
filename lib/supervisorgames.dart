@@ -25,6 +25,21 @@ class GameSupervisor extends StatefulWidget {
 
 class _GameSupervisorState extends State<GameSupervisor> {
   GameCommons myPerso = GameCommons("xxxx", 0, 0);
+  GameAudika myAudikaGMU = GameAudika(
+      audikaid: 0,
+      codid: 1,
+      lastid: 0,
+      gamecode: 0,
+      lastdate: DateTime.now().toString());
+  GameAudika myAudikaGAME = GameAudika(
+      audikaid: 0,
+      codid: 2,
+      lastid: 0,
+      gamecode: 0,
+      lastdate: DateTime.now().toString());
+  bool ActionAudikaGMU = false; // Si true Relire Les GAMEUSERS
+  bool ActionAudikaGAME = false; // Si true Relire les GAMes
+
   bool setGuOffGamesState = false;
   bool getGameUsersByCodeState = false;
   int getGameUsersByCodeError = 0;
@@ -45,7 +60,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
   List<GameByUser> myGames = [];
   String thatPseudo = PhlCommons.thatPseudo;
   int cestCeluiLa = 0;
-  bool changeStatusGameUserState = false;
+  int thatGamer = 0;
+
   int takeThisGameCode = 0;
   String greeting = "";
   Timer? _timer;
@@ -143,10 +159,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
   Future changeStateGameUser(int _state) async {
     Uri url = Uri.parse(pathPHP + "changeStateGameUser.php");
 
-    if (PhlCommons.thisGameCode ==0 )  {
+    if (PhlCommons.thisGameCode == 0) {
       return;
     }
-    changeStateGameUserState = false;
+    // <PML> cause insta in display
+    //    changeStateGameUserState = false;
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
@@ -157,14 +174,14 @@ class _GameSupervisorState extends State<GameSupervisor> {
     changeStateGameUserState = true;
   }
 
-  Future changeStatusGameUser(int _status, int _state) async {
+  /* Future changeStatusGameUser(int _status, int _state) async {
     Uri url = Uri.parse(pathPHP + "changeStatusGameUser.php");
-
+    // <PML> cause insta in display
     // Limiter à 1 ou 0 les valeurs possibles
     _state == 1 ? 1 : 0;
     _state == 0 ? 0 : 1;
 
-    changeStatusGameUserState = false;
+    // changeStatusGameUserState = false;
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
@@ -175,7 +192,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
     changeStatusGameUserState = true;
     // Et On relit
     if (PhlCommons.thisGameCode > 0) getGameUsersByCode();
-  }
+  }*/
 
   Future checkAudika() async {
     bool gameCodeFound = true;
@@ -193,13 +210,19 @@ class _GameSupervisorState extends State<GameSupervisor> {
     }
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
-      setState(() {
-        listAudika =
-            datamysql.map((xJson) => GameAudika.fromJson(xJson)).toList();
 
-        checkAudikaState = true;
-        checkAudikaError = 0;
-      });
+      listAudika =
+          datamysql.map((xJson) => GameAudika.fromJson(xJson)).toList();
+
+      checkAudikaState = true;
+      checkAudikaError = 0;
+
+      // this Level compare with Reference
+      print("listAudika[0].lastid" + listAudika[0].lastid.toString());
+
+      if (listAudika[0].lastid != myAudikaGMU.lastid) {
+        print("listAudika[0].lastid" + listAudika[0].lastid.toString());
+      }
     } else {}
   }
 
@@ -222,9 +245,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
         PhlCommons.thisGameCode = myGames.last.gamecode; // ON prend le dernier
-        getGamebyUidState = true;
-        getGamebyUidError = 0;
       });
+      getGamebyUidState = true;
+      getGamebyUidError = 0;
     } else {}
   }
 
@@ -235,15 +258,17 @@ class _GameSupervisorState extends State<GameSupervisor> {
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
     };
+
     http.Response response = await http.post(url, body: data);
     if (response.statusCode == 200) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         listPhotoBase =
             datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
-        getGamePhotoSelectState = true;
-        getGamePhotoSelectError = 0;
       });
+
+      getGamePhotoSelectState = true;
+      getGamePhotoSelectError = 0;
     } else {
       getGamePhotoSelectError = 2001;
     }
@@ -256,11 +281,13 @@ class _GameSupervisorState extends State<GameSupervisor> {
     var data = {
       "GAMECODE": _thisGameCode.toString(),
     };
+    getGameUsersByCodeState = false;
+
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
       gameCodeFound = false;
-      getGamebyUidState = false;
-      getGamebyUidError = 1001;
+      getGameUsersByCodeState = false;
+      getGameUsersByCodeError = 0;
     } else {
       gameCodeFound = true;
     }
@@ -269,15 +296,24 @@ class _GameSupervisorState extends State<GameSupervisor> {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         Gamers = datamysql.map((xJson) => GameUsers.fromJson(xJson)).toList();
-        print(" Gamers" + Gamers[0].uname);
-        getGameUsersByCodeState = true;
-        getGameUsersByCodeError = 0;
       });
+      getGameUsersByCodeState = true;
+      getGameUsersByCodeError = 0;
+      // Trouvons le Gamer
+      int jj = 0;
+      for (GameUsers _brocky in Gamers) {
+        if (_brocky.uid == PhlCommons.thatUid) {
+          PhlCommons.thatStatus = _brocky.gustatus;
+          PhlCommons.thatState = _brocky.gustate;
+          thatGamer = jj;
+        }
+        jj++;
+      }
+      //
     } else {}
   }
 
   Expanded getListGame() {
-    setState(() {});
     if (!getGamebyUidState) {
       return (const Expanded(child: Text(".............")));
     }
@@ -317,7 +353,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     //
                     getGameUsersByCode();
                     //
-
                     isGmid = false;
                     isGmid = (PhlCommons.thatUid == myGames[index].gmid);
                     getGamePhotoSelectState = false;
@@ -326,7 +361,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     takeThisGameCode = myGames[index].gamecode;
 
                     PhlCommons.thisGameCode = takeThisGameCode;
-                  //  changeStateGameUser(1); // <PML>  pas sur
+                    //PhlCommons.thatStatus=Gamers
+                    changeStateGameUser(1); // <PML>  pas sur
                     myPerso.myGame = takeThisGameCode;
                     myGames[index].extraColor = Colors.green;
                     int jj = 0;
@@ -339,7 +375,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   } else {
                     myGames[index].extraColor = Colors.grey;
                     if (PhlCommons.thisGameCode > 0)
-                    //  changeStateGameUser(0); // on cancel le dernier
+                      changeStateGameUser(0); // on cancel le dernier
                     PhlCommons.thisGameCode = 0;
                   }
                 });
@@ -349,10 +385,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
   }
 
   Expanded getListGameUsers() {
-    setState(() {});
-    if (!getGameUsersByCodeState) {
-      return (const Expanded(child: Text(".............")));
-    }
+/*
+    if (getGameUsersByCodeState) {
+
+    return (const Expanded(child: Text(".............")));
+    }*/
     var listView = ListView.builder(
         itemCount: Gamers.length,
         controller: ScrollController(),
@@ -366,19 +403,20 @@ class _GameSupervisorState extends State<GameSupervisor> {
                       children: [
                         ElevatedButton(
                           child: Text(
-                Gamers[index].uname +
-                " " +
-                Gamers[index].gustatus.toString(),
-                  style: TextStyle(
-                      color: (Gamers[index].gustate == 1)
-                          ? Colors.green
-                          : Colors.red,
-                      fontSize: 15)),
+                              Gamers[index].uname +
+                                  " " +
+                                  Gamers[index].gustatus.toString(),
+                              style: TextStyle(
+                                  //backgroundColor: Colors.white,
+                                  color: (Gamers[index].gustate == 1)
+                                      ? Colors.black
+                                      : Colors.red,
+                                  fontSize: 15)),
                           onPressed: () {
-                            print ("Gamers[index].gustate" + Gamers[index].gustatus.toString());
+                            print("Gamers[index].gustate" +
+                                Gamers[index].gustate.toString());
                           },
                         ),
-
                       ],
                     ),
                     Visibility(
@@ -388,20 +426,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         color: Colors.red,
                         iconSize: 20.0,
                         tooltip: 'Home',
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                       ),
                     ),
-                    /*         IconButton(
-                      icon: const Icon(Icons.chat),
-                      color: Colors.blue,
-                      iconSize: 22.0,
-                      tooltip: 'Home',
-                      onPressed: () {
-
-                      },
-                    ),*/
                   ],
                 ),
               ),
@@ -413,7 +440,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
   }
 
   Expanded getListView() {
-    setState(() {});
     if (!getGamePhotoSelectState) {
       return (const Expanded(child: Text(".............")));
     }
@@ -454,6 +480,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       setState(() {
         greeting = "Check ${DateTime.now().second}";
 
+        checkAudika();
         getGameUsersByCode();
       });
     });

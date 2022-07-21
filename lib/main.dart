@@ -134,7 +134,7 @@ class _MenoPaulState extends State<MenoPaul> {
                         child: ElevatedButton(
                           child: Text(
                             'My LOBBIES',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            style: GoogleFonts.averageSans(fontSize: 18.0),
                           ),
                           onPressed: () {
                             PhlCommons.thisGameCode = -1;
@@ -158,8 +158,8 @@ class _MenoPaulState extends State<MenoPaul> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           child: Text(
-                            'Create New  LOBBY',
-                            style: GoogleFonts.averageSans(fontSize: 20.0),
+                            'New  LOBBY',
+                            style: GoogleFonts.averageSans(fontSize: 18.0),
                           ),
                           onPressed: () {
                             Navigator.push(

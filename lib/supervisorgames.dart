@@ -94,7 +94,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 child: ElevatedButton(
                   child: Text(
                     'PROMOTE GAME N°' + takeThisGameCode.toString(),
-                    style: GoogleFonts.averageSans(fontSize: 20.0),
+                    style: GoogleFonts.averageSans(fontSize: 16.0),
                   ),
                   onPressed: () {
                     promoteGame();
@@ -133,7 +133,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
             child: ElevatedButton(
               child: Text(
                 'Join LOBBY N°' + takeThisGameCode.toString(),
-                style: GoogleFonts.averageSans(fontSize: 20.0),
+                style: GoogleFonts.averageSans(fontSize: 16.0),
               ),
               onPressed: () {
                 PhlCommons.thisGameCode = takeThisGameCode;
@@ -336,10 +336,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
                           children: [
                             Text(
                                 myGames[index].gamecode.toString() +
-                                    ' :' +
-                                    statusGame[myGames[index].status],
+                                    ' :'
+                                 //   + statusGame[myGames[index].status]
+                                ,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 25))
+                                    color: Colors.white, fontSize: 18))
                           ],
                         )),
                   ),

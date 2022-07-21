@@ -99,12 +99,12 @@ class _GameUserState extends State<GameUser> {
               ElevatedButton(
                   onPressed: () => {null},
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      primary: Colors.green,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 5),
                       textStyle: const TextStyle(
                           fontSize: 14,
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.green,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
               Text(PhlCommons.thisGameCode.toString()),
@@ -144,7 +144,7 @@ class _GameUserState extends State<GameUser> {
                   Navigator.pop(context);
                 }),
           ),
-
+/*
           Visibility(
             visible: true,
             child: Padding(
@@ -174,9 +174,9 @@ class _GameUserState extends State<GameUser> {
             visible: true,
             child: IconButton(
                 icon: const Icon(Icons.favorite_rounded),
-                /*     showSimpleNotification(
+                *//*     showSimpleNotification(
                     Text("this is a message from simple notification"),
-                    background: Colors.green);*/
+                    background: Colors.green);*//*
                 iconSize: 35,
                 color: Colors.blue,
                 tooltip: 'Unused',
@@ -193,7 +193,7 @@ class _GameUserState extends State<GameUser> {
                     ),
                   );
                 }),
-          ), //  REsuktats
+          ), //  REsuktats*/
         ],
       ),
     ));

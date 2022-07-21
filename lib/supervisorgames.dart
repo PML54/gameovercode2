@@ -8,6 +8,8 @@ import 'package:gameover/gamephlclass.dart';
 import 'package:gameover/gameuser.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:gameover/selectgamers.dart';
+import 'package:gameover/gamevoteresult.dart';
+import 'package:gameover/gamevote.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -104,12 +106,12 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ElevatedButton(
                   onPressed: () => {null},
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      primary: Colors.green,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 5),
                       textStyle: const TextStyle(
                           fontSize: 14,
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.green,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
               Text(greeting),
@@ -124,34 +126,85 @@ class _GameSupervisorState extends State<GameSupervisor> {
           getListView()
         ]),
       ),
-      bottomNavigationBar: Visibility(
-        visible: true,
-        child: Visibility(
-          visible: takeThisGameCode > 0,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ElevatedButton(
-              child: Text(
-                'Join LOBBY N°' + takeThisGameCode.toString(),
-                style: GoogleFonts.averageSans(fontSize: 16.0),
-              ),
+      bottomNavigationBar:
+      Row(//   visible: takeThisGameCode > 0,
+        children: [
+
+          Visibility(
+            visible: true,
+            child: IconButton(
+                icon: const Icon(Icons.chat),
+                /*     showSimpleNotification(
+                    Text("this is a message from simple notification"),
+                    background: Colors.green);*/
+                iconSize: 35,
+                color: Colors.blue,
+                tooltip: 'Caption',
+                onPressed: () {
+                  PhlCommons.thisGameCode = takeThisGameCode;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+
+                      builder: (context) => const GameUser(),
+                      settings: RouteSettings(
+                        arguments: myPerso,
+                      ),
+                    ),
+                  );
+                },),
+          ), //  Meme
+          Visibility(
+            visible: true,
+            child: IconButton(
+              icon: const Icon(Icons.how_to_vote),
+              /*     showSimpleNotification(
+                    Text("this is a message from simple notification"),
+                    background: Colors.green);*/
+              iconSize: 35,
+              color: Colors.blue,
+              tooltip: 'Vote',
               onPressed: () {
-                PhlCommons.thisGameCode = takeThisGameCode;
-                _timer?.cancel();
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     //      builder: (context) => const ConnectGame()),
-                    builder: (context) => const GameUser(),
+                    builder: (context) => const GameVote(),
                     settings: RouteSettings(
                       arguments: myPerso,
                     ),
                   ),
                 );
-              },
-            ),
-          ),
-        ),
+              },),
+          ), //  Meme
+          Visibility(
+            visible: true,
+            child: IconButton(
+                icon: const Icon(Icons.favorite_rounded),
+                /*     showSimpleNotification(
+                    Text("this is a message from simple notification"),
+                    background: Colors.green);*/
+                iconSize: 35,
+                color: Colors.blue,
+                tooltip: 'Resultats',
+                onPressed: () {
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      //      builder: (context) => const ConnectGame()),
+                      builder: (context) => const GameVoteResult(),
+                      settings: RouteSettings(
+                        arguments: myPerso,
+                      ),
+                    ),
+                  );
+                }),
+          ), //  REsuktats
+
+        ],
       ),
     ));
   }
@@ -335,8 +388,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         child: Column(
                           children: [
                             Text(
-                                myGames[index].gamecode.toString() +
-                                    ' :'
+                                myGames[index].gamecode.toString()
                                  //   + statusGame[myGames[index].status]
                                 ,
                                 style: TextStyle(

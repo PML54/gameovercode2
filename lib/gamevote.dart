@@ -128,10 +128,17 @@ class _GameVoteState extends State<GameVote> {
                             backgroundColor: Colors.red,
                             fontWeight: FontWeight.bold)),
                     child: const Text('Exit')),
-                Text(
-                  myPerso.myPseudo + " ",
-                  style: GoogleFonts.averageSans(fontSize: 18.0),
-                ),
+                ElevatedButton(
+                    onPressed: () => {null},
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            backgroundColor: Colors.green,
+                            fontWeight: FontWeight.bold)),
+                    child: Text(myPerso.myPseudo)),
                 Text(PhlCommons.thisGameCode.toString()),
                 Visibility(
                   visible: booLike,
@@ -295,10 +302,7 @@ class _GameVoteState extends State<GameVote> {
               onPressed: () {
                 nextPRL();
               }),
-          Text(
-            " Moyenne = " + thatAverage.toString(),
-            style: GoogleFonts.averageSans(fontSize: 15.0),
-          ),
+
         ]),
       ),
     );

@@ -92,7 +92,7 @@ class _GameUserState extends State<GameUser> {
                           fontWeight: FontWeight.bold)),
                   child: Text(' Exit Lobby '),
                   onPressed: () {
-                    changeStateGameUser(0);
+
                     stopTimer();
                     Navigator.pop(context);
                   }),
@@ -144,56 +144,8 @@ class _GameUserState extends State<GameUser> {
                   Navigator.pop(context);
                 }),
           ),
-/*
-          Visibility(
-            visible: true,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
-                child: Text(
-                  'VOTE   ',
-                  style: GoogleFonts.averageSans(fontSize: 20.0),
-                ),
-                onPressed: () {
-                  stopTimer();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      //      builder: (context) => const ConnectGame()),
-                      builder: (context) => const GameVote(),
-                      settings: RouteSettings(
-                        arguments: myPerso,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ), //VOTE
-          Visibility(
-            visible: true,
-            child: IconButton(
-                icon: const Icon(Icons.favorite_rounded),
-                *//*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*//*
-                iconSize: 35,
-                color: Colors.blue,
-                tooltip: 'Unused',
-                onPressed: () {
-                  stopTimer();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      //      builder: (context) => const ConnectGame()),
-                      builder: (context) => const GameVoteResult(),
-                      settings: RouteSettings(
-                        arguments: myPerso,
-                      ),
-                    ),
-                  );
-                }),
-          ), //  REsuktats*/
+
+
         ],
       ),
     ));
@@ -339,7 +291,7 @@ class _GameUserState extends State<GameUser> {
   }
 
   Expanded getget() {
-    if (!getGamebyUidState || !getGamePhotoSelectState) {
+    if (!getGamebyUidState || !getGamePhotoSelectState|| PhlCommons.thatStatus>= 4) {
       return Expanded(
         child: Column(
           children: const [
@@ -475,6 +427,8 @@ class _GameUserState extends State<GameUser> {
     reset();
     changeStateGameUser(1);
    if ( PhlCommons.thatStatus < 2)  changeStatusGameUser(2); //MEMING
+
+    print ('PhlCommons.thatState'+ PhlCommons.thatState.toString());
   }
 
   void reset() {

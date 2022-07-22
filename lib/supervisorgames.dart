@@ -95,7 +95,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 visible: isGmid,
                 child: ElevatedButton(
                   child: Text(
-                    'PROMOTE GAME N°' + takeThisGameCode.toString(),
+                    'PROMOTE : ' + takeThisGameCode.toString(),
                     style: GoogleFonts.averageSans(fontSize: 16.0),
                   ),
                   onPressed: () {
@@ -220,32 +220,13 @@ class _GameSupervisorState extends State<GameSupervisor> {
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
-      // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
-      "GUSTATE": _state.toString(),
+          "GUSTATE": _state.toString(),
     };
     await http.post(url, body: data);
     changeStateGameUserState = true;
   }
 
-  /* Future changeStatusGameUser(int _status, int _state) async {
-    Uri url = Uri.parse(pathPHP + "changeStatusGameUser.php");
-    // <PML> cause insta in display
-    // Limiter à 1 ou 0 les valeurs possibles
-    _state == 1 ? 1 : 0;
-    _state == 0 ? 0 : 1;
 
-    // changeStatusGameUserState = false;
-    var data = {
-      "GAMECODE": PhlCommons.thisGameCode.toString(),
-      "UID": PhlCommons.thatUid.toString(),
-      "GUSTATUS": _status.toString(),
-      'GUSTATE': _state.toString()
-    };
-    await http.post(url, body: data);
-    changeStatusGameUserState = true;
-    // Et On relit
-    if (PhlCommons.thisGameCode > 0) getGameUsersByCode();
-  }*/
 
   Future checkAudika() async {
     bool gameCodeFound = true;

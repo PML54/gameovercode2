@@ -332,7 +332,7 @@ class _GameVoteState extends State<GameVote> {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
       // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
-      "GUSTATUS": (_status + 1).toString(),
+      "GUSTATUS": (_status).toString(),
     };
     await http.post(url, body: data);
     changeStatusGameUserState = true;
@@ -354,7 +354,7 @@ class _GameVoteState extends State<GameVote> {
   }
 
   Future createGameVoteAll(int _myUid) async {
-    //Uri url = Uri.parse(pathPHP + "createMLV.php");
+
     Uri url = Uri.parse(pathPHP + "createGameVoteAll.php");
 
     for (GameLike _thisVote in listGameLike) {

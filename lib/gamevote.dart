@@ -116,6 +116,7 @@ class _GameVoteState extends State<GameVote> {
               children: [
                 ElevatedButton(
                     onPressed: () => {
+        //  changeStatusGameUser(8);
           cleanExit()
                       },
 
@@ -125,9 +126,9 @@ class _GameVoteState extends State<GameVote> {
                             horizontal: 8, vertical: 5),
                         textStyle: const TextStyle(
                             fontSize: 14,
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.blue,
                             fontWeight: FontWeight.bold)),
-                    child: const Text('Exit')),
+                    child: const Text('Save&Exit')),
                 ElevatedButton(
                     onPressed: () => {null},
                     style: ElevatedButton.styleFrom(

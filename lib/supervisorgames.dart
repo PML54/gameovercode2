@@ -163,7 +163,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     Text("this is a message from simple notification"),
                     background: Colors.green);*/
               iconSize: 35,
-              color: Colors.blue,
+              color: Colors.orange,
               tooltip: 'Vote',
               onPressed: () {
 
@@ -187,7 +187,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     Text("this is a message from simple notification"),
                     background: Colors.green);*/
                 iconSize: 35,
-                color: Colors.blue,
+                color: Colors.green,
                 tooltip: 'Resultats',
                 onPressed: () {
 
@@ -435,22 +435,39 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   children: [
                     Column(
                       children: [
+
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: (Gamers[index].gustate == 1) ? Colors.green
+                                  : Colors.grey ,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 5),
+                              textStyle:  TextStyle(
+                                  fontSize: 14,
+                                color:  Colors.black ,
+
+                                  backgroundColor: (Gamers[index].gustate == 1) ? Colors.green
+                                      : Colors.grey ,
+                                  fontWeight: FontWeight.bold)),
                           child: Text(
                               Gamers[index].uname +
                                   " " +
                                   Gamers[index].gustatus.toString(),
                               style: TextStyle(
-                                  //backgroundColor: Colors.white,
+
                                   color: (Gamers[index].gustate == 1)
                                       ? Colors.black
-                                      : Colors.red,
-                                  fontSize: 15)),
+                                      : Colors.black,
+                                  fontSize:        (Gamers[index].gustate == 1)
+                                  ? 14
+                                  : 11)),
                           onPressed: () {
                             print("Gamers[index].gustate" +
                                 Gamers[index].gustate.toString());
                           },
                         ),
+
+
                       ],
                     ),
                     Visibility(

@@ -92,14 +92,20 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 },
               ),
               Visibility(
-                visible: isGmid,
+                visible: true ,
                 child: ElevatedButton(
-                  child: Text(
+                  child:
+                /*  Text(
                     'PROMOTE : ' + takeThisGameCode.toString(),
                     style: GoogleFonts.averageSans(fontSize: 16.0),
+                  ),*/
+                  Text(
+                     statusGame[PhlCommons.gameStatus],
+                    style: GoogleFonts.averageSans(fontSize: 16.0),
                   ),
+
                   onPressed: () {
-                    promoteGame();
+                   if (isGmid ) promoteGame();
                   },
                 ),
               ),
@@ -114,7 +120,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                           backgroundColor: Colors.green,
                           fontWeight: FontWeight.bold)),
                   child: Text(myPerso.myPseudo)),
-              Text(greeting),
+              //Text(greeting), <PML>
             ],
           ),
         ),
@@ -131,7 +137,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
         children: [
 
           Visibility(
-            visible: true,
+            visible: PhlCommons.gameStatus == 1,
             child: IconButton(
                 icon: const Icon(Icons.chat),
                 /*     showSimpleNotification(
@@ -156,7 +162,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 },),
           ), //  Meme
           Visibility(
-            visible: true,
+            visible: PhlCommons.gameStatus == 3,
             child: IconButton(
               icon: const Icon(Icons.how_to_vote),
               /*     showSimpleNotification(
@@ -180,7 +186,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               },),
           ), //  Meme
           Visibility(
-            visible: true,
+            visible:  PhlCommons.gameStatus == 5,
             child: IconButton(
                 icon: const Icon(Icons.favorite_rounded),
                 /*     showSimpleNotification(
@@ -220,10 +226,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
-          "GUSTATE": _state.toString(),
+      "GUSTATE": _state.toString(),
     };
     await http.post(url, body: data);
     changeStateGameUserState = true;
+    //getGamebyUid();  // On l-relit les Games
   }
 
 
@@ -395,6 +402,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     takeThisGameCode = myGames[index].gamecode;
 
                     PhlCommons.thisGameCode = takeThisGameCode;
+                    PhlCommons.gameStatus=myGames[index].status;
                     //PhlCommons.thatStatus=Gamers
                     changeStateGameUser(1); // <PML>  pas sur
                     myPerso.myGame = takeThisGameCode;
@@ -540,9 +548,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
   Future promoteGame() async {
     promoteGameState = false;
     int _status = myGames[cestCeluiLa].status;
-    if (_status == 6) return;
     _status = _status + 1;
+    if (_status == 6) _status=0;
     myGames[cestCeluiLa].status = _status;
+    PhlCommons.gameStatus=_status;
+
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
@@ -552,6 +562,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
     http.Response response = await http.post(url, body: data);
     if (response.statusCode == 200) {
       setState(() {
+
+        print ("myGames[cestCeluiLa].status  "+myGames[cestCeluiLa].status.toString());
         promoteGameState = true;
       });
     } else {}

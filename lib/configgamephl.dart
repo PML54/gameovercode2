@@ -9,12 +9,13 @@ const String pathPHP = "https://www.paulbrode.com/php/"; //DEV
 
 const String unknownCodeMaster = "Code Incorrect";
 List statusGame = [
-  "READY",
-  "MEMING",
-  "MEMECLOSED",
-  "VOTING",
-  "VOTECLOSED",
-  "ABORTED"
+  "Attente du départ",
+  "Caption  en cours",
+  "Fin des Captions",
+  "Vote en cours",
+  "Fin des Votes",
+  "Résultats",
+      "Aborted"
 ];
 List modeGame = ["PUBLIC", "PRIVATE"];
 List msgNewGame = ["Nom Game ?", "Photos Selected ? "];

@@ -18,7 +18,9 @@ import 'package:gameover/gamevoteresult.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
-
+import 'package:gameover/configgamephl.dart';
+import 'package:http/http.dart' as http;
+//setGUOFFGAME.php
 void getParams() {
   var uri = Uri.dataFromString(window.location.href);
   Map<String, String> params = uri.queryParameters;
@@ -55,6 +57,7 @@ class _MenoPaulState extends State<MenoPaul> {
 
   @override
   Widget build(BuildContext context) {
+    if (PhlCommons.thatUid > 0 )cleanLogins();
     setState(() {});
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent
@@ -63,7 +66,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'V22.07 : ' + myPerso.myPseudo + ' ',
+          'V22.0757 : ' + myPerso.myPseudo + ' ',
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -330,6 +333,8 @@ class _MenoPaulState extends State<MenoPaul> {
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+
     setState(() {
       isAdmin = false;
       isGamer = false;
@@ -376,4 +381,24 @@ class _MenoPaulState extends State<MenoPaul> {
         dispConnectivity = "***";
     });
   }
+  Future cleanLogins() async {
+    // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
+    Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
+print (" PhlCommons.thatUid.toString()"+PhlCommons.thatUid.toString());
+    var data = {
+      //<TODO>
+      "UID": PhlCommons.thatUid.toString(),
+    };
+
+
+    http.Response response = await http.post(url, body: data);
+
+
+    if (response.body.toString() == 'ERR_1001') {
+
+    }
+
+
+  }
+
 }

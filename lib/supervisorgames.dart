@@ -76,12 +76,27 @@ class _GameSupervisorState extends State<GameSupervisor> {
   Widget build(BuildContext context) {
     myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
     return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(actions: <Widget>[
-        Expanded(
-          child: Row(
-            children: [
-              IconButton(
+      home: Scaffold(
+        appBar: AppBar(actions: <Widget>[
+          Expanded(
+            child: Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            backgroundColor: Colors.red,
+                            fontWeight: FontWeight.bold)),
+                    child: Text(' Exit GAME '),
+                    onPressed: () {
+                      changeStateGameUser(0);
+
+                      Navigator.pop(context);
+                    }),
+                /*  IconButton(
                 icon: const Icon(Icons.arrow_back),
                 color: Colors.red,
                 iconSize: 30.0,
@@ -92,115 +107,115 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   PhlCommons.thisGameCode = takeThisGameCode;
                   Navigator.pop(context);
                 },
-              ),
-              Visibility(
-                visible: true,
-                child: ElevatedButton(
-                  child: Text(
-                    statusGame[PhlCommons.gameStatus],
-                    style: GoogleFonts.averageSans(fontSize: 16.0),
+              ),*/
+                Visibility(
+                  visible: true,
+                  child: ElevatedButton(
+                    child: Text(
+                      statusGame[PhlCommons.gameStatus],
+                      style: GoogleFonts.averageSans(fontSize: 16.0),
+                    ),
+                    onPressed: () {
+                      if (isGmid) promoteGame();
+                    },
                   ),
-                  onPressed: () {
-                    if (isGmid) promoteGame();
-                  },
                 ),
-              ),
-              ElevatedButton(
-                  onPressed: () => {null},
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 5),
-                      textStyle: TextStyle(
-                          fontSize: 14,
-                          backgroundColor: Colors.green,
-                          fontWeight: FontWeight.bold)),
-                  child: Text(myPerso.myPseudo)),
-              //Text(greeting), <PML>
-            ],
+                ElevatedButton(
+                    onPressed: () => {null},
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        textStyle: TextStyle(
+                            fontSize: 14,
+                            backgroundColor: Colors.green,
+                            fontWeight: FontWeight.bold)),
+                    child: Text(myPerso.myPseudo)),
+                //Text(greeting), <PML>
+              ],
+            ),
           ),
-        ),
-      ]),
-      body: SafeArea(
-        child: Row(children: <Widget>[
-          getListGame(),
-          getListGameUsers(),
-          getListView()
         ]),
-      ),
-      bottomNavigationBar: Row(
-        //   visible: takeThisGameCode > 0,
-        children: [
-          Visibility(
-            visible: PhlCommons.gameStatus == 1,
-            child: IconButton(
-              icon: const Icon(Icons.chat),
-              iconSize: 35,
-              color: Colors.blue,
-              tooltip: 'Caption',
-              onPressed: () {
-                PhlCommons.thisGameCode = takeThisGameCode;
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GameUser(),
-                    settings: RouteSettings(
-                      arguments: myPerso,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ), //  Meme
-          Visibility(
-            visible: PhlCommons.gameStatus == 3,
-            child: IconButton(
-              icon: const Icon(Icons.how_to_vote),
-              /*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*/
-              iconSize: 35,
-              color: Colors.orange,
-              tooltip: 'Vote',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GameVote(),
-                    settings: RouteSettings(
-                      arguments: myPerso,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ), //  Meme
-          Visibility(
-            visible: PhlCommons.gameStatus == 5,
-            child: IconButton(
-                icon: const Icon(Icons.favorite_rounded),
-                /*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*/
-                iconSize: 35,
-                color: Colors.green,
-                tooltip: 'Resultats',
+        body: SafeArea(
+          child: Row(children: <Widget>[
+            getListGame(),
+            Visibility(
+                visible: takeThisGameCode > 0, child: getListGameUsers()),
+            getListView()
+          ]),
+        ),
+        bottomNavigationBar: Row(
+          //   visible: takeThisGameCode > 0,
+          children: [
+            Visibility(
+              visible: PhlCommons.gameStatus == 1,
+              child: ElevatedButton(
+                child: Text(
+                  " Commentez ",
+                  style: GoogleFonts.averageSans(fontSize: 16.0),
+                ),
                 onPressed: () {
+                  PhlCommons.thisGameCode = takeThisGameCode;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const GameVoteResult(),
+                      builder: (context) => const GameUser(),
                       settings: RouteSettings(
                         arguments: myPerso,
                       ),
                     ),
                   );
-                }),
-          ), //  REsuktats
-        ],
+                },
+              ),
+            ),
+            Visibility(
+              visible: PhlCommons.gameStatus == 3,
+              child: ElevatedButton(
+                child: Text(
+                  " Votez ",
+                  style: GoogleFonts.averageSans(fontSize: 16.0),
+                ),
+                onPressed: () {
+                  PhlCommons.thisGameCode = takeThisGameCode;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameVote(),
+                      settings: RouteSettings(
+                        arguments: myPerso,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Visibility(
+              visible: PhlCommons.gameStatus == 5,
+              child: ElevatedButton(
+                child: Text(
+                  " Resutats ",
+                  style: GoogleFonts.averageSans(fontSize: 16.0),
+                ),
+                onPressed: () {
+                  PhlCommons.thisGameCode = takeThisGameCode;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameVoteResult(),
+                      settings: RouteSettings(
+                        arguments: myPerso,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Future changeStateGameUser(int _state) async {
@@ -371,6 +386,21 @@ class _GameSupervisorState extends State<GameSupervisor> {
                           ],
                         )),
                   ),
+                  Visibility(
+                    visible: (myGames[index].gamestatus % 2 == 1),
+                    child: IconButton(
+                        //   icon: const Icon(Icons.favorite_rounded),
+                        icon: const Icon(Icons.directions_run_outlined),
+                        /*     showSimpleNotification(
+                    Text("this is a message from simple notification"),
+                    background: Colors.green);*/
+                        iconSize: 25,
+                        color: Colors.green,
+                        tooltip: 'Resultats',
+                        onPressed: () {
+                          quelleAction(myGames[index].gamestatus);
+                        }),
+                  ), //  REsu
                 ],
               ),
               onTap: () {
@@ -451,7 +481,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                                       ? Colors.black
                                       : Colors.black,
                                   fontSize:
-                                      (Gamers[index].gustate == 1) ? 14 : 11)),
+                                      (Gamers[index].gustate == 1) ? 14 : 14)),
                           onPressed: () {
                             print("Gamers[index].gustate" +
                                 Gamers[index].gustate.toString());
@@ -460,7 +490,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                       ],
                     ),
                     Visibility(
-                      visible: isGmid,
+                      visible: isGmid && false,
                       child: IconButton(
                         icon: const Icon(Icons.delete),
                         color: Colors.red,
@@ -526,10 +556,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       });
     });
   }
-
-  //plusGAMEBYUID.php
-
-  Future plusGamebyUid() async{
+  Future plusGamebyUid() async {
     bool gameUidFound = true;
     plusGamebyUidState = false;
     if (PhlCommons.thatUid == null) return;
@@ -555,22 +582,20 @@ class _GameSupervisorState extends State<GameSupervisor> {
       for (GameByUser _gameActif in myGames) {
         for (GamesPlus _gameRelu in myGamesStatus) {
           if (_gameRelu.gamecode == _gameActif.gamecode) {
-            if ( _gameActif.gamestatus != _gameRelu.gamestatus) {
+            if (_gameActif.gamestatus != _gameRelu.gamestatus) {
               setState(() {
                 _gameActif.gamestatus = _gameRelu.gamestatus;
                 if (_gameActif.gamecode == PhlCommons.thisGameCode) {
                   PhlCommons.gameStatus = _gameActif.gamestatus;
                 }
-                });
+              });
             }
-              };
           }
+          ;
         }
       }
-
-    else {}
+    } else {}
   }
-
   Future promoteGame() async {
     promoteGameState = false;
     int _status = myGames[cestCeluiLa].gamestatus;
@@ -592,7 +617,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
       promoteGameState = true;
     } else {}
   }
-
   Future SetGuOffGames() async {
     Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
     var data = {
@@ -603,5 +627,44 @@ class _GameSupervisorState extends State<GameSupervisor> {
     if (response.statusCode == 200) {
       setGuOffGamesState = true;
     } else {}
+  }
+  quelleAction(int _laquelle) {
+    PhlCommons.thisGameCode = takeThisGameCode;
+    if (_laquelle == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GameUser(),
+          settings: RouteSettings(
+            arguments: myPerso,
+          ),
+        ),
+      );
+    }
+
+    if (_laquelle == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GameVote(),
+          settings: RouteSettings(
+            arguments: myPerso,
+          ),
+        ),
+      );
+    }
+
+    if (_laquelle == 5) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GameVoteResult(),
+          settings: RouteSettings(
+            arguments: myPerso,
+          ),
+        ),
+      );
+    }
+
   }
 }

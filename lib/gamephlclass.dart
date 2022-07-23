@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
 
 class CheckMLVU {
@@ -101,10 +100,45 @@ class Evaluations {
   }
 }
 
+class GameAudika {
+ /*
+  | AUDIKAID | CODID | LASTID | GAMECODE | LASTDATE   |
+  +----------+-------+--------+----------+------------+
+  |       96 |     1 |     13 | 80181888 | 2022-07-20 |
+  |       97 |     2 |      0 | 80181888 | 2022-07-20 |
+  |       98 |     3 |      0 | 80181888 | 2022-07-20 |
+
+  */
+  int audikaid = 0;
+  int codid = 0;
+  int lastid =0;
+  int gamecode = 0;
+   String lastdate = "05-05-2022";
+
+  GameAudika({
+    required this.audikaid,
+    required this.codid,
+    required this.lastid,
+    required this.gamecode,
+    required this.lastdate,
+  });
+
+  factory GameAudika.fromJson(Map<String, dynamic> json) {
+    return GameAudika(
+      audikaid: int.parse(json['AUDIKAID']),
+      codid: int.parse(json['CODID']),
+      lastid: int.parse(json['LASTID']),
+      gamecode: int.parse(json['GAMECODE']),
+      lastdate: json['LASTDATE'] as String,
+
+    );
+  }
+}
+
 class GameByUser {
   int uid = 0;
   int gamecode = 0;
-  int status = 0;
+  int gamestatus = 0;
   int gmid = 0;
   bool isSelected = false;
   Color extraColor = Colors.grey;
@@ -113,6 +147,7 @@ class GameByUser {
     required this.uid,
     required this.gamecode,
     required this.gmid,
+    required this.gamestatus,
   });
 
   factory GameByUser.fromJson(Map<String, dynamic> json) {
@@ -120,6 +155,7 @@ class GameByUser {
       uid: int.parse(json['UID']),
       gamecode: int.parse(json['GAMECODE']),
       gmid: int.parse(json['GMID']),
+      gamestatus: int.parse(json['GAMESTATUS']),
     );
   }
 }
@@ -213,11 +249,10 @@ class Games {
   int gamenbphotos = 0;
   int gamefilter = 0;
   int gametimememe = 0;
-
   int gametimevote = 0;
   int gametimer = 0;
-
   int gameopen = 0;
+
   bool isSelected = false;
   Color extraColor = Colors.grey;
 
@@ -302,7 +337,6 @@ class GameUsers {
     );
   }
 }
-
 class GameVotes {
   int uid = 0;
   int memeid = 0;
@@ -325,40 +359,6 @@ class GameVotes {
       gamecode: int.parse(json['GAMECODE']),
       gvpoints: int.parse(json['GVPOINTS']),
       gvlast: json['GVLAST'] as String,
-
-    );
-  }
-}
-class GameAudika {
- /*
-  | AUDIKAID | CODID | LASTID | GAMECODE | LASTDATE   |
-  +----------+-------+--------+----------+------------+
-  |       96 |     1 |     13 | 80181888 | 2022-07-20 |
-  |       97 |     2 |      0 | 80181888 | 2022-07-20 |
-  |       98 |     3 |      0 | 80181888 | 2022-07-20 |
-
-  */
-  int audikaid = 0;
-  int codid = 0;
-  int lastid =0;
-  int gamecode = 0;
-   String lastdate = "05-05-2022";
-
-  GameAudika({
-    required this.audikaid,
-    required this.codid,
-    required this.lastid,
-    required this.gamecode,
-    required this.lastdate,
-  });
-
-  factory GameAudika.fromJson(Map<String, dynamic> json) {
-    return GameAudika(
-      audikaid: int.parse(json['AUDIKAID']),
-      codid: int.parse(json['CODID']),
-      lastid: int.parse(json['LASTID']),
-      gamecode: int.parse(json['GAMECODE']),
-      lastdate: json['LASTDATE'] as String,
 
     );
   }

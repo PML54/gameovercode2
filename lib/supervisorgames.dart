@@ -5,11 +5,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
+import 'package:gameover/gamephlplusclass.dart';
 import 'package:gameover/gameuser.dart';
+import 'package:gameover/gamevote.dart';
+import 'package:gameover/gamevoteresult.dart';
 import 'package:gameover/phlcommons.dart';
 import 'package:gameover/selectgamers.dart';
-import 'package:gameover/gamevoteresult.dart';
-import 'package:gameover/gamevote.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,6 +54,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
   bool checkAudikaState = false;
   int checkAudikaError = 0;
   List<GameAudika> listAudika = [];
+
+  bool plusGamebyUidState =false;
+  List<GamesPlus> myGamesStatus= [];
 
   bool getGamePhotoSelectState = false;
   int getGamePhotoSelectError = -1;
@@ -281,12 +285,15 @@ class _GameSupervisorState extends State<GameSupervisor> {
     } else {
       gameCodeFound = true;
     }
+
+    print (" In getGamebyUid");
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
         PhlCommons.thisGameCode = myGames.last.gamecode; // ON prend le dernier
       });
+      print (" Out getGamebyUid");
       getGamebyUidState = true;
       getGamebyUidError = 0;
     } else {}
@@ -355,6 +362,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
   }
 
   Expanded getListGame() {
+   // getGamebyUid();
     if (!getGamebyUidState) {
       return (const Expanded(child: Text(".............")));
     }
@@ -391,8 +399,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   myGames[index].isSelected = !myGames[index].isSelected;
 
                   if (myGames[index].isSelected) {
-                    //
                     getGameUsersByCode();
+
                     //
                     isGmid = false;
                     isGmid = (PhlCommons.thatUid == myGames[index].gmid);
@@ -402,7 +410,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     takeThisGameCode = myGames[index].gamecode;
 
                     PhlCommons.thisGameCode = takeThisGameCode;
-                    PhlCommons.gameStatus=myGames[index].status;
+                    PhlCommons.gameStatus=myGames[index].gamestatus;
                     //PhlCommons.thatStatus=Gamers
                     changeStateGameUser(1); // <PML>  pas sur
                     myPerso.myGame = takeThisGameCode;
@@ -535,22 +543,63 @@ class _GameSupervisorState extends State<GameSupervisor> {
     checkAudika();
     getGamebyUid();
     SetGuOffGames();
-    _timer = Timer.periodic(Duration(seconds: 6), (timer) {
+    plusGamebyUid(); // <PML> on laisse ici ?
+    _timer = Timer.periodic(Duration(seconds:4), (timer) {
       setState(() {
         greeting = "Check ${DateTime.now().second}";
-
         checkAudika();
         getGameUsersByCode();
+    // plusGamebyUid();
       });
     });
   }
 
+  //plusGAMEBYUID.php
+
+  Future plusGamebyUid() async {
+    bool gameUidFound = true;
+    plusGamebyUidState=false;
+    if  (PhlCommons.thatUid  == null) return;
+    Uri url = Uri.parse(pathPHP + "plusGAMEBYUID.php");
+    var data = {
+      "UID": PhlCommons.thatUid.toString(),
+    };
+    http.Response response = await http.post(url, body: data);
+    if (response.body.toString() == 'ERR_1001') {
+      gameUidFound = false;
+      plusGamebyUidState = false;
+    } else {
+      gameUidFound = true;
+    }
+    if (response.statusCode == 200 && (gameUidFound)) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        myGamesStatus = datamysql.map((xJson) => GamesPlus.fromJson(xJson)).toList();
+      });
+      plusGamebyUidState = true;
+      // Voyon sil ya des changeents
+      for ( GameByUser _gameActif  in myGames) {
+        for (GamesPlus _gameRelu  in  myGamesStatus) {
+        if (_gameRelu.gamecode == _gameActif.gamecode) {
+          _gameActif.gamestatus=_gameRelu.gamestatus;
+        }
+        }
+      }
+
+    }
+
+
+
+
+     else {}
+  }
+
   Future promoteGame() async {
     promoteGameState = false;
-    int _status = myGames[cestCeluiLa].status;
+    int _status = myGames[cestCeluiLa].gamestatus;
     _status = _status + 1;
     if (_status == 6) _status=0;
-    myGames[cestCeluiLa].status = _status;
+    myGames[cestCeluiLa].gamestatus = _status;
     PhlCommons.gameStatus=_status;
 
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
@@ -563,12 +612,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
     if (response.statusCode == 200) {
       setState(() {
 
-        print ("myGames[cestCeluiLa].status  "+myGames[cestCeluiLa].status.toString());
+        print ("myGames[cestCeluiLa].status  "+myGames[cestCeluiLa].gamestatus.toString());
         promoteGameState = true;
       });
     } else {}
   }
-
   Future SetGuOffGames() async {
     Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
     var data = {
@@ -580,4 +628,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
       setGuOffGamesState = true;
     } else {}
   }
+
+
+
+
 }

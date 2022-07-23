@@ -99,10 +99,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 visible: true ,
                 child: ElevatedButton(
                   child:
-                /*  Text(
-                    'PROMOTE : ' + takeThisGameCode.toString(),
-                    style: GoogleFonts.averageSans(fontSize: 16.0),
-                  ),*/
+
                   Text(
                      statusGame[PhlCommons.gameStatus],
                     style: GoogleFonts.averageSans(fontSize: 16.0),
@@ -144,9 +141,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
             visible: PhlCommons.gameStatus == 1,
             child: IconButton(
                 icon: const Icon(Icons.chat),
-                /*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*/
+
                 iconSize: 35,
                 color: Colors.blue,
                 tooltip: 'Caption',
@@ -549,7 +544,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
         greeting = "Check ${DateTime.now().second}";
         checkAudika();
         getGameUsersByCode();
-    // plusGamebyUid();
+      plusGamebyUid();
       });
     });
   }
@@ -599,8 +594,10 @@ class _GameSupervisorState extends State<GameSupervisor> {
     int _status = myGames[cestCeluiLa].gamestatus;
     _status = _status + 1;
     if (_status == 6) _status=0;
+    setState(() {
     myGames[cestCeluiLa].gamestatus = _status;
     PhlCommons.gameStatus=_status;
+    });
 
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
     var data = {

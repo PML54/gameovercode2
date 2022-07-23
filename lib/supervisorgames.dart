@@ -55,8 +55,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
   int checkAudikaError = 0;
   List<GameAudika> listAudika = [];
 
-  bool plusGamebyUidState =false;
-  List<GamesPlus> myGamesStatus= [];
+  bool plusGamebyUidState = false;
+  List<GamesPlus> myGamesStatus = [];
 
   bool getGamePhotoSelectState = false;
   int getGamePhotoSelectError = -1;
@@ -87,8 +87,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 iconSize: 30.0,
                 tooltip: 'Home',
                 onPressed: () {
-//_timer.isActive { _timer.cancel()};
-
                   _timer?.cancel();
 
                   PhlCommons.thisGameCode = takeThisGameCode;
@@ -96,17 +94,14 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 },
               ),
               Visibility(
-                visible: true ,
+                visible: true,
                 child: ElevatedButton(
-                  child:
-
-                  Text(
-                     statusGame[PhlCommons.gameStatus],
+                  child: Text(
+                    statusGame[PhlCommons.gameStatus],
                     style: GoogleFonts.averageSans(fontSize: 16.0),
                   ),
-
                   onPressed: () {
-                   if (isGmid ) promoteGame();
+                    if (isGmid) promoteGame();
                   },
                 ),
               ),
@@ -116,7 +111,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                       primary: Colors.green,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 5),
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                           fontSize: 14,
                           backgroundColor: Colors.green,
                           fontWeight: FontWeight.bold)),
@@ -133,32 +128,30 @@ class _GameSupervisorState extends State<GameSupervisor> {
           getListView()
         ]),
       ),
-      bottomNavigationBar:
-      Row(//   visible: takeThisGameCode > 0,
+      bottomNavigationBar: Row(
+        //   visible: takeThisGameCode > 0,
         children: [
-
           Visibility(
             visible: PhlCommons.gameStatus == 1,
             child: IconButton(
-                icon: const Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
+              iconSize: 35,
+              color: Colors.blue,
+              tooltip: 'Caption',
+              onPressed: () {
+                PhlCommons.thisGameCode = takeThisGameCode;
 
-                iconSize: 35,
-                color: Colors.blue,
-                tooltip: 'Caption',
-                onPressed: () {
-                  PhlCommons.thisGameCode = takeThisGameCode;
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-
-                      builder: (context) => const GameUser(),
-                      settings: RouteSettings(
-                        arguments: myPerso,
-                      ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GameUser(),
+                    settings: RouteSettings(
+                      arguments: myPerso,
                     ),
-                  );
-                },),
+                  ),
+                );
+              },
+            ),
           ), //  Meme
           Visibility(
             visible: PhlCommons.gameStatus == 3,
@@ -171,21 +164,20 @@ class _GameSupervisorState extends State<GameSupervisor> {
               color: Colors.orange,
               tooltip: 'Vote',
               onPressed: () {
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    //      builder: (context) => const ConnectGame()),
-                    builder: (context) => const GameVote(),
+                    builder: (context) => GameVote(),
                     settings: RouteSettings(
                       arguments: myPerso,
                     ),
                   ),
                 );
-              },),
+              },
+            ),
           ), //  Meme
           Visibility(
-            visible:  PhlCommons.gameStatus == 5,
+            visible: PhlCommons.gameStatus == 5,
             child: IconButton(
                 icon: const Icon(Icons.favorite_rounded),
                 /*     showSimpleNotification(
@@ -195,11 +187,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 color: Colors.green,
                 tooltip: 'Resultats',
                 onPressed: () {
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      //      builder: (context) => const ConnectGame()),
                       builder: (context) => const GameVoteResult(),
                       settings: RouteSettings(
                         arguments: myPerso,
@@ -208,7 +198,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   );
                 }),
           ), //  REsuktats
-
         ],
       ),
     ));
@@ -231,8 +220,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
     changeStateGameUserState = true;
     //getGamebyUid();  // On l-relit les Games
   }
-
-
 
   Future checkAudika() async {
     bool gameCodeFound = true;
@@ -281,14 +268,14 @@ class _GameSupervisorState extends State<GameSupervisor> {
       gameCodeFound = true;
     }
 
-    print (" In getGamebyUid");
+    print(" In getGamebyUid");
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
         PhlCommons.thisGameCode = myGames.last.gamecode; // ON prend le dernier
       });
-      print (" Out getGamebyUid");
+      print(" Out getGamebyUid");
       getGamebyUidState = true;
       getGamebyUidError = 0;
     } else {}
@@ -357,7 +344,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
   }
 
   Expanded getListGame() {
-   // getGamebyUid();
+    // getGamebyUid();
     if (!getGamebyUidState) {
       return (const Expanded(child: Text(".............")));
     }
@@ -378,10 +365,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                             border: Border.all()),
                         child: Column(
                           children: [
-                            Text(
-                                myGames[index].gamecode.toString()
-                                 //   + statusGame[myGames[index].status]
-                                ,
+                            Text(myGames[index].gamecode.toString(),
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16))
                           ],
@@ -395,7 +379,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
 
                   if (myGames[index].isSelected) {
                     getGameUsersByCode();
-
                     //
                     isGmid = false;
                     isGmid = (PhlCommons.thatUid == myGames[index].gmid);
@@ -405,8 +388,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     takeThisGameCode = myGames[index].gamecode;
 
                     PhlCommons.thisGameCode = takeThisGameCode;
-                    PhlCommons.gameStatus=myGames[index].gamestatus;
-                    //PhlCommons.thatStatus=Gamers
+                    PhlCommons.gameStatus = myGames[index].gamestatus;
                     changeStateGameUser(1); // <PML>  pas sur
                     myPerso.myGame = takeThisGameCode;
                     myGames[index].extraColor = Colors.green;
@@ -446,39 +428,35 @@ class _GameSupervisorState extends State<GameSupervisor> {
                   children: [
                     Column(
                       children: [
-
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              primary: (Gamers[index].gustate == 1) ? Colors.green
-                                  : Colors.grey ,
+                              primary: (Gamers[index].gustate == 1)
+                                  ? Colors.green
+                                  : Colors.grey,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 5),
-                              textStyle:  TextStyle(
+                              textStyle: TextStyle(
                                   fontSize: 14,
-                                color:  Colors.black ,
-
-                                  backgroundColor: (Gamers[index].gustate == 1) ? Colors.green
-                                      : Colors.grey ,
+                                  color: Colors.black,
+                                  backgroundColor: (Gamers[index].gustate == 1)
+                                      ? Colors.green
+                                      : Colors.grey,
                                   fontWeight: FontWeight.bold)),
                           child: Text(
                               Gamers[index].uname +
                                   " " +
                                   Gamers[index].gustatus.toString(),
                               style: TextStyle(
-
                                   color: (Gamers[index].gustate == 1)
                                       ? Colors.black
                                       : Colors.black,
-                                  fontSize:        (Gamers[index].gustate == 1)
-                                  ? 14
-                                  : 11)),
+                                  fontSize:
+                                      (Gamers[index].gustate == 1) ? 14 : 11)),
                           onPressed: () {
                             print("Gamers[index].gustate" +
                                 Gamers[index].gustate.toString());
                           },
                         ),
-
-
                       ],
                     ),
                     Visibility(
@@ -539,22 +517,22 @@ class _GameSupervisorState extends State<GameSupervisor> {
     getGamebyUid();
     SetGuOffGames();
     plusGamebyUid(); // <PML> on laisse ici ?
-    _timer = Timer.periodic(Duration(seconds:4), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 4), (timer) {
       setState(() {
         greeting = "Check ${DateTime.now().second}";
         checkAudika();
         getGameUsersByCode();
-      plusGamebyUid();
+        plusGamebyUid();
       });
     });
   }
 
   //plusGAMEBYUID.php
 
-  Future plusGamebyUid() async {
+  Future plusGamebyUid() async{
     bool gameUidFound = true;
-    plusGamebyUidState=false;
-    if  (PhlCommons.thatUid  == null) return;
+    plusGamebyUidState = false;
+    if (PhlCommons.thatUid == null) return;
     Uri url = Uri.parse(pathPHP + "plusGAMEBYUID.php");
     var data = {
       "UID": PhlCommons.thatUid.toString(),
@@ -569,34 +547,38 @@ class _GameSupervisorState extends State<GameSupervisor> {
     if (response.statusCode == 200 && (gameUidFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
-        myGamesStatus = datamysql.map((xJson) => GamesPlus.fromJson(xJson)).toList();
+        myGamesStatus =
+            datamysql.map((xJson) => GamesPlus.fromJson(xJson)).toList();
       });
       plusGamebyUidState = true;
       // Voyon sil ya des changeents
-      for ( GameByUser _gameActif  in myGames) {
-        for (GamesPlus _gameRelu  in  myGamesStatus) {
-        if (_gameRelu.gamecode == _gameActif.gamecode) {
-          _gameActif.gamestatus=_gameRelu.gamestatus;
-        }
+      for (GameByUser _gameActif in myGames) {
+        for (GamesPlus _gameRelu in myGamesStatus) {
+          if (_gameRelu.gamecode == _gameActif.gamecode) {
+            if ( _gameActif.gamestatus != _gameRelu.gamestatus) {
+              setState(() {
+                _gameActif.gamestatus = _gameRelu.gamestatus;
+                if (_gameActif.gamecode == PhlCommons.thisGameCode) {
+                  PhlCommons.gameStatus = _gameActif.gamestatus;
+                }
+                });
+            }
+              };
+          }
         }
       }
 
-    }
-
-
-
-
-     else {}
+    else {}
   }
 
   Future promoteGame() async {
     promoteGameState = false;
     int _status = myGames[cestCeluiLa].gamestatus;
     _status = _status + 1;
-    if (_status == 6) _status=0;
+    if (_status == 6) _status = 0;
     setState(() {
-    myGames[cestCeluiLa].gamestatus = _status;
-    PhlCommons.gameStatus=_status;
+      myGames[cestCeluiLa].gamestatus = _status;
+      PhlCommons.gameStatus = _status;
     });
 
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
@@ -607,13 +589,10 @@ class _GameSupervisorState extends State<GameSupervisor> {
     };
     http.Response response = await http.post(url, body: data);
     if (response.statusCode == 200) {
-      setState(() {
-
-        print ("myGames[cestCeluiLa].status  "+myGames[cestCeluiLa].gamestatus.toString());
-        promoteGameState = true;
-      });
+      promoteGameState = true;
     } else {}
   }
+
   Future SetGuOffGames() async {
     Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
     var data = {
@@ -625,8 +604,4 @@ class _GameSupervisorState extends State<GameSupervisor> {
       setGuOffGamesState = true;
     } else {}
   }
-
-
-
-
 }

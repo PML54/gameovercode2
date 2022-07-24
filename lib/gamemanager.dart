@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
@@ -70,7 +69,6 @@ class _GameManagerState extends State<GameManager> {
   int getGmGamesError = -1;
   bool createGameState = false;
   int createGameError = -1;
-
 
   @override
   Widget build(BuildContext context) {

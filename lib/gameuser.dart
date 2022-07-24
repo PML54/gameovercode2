@@ -91,7 +91,6 @@ class _GameUserState extends State<GameUser> {
                           fontWeight: FontWeight.bold)),
                   child: const Text(' Exit Lobby '),
                   onPressed: () {
-
                     stopTimer();
                     Navigator.pop(context);
                   }),
@@ -139,12 +138,10 @@ class _GameUserState extends State<GameUser> {
                 onPressed: () {
                   createMeme();
                   stopTimer();
-                  if (PhlCommons.thatStatus <4 )changeStatusGameUser(4);
+                  if (PhlCommons.thatStatus < 2) changeStatusGameUser(2);
                   Navigator.pop(context);
                 }),
           ),
-
-
         ],
       ),
     ));
@@ -158,7 +155,7 @@ class _GameUserState extends State<GameUser> {
     if (totalSeconds <= 1) {
       createMeme();
       stopTimer();
-      if (PhlCommons.thatStatus <4 ) changeStatusGameUser( 4); //MEME CLOSED
+      if (PhlCommons.thatStatus < 2) changeStatusGameUser(2); //MEME CLOSED
       Navigator.pop(context);
     }
   }
@@ -169,7 +166,6 @@ class _GameUserState extends State<GameUser> {
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
       "UID": PhlCommons.thatUid.toString(),
-      // +1 CAr  si le GameUSer Vote cest donc quil est en ligne
       "GUSTATE": (_state).toString(),
     };
     await http.post(url, body: data);
@@ -290,7 +286,9 @@ class _GameUserState extends State<GameUser> {
   }
 
   Expanded getget() {
-    if (!getGamebyUidState || !getGamePhotoSelectState|| PhlCommons.thatStatus>= 4) {
+    if (!getGamebyUidState ||
+        !getGamePhotoSelectState ||
+        PhlCommons.thatStatus >= 4) {
       return Expanded(
         child: Column(
           children: const [
@@ -310,6 +308,8 @@ class _GameUserState extends State<GameUser> {
       children: [
         TextField(
           controller: legendeController,
+          keyboardType: TextInputType.multiline,
+          maxLines: 2,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             labelText: "Meme?",
@@ -425,8 +425,8 @@ class _GameUserState extends State<GameUser> {
     getGamebyCode(); // H-eu
     reset();
     changeStateGameUser(1);
-   if ( PhlCommons.thatStatus < 2)  changeStatusGameUser(2); //MEMING
 
+    changeStatusGameUser(1); //MEMING
   }
 
   void reset() {
@@ -448,5 +448,4 @@ class _GameUserState extends State<GameUser> {
     }
     setState(() => timer?.cancel());
   }
-
 }

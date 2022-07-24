@@ -92,6 +92,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                             fontWeight: FontWeight.bold)),
                     child: const Text(' Exit GAME '),
                     onPressed: () {
+
                       changeStateGameUser(0);
 
                       Navigator.pop(context);
@@ -137,7 +138,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
           //   visible: takeThisGameCode > 0,
           children: [
             Visibility(
-              visible: PhlCommons.gameStatus == 1,
+              visible: PhlCommons.gameStatus == 1 && PhlCommons.thatStatus==1,
               child: ElevatedButton(
                 child: Text(
                   " Commentez ",
@@ -158,7 +159,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ),
             ),
             Visibility(
-              visible: PhlCommons.gameStatus == 3,
+              visible: PhlCommons.gameStatus == 3  && PhlCommons.thatStatus == 3,
               child: ElevatedButton(
                 child: Text(
                   " Votez ",
@@ -180,7 +181,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ),
             ),
             Visibility(
-              visible: PhlCommons.gameStatus == 5,
+              visible: PhlCommons.gameStatus == 5 && PhlCommons.thatStatus== 5,
               child: ElevatedButton(
                 child: Text(
                   " Resutats ",
@@ -411,6 +412,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     //
                     isGmid = false;
                     isGmid = (PhlCommons.thatUid == myGames[index].gmid);
+
+                    print ("isGmid "+  isGmid.toString());
+                    print ("PhlCommons.thatUid"+PhlCommons.thatUid.toString());
+                    print (" myGames[index].gmid"+myGames[index].gmid.toString());
+
                     getGamePhotoSelectState = false;
                     cestCeluiLa = index;
                     getGamePhotoSelect();
@@ -610,7 +616,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       myGames[cestCeluiLa].gamestatus = _status;
       PhlCommons.gameStatus = _status;
     });
-
+print (" Promote");
     Uri url = Uri.parse(pathPHP + "promoteGAME.php");
     var data = {
       "GAMECODE": PhlCommons.thisGameCode.toString(),
@@ -672,6 +678,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
     }
 
   }
+
 
 
 }

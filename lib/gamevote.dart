@@ -316,7 +316,7 @@ class _GameVoteState extends State<GameVote> {
     });
     if (totalSeconds <= 1) {
       stopTimer();
-      changeStatusGameUser(16); //has Voted
+      changeStatusGameUser(4); //has Voted
       Navigator.pop(context);
     }
   }
@@ -415,7 +415,7 @@ class _GameVoteState extends State<GameVote> {
     readGameLike(); // Seule Lecture
 
     getGamebyCode(); // H-eu
-    changeStatusGameUser(8); //Voting
+    changeStatusGameUser(3); //Voting
 
     listCountEmo.clear();
     for (int i = 0; i < 6; i++) {
@@ -520,6 +520,7 @@ class _GameVoteState extends State<GameVote> {
   }
   void cleanExit()
   {
+
     stopTimer();
     Navigator.pop(context);
   }

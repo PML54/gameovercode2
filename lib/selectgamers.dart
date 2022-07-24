@@ -115,7 +115,7 @@ class _SelectGamersState extends State<SelectGamers> {
     setState(() {
       listMemopolUsersReduce.clear();
       for (MemopolUsersReduce _brocky in listMemopolUsers) {
-        if (_brocky.isSelected) {
+        if (_brocky.isSelected ||_brocky.uid == PhlCommons.thatUid) {
           listMemopolUsersReduce.add(_brocky);
         }
       }

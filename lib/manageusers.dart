@@ -148,8 +148,9 @@ class _ManageUsers extends State<ManageUsers> {
   Expanded getViewMemopolUsers() {
     setState(() {});
 
-    if (!getAllMemopolUserState)
+    if (!getAllMemopolUserState) {
       return (const Expanded(child: Text(".......")));
+    }
     var listView = ListView.builder(
         itemCount: listMemopolUsers.length,
         controller: ScrollController(),

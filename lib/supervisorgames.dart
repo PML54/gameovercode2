@@ -40,8 +40,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
       lastid: 0,
       gamecode: 0,
       lastdate: DateTime.now().toString());
-  bool ActionAudikaGMU = false; // Si true Relire Les GAMEUSERS
-  bool ActionAudikaGAME = false; // Si true Relire les GAMes
+  bool actionAudikaGMU = false; // Si
+  bool actionAudikaGAME = false; // Si true Relire les GAMes
 
   bool setGuOffGamesState = false;
   bool getGameUsersByCodeState = false;
@@ -92,7 +92,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                             fontWeight: FontWeight.bold)),
                     child: const Text(' Exit GAME '),
                     onPressed: () {
-
+                      _timer?.cancel();
                       changeStateGameUser(0);
 
                       Navigator.pop(context);
@@ -138,7 +138,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
           //   visible: takeThisGameCode > 0,
           children: [
             Visibility(
-              visible: PhlCommons.gameStatus == 1 && PhlCommons.thatStatus==1,
+              visible: PhlCommons.gameStatus == 1 && PhlCommons.thatStatus==0,
               child: ElevatedButton(
                 child: Text(
                   " Commentez ",
@@ -159,7 +159,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ),
             ),
             Visibility(
-              visible: PhlCommons.gameStatus == 3  && PhlCommons.thatStatus == 3,
+              visible: PhlCommons.gameStatus == 3  && PhlCommons.thatStatus == 2,
               child: ElevatedButton(
                 child: Text(
                   " Votez ",
@@ -181,10 +181,10 @@ class _GameSupervisorState extends State<GameSupervisor> {
               ),
             ),
             Visibility(
-              visible: PhlCommons.gameStatus == 5 && PhlCommons.thatStatus== 5,
+              visible: PhlCommons.gameStatus == 5 && PhlCommons.thatStatus== 4,
               child: ElevatedButton(
                 child: Text(
-                  " Resutats ",
+                  " Résutats ",
                   style: GoogleFonts.averageSans(fontSize: 16.0),
                 ),
                 onPressed: () {
@@ -283,14 +283,14 @@ class _GameSupervisorState extends State<GameSupervisor> {
       gameCodeFound = true;
     }
 
-    print(" In getGamebyUid");
+
     if (response.statusCode == 200 && (gameCodeFound)) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
         myGames = datamysql.map((xJson) => GameByUser.fromJson(xJson)).toList();
         PhlCommons.thisGameCode = myGames.last.gamecode; // ON prend le dernier
       });
-      print(" Out getGamebyUid");
+
       getGamebyUidState = true;
       getGamebyUidError = 0;
     } else {}
@@ -387,7 +387,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                         )),
                   ),
                   Visibility(
-                    visible: (myGames[index].gamestatus % 2 == 1),
+                    visible: (myGames[index].gamestatus  == 1) &&  (PhlCommons.thatStatus  == 0) || (myGames[index].gamestatus  == 3) &&  (PhlCommons.thatStatus  == 2)
+                      || (myGames[index].gamestatus  == 5) &&  (PhlCommons.thatStatus  == 4),
+
                     child: IconButton(
                         //   icon: const Icon(Icons.favorite_rounded),
                         icon: const Icon(Icons.directions_run_outlined),
@@ -412,10 +414,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     //
                     isGmid = false;
                     isGmid = (PhlCommons.thatUid == myGames[index].gmid);
-
-                    print ("isGmid "+  isGmid.toString());
-                    print ("PhlCommons.thatUid"+PhlCommons.thatUid.toString());
-                    print (" myGames[index].gmid"+myGames[index].gmid.toString());
 
                     getGamePhotoSelectState = false;
                     cestCeluiLa = index;
@@ -459,54 +457,52 @@ class _GameSupervisorState extends State<GameSupervisor> {
         itemBuilder: (context, index) {
           return ListTile(
               dense: true,
-              title: Container(
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: (Gamers[index].gustate == 1)
-                                  ? Colors.green
-                                  : Colors.grey,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 5),
-                              textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  backgroundColor: (Gamers[index].gustate == 1)
-                                      ? Colors.green:Colors.grey,
-                                  //    : ((Gamers[index].gustatus >=2 ) ? Colors.blue:Colors.grey),
-                                  fontWeight: FontWeight.bold)),
-                          child: Text(
-                              Gamers[index].uname +
-                                  " " +
-                                  Gamers[index].gustatus.toString(),
-                              style: TextStyle(
-                                  color: (Gamers[index].gustate == 1)
-                                      ? Colors.black
-                                      : Colors.black,
-                                  fontSize:
-                                      (Gamers[index].gustate == 1) ? 14 : 14)),
-                          onPressed: () {
+              title: Row(
+                children: [
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: (Gamers[index].gustate == 1)
+                                ? Colors.green
+                                : Colors.grey,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
+                            textStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                backgroundColor: (Gamers[index].gustate == 1)
+                                    ? Colors.green:Colors.grey,
+                                //    : ((Gamers[index].gustatus >=2 ) ? Colors.blue:Colors.grey),
+                                fontWeight: FontWeight.bold)),
+                        child: Text(
+                            Gamers[index].uname +
+                                " " +
+                                Gamers[index].gustatus.toString(),
+                            style: TextStyle(
+                                color: (Gamers[index].gustate == 1)
+                                    ? Colors.black
+                                    : Colors.black,
+                                fontSize:
+                                    (Gamers[index].gustate == 1) ? 14 : 14)),
+                        onPressed: () {
 
-                                Gamers[index].gustate.toString();
-                          },
-                        ),
-                      ],
-                    ),
-                    Visibility(
-                      visible: isGmid && false,
-                      child: IconButton(
-                        icon: const Icon(Icons.delete),
-                        color: Colors.red,
-                        iconSize: 20.0,
-                        tooltip: 'Home',
-                        onPressed: () {},
+                              Gamers[index].gustate.toString();
+                        },
                       ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: isGmid && false,
+                    child: IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      iconSize: 20.0,
+                      tooltip: 'Home',
+                      onPressed: () {},
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               onTap: () {
                 setState(() {});
@@ -528,13 +524,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
               title: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      child: Image.network(
-                        "upload/" +
-                            listPhotoBaseGame[index].photofilename +
-                            "." +
-                            listPhotoBaseGame[index].photofiletype,
-                      ),
+                    child: Image.network(
+                      "upload/" +
+                          listPhotoBaseGame[index].photofilename +
+                          "." +
+                          listPhotoBaseGame[index].photofiletype,
                     ),
                   ),
                 ],
@@ -567,6 +561,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
       });
     });
   }
+  @override
+
+
   Future plusGamebyUid() async {
     bool gameUidFound = true;
     plusGamebyUidState = false;

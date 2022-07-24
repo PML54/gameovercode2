@@ -1,38 +1,36 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:html';
-import 'phlcommons.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gameover/admin/admingame.dart';
+import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamehelp.dart';
 import 'package:gameover/gamemanager.dart';
-
 import 'package:gameover/gamephlclass.dart';
-
 import 'package:gameover/mementoes.dart';
 import 'package:gameover/memolike.dart';
 import 'package:gameover/randomeme.dart';
+import 'package:gameover/supervisorgames.dart';
 import 'package:gameover/userconnect.dart';
 import 'package:gameover/usercreate.dart';
-import 'package:gameover/supervisorgames.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/services.dart';
-import 'package:gameover/configgamephl.dart';
 import 'package:http/http.dart' as http;
-//setGUOFFGAME.php
-void getParams() {
-  var uri = Uri.dataFromString(window.location.href);
-  Map<String, String> params = uri.queryParameters;
-  var origin = params['origin'];
-  var destiny = params['destiny'];
 
-}
+import 'phlcommons.dart';
 
 void main() {
   String myurl = Uri.base.toString(); //get complete url
   getParams();
   runApp(const MaterialApp(title: 'Navigation Basics', home: MenoPaul()));
+}
+
+void getParams() {
+  var uri = Uri.dataFromString(window.location.href);
+  Map<String, String> params = uri.queryParameters;
+  var origin = params['origin'];
+  var destiny = params['destiny'];
 }
 
 class MenoPaul extends StatefulWidget {
@@ -56,7 +54,7 @@ class _MenoPaulState extends State<MenoPaul> {
 
   @override
   Widget build(BuildContext context) {
-    if (PhlCommons.thatUid > 0 )cleanLogins();
+    if (PhlCommons.thatUid > 0) cleanLogins();
     setState(() {});
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent
@@ -65,7 +63,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'V24.1540 : ' + myPerso.myPseudo + ' ',
+          'V24.2000 : ' + myPerso.myPseudo + ' ',
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -325,19 +323,18 @@ class _MenoPaulState extends State<MenoPaul> {
     );
   }
 
-  @override
-  void initState() {
-    //  super.initState();
+  Future cleanLogins() async {
+    // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
+    Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
 
-    initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    var data = {
+      //<TODO>
+      "UID": PhlCommons.thatUid.toString(),
+    };
 
+    http.Response response = await http.post(url, body: data);
 
-    setState(() {
-      isAdmin = false;
-      isGamer = false;
-    });
+    if (response.body.toString() == 'ERR_1001') {}
   }
 
   @override
@@ -366,6 +363,20 @@ class _MenoPaulState extends State<MenoPaul> {
     return _updateConnectionStatus(result);
   }
 
+  @override
+  void initState() {
+    //  super.initState();
+
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    setState(() {
+      isAdmin = false;
+      isGamer = false;
+    });
+  }
+
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     setState(() {
       _connectionStatus = result;
@@ -379,24 +390,4 @@ class _MenoPaulState extends State<MenoPaul> {
       }
     });
   }
-  Future cleanLogins() async {
-    // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
-    Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
-
-    var data = {
-      //<TODO>
-      "UID": PhlCommons.thatUid.toString(),
-    };
-
-
-    http.Response response = await http.post(url, body: data);
-
-
-    if (response.body.toString() == 'ERR_1001') {
-
-    }
-
-
-  }
-
 }

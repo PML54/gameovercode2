@@ -127,21 +127,24 @@ class _GameUserState extends State<GameUser> {
       ),
       bottomNavigationBar: Row(
         children: [
-          Visibility(
-            // visible: !timeOut,
-            visible: true,
-            child: IconButton(
-                icon: const Icon(Icons.save),
-                iconSize: 35,
-                color: Colors.red,
-                tooltip: 'Save Captions',
-                onPressed: () {
-                  createMeme();
-                  stopTimer();
-                  if (PhlCommons.thatStatus < 2) changeStatusGameUser(2);
-                  Navigator.pop(context);
-                }),
-          ),
+
+      ElevatedButton(
+      style: ElevatedButton.styleFrom(
+      primary: Colors.red,
+          padding: const EdgeInsets.symmetric(
+              horizontal: 8, vertical: 5),
+          textStyle: const TextStyle(
+              fontSize: 14,
+              backgroundColor: Colors.red,
+              fontWeight: FontWeight.bold)),
+            child: const Text(' Exit Lobby '),
+            onPressed: () {
+              createMeme();
+              stopTimer();
+              if (PhlCommons.thatStatus < 2) changeStatusGameUser(2);
+              Navigator.pop(context);
+            }),
+
         ],
       ),
     ));
@@ -369,20 +372,13 @@ class _GameUserState extends State<GameUser> {
               title: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      /*margin: const EdgeInsets.all(2.0),
-                        padding: const EdgeInsets.all(2.0),0
-                        decoration: BoxDecoration(
-                            color: listPhotoBase[index].extraColor,
-                            border: Border.all()),*/
-                      child: Image.network(
-                        "upload/" +
-                            listPhotoBase[index].photofilename +
-                            "." +
-                            listPhotoBase[index].photofiletype,
-                        /*width: (listPhotoBase[index].extraWidth),
-                              height: (listPhotoBase[index].extraHeight),*/
-                      ),
+                    child: Image.network(
+                      "upload/" +
+                          listPhotoBase[index].photofilename +
+                          "." +
+                          listPhotoBase[index].photofiletype,
+                      /*width: (listPhotoBase[index].extraWidth),
+                            height: (listPhotoBase[index].extraHeight),*/
                     ),
                   ),
                 ],

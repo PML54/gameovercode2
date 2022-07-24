@@ -114,7 +114,7 @@ class _GameVoteResultState extends State<GameVoteResult> {
                           '--> ' +
                           listGameLike[cestCeluiLa].mynote.toString() +
                           " Points",
-                          style: TextStyle(fontSize: 22, color: Colors.red),
+                          style: const TextStyle(fontSize: 22, color: Colors.red),
                       )),
                 ]),
               )

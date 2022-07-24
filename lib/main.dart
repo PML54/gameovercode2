@@ -5,16 +5,16 @@ import 'phlcommons.dart';
 import 'package:gameover/admin/admingame.dart';
 import 'package:gameover/gamehelp.dart';
 import 'package:gameover/gamemanager.dart';
-import 'package:gameover/gameuser.dart';
+
 import 'package:gameover/gamephlclass.dart';
-import 'package:gameover/gamevote.dart';
+
 import 'package:gameover/mementoes.dart';
 import 'package:gameover/memolike.dart';
 import 'package:gameover/randomeme.dart';
 import 'package:gameover/userconnect.dart';
 import 'package:gameover/usercreate.dart';
 import 'package:gameover/supervisorgames.dart';
-import 'package:gameover/gamevoteresult.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +26,7 @@ void getParams() {
   Map<String, String> params = uri.queryParameters;
   var origin = params['origin'];
   var destiny = params['destiny'];
-  print(origin);
-  print(destiny);
+
 }
 
 void main() {
@@ -66,7 +65,7 @@ class _MenoPaulState extends State<MenoPaul> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'V23.2000 : ' + myPerso.myPseudo + ' ',
+          'V24.0745 : ' + myPerso.myPseudo + ' ',
           style: GoogleFonts.averageSans(fontSize: 18.0),
         ),
       ),
@@ -375,16 +374,15 @@ class _MenoPaulState extends State<MenoPaul> {
 
       if (result.toString() == "ConnectivityResult.wifi") {
         dispConnectivity = "Wifi";
-      } else
-        //  dispConnectivity=result.toString();
-
+      } else {
         dispConnectivity = "***";
+      }
     });
   }
   Future cleanLogins() async {
     // Lire TABLE   GAMEPHOTOSELECT  et mettre dans  listgetGamePhotoSelect
     Uri url = Uri.parse(pathPHP + "setGUOFFGAME.php");
-print (" PhlCommons.thatUid.toString()"+PhlCommons.thatUid.toString());
+
     var data = {
       //<TODO>
       "UID": PhlCommons.thatUid.toString(),

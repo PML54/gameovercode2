@@ -5,10 +5,9 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
-import 'package:gameover/gamevote.dart';
-import 'package:gameover/gamevoteresult.dart';
+
 import 'package:gameover/phlcommons.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:http/http.dart' as http;
 
 class GameUser extends StatefulWidget {
@@ -90,7 +89,7 @@ class _GameUserState extends State<GameUser> {
                           fontSize: 14,
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
-                  child: Text(' Exit Lobby '),
+                  child: const Text(' Exit Lobby '),
                   onPressed: () {
 
                     stopTimer();
@@ -428,7 +427,6 @@ class _GameUserState extends State<GameUser> {
     changeStateGameUser(1);
    if ( PhlCommons.thatStatus < 2)  changeStatusGameUser(2); //MEMING
 
-    print ('PhlCommons.thatState'+ PhlCommons.thatState.toString());
   }
 
   void reset() {
@@ -450,4 +448,5 @@ class _GameUserState extends State<GameUser> {
     }
     setState(() => timer?.cancel());
   }
+
 }

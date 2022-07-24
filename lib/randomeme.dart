@@ -23,8 +23,8 @@ class _RandoMemeState extends State<RandoMeme> {
   TextEditingController legendeController = TextEditingController();
   int totalSeconds = 100;
   bool timeOut = false;
-  bool boolCategory = false;
-  int getPhotoCatError = -1;
+
+ bool boolCategory = false;  int getPhotoCatError = -1;
   int nbPhotoCat = 0;
   int getPhotoBaseError = -1;
   List<int> photoidSelected = []; // retenues avec les Catégotire
@@ -370,7 +370,6 @@ class _RandoMemeState extends State<RandoMeme> {
       });
     } else {}
   }
-
   Future getPhotoCat() async {
     Uri url = Uri.parse(pathPHP+"getPHOTOCAT.php");
     getPhotoCatState = false;
@@ -396,7 +395,6 @@ class _RandoMemeState extends State<RandoMeme> {
       });
     } else {}
   }
-
   Expanded getViewPhotoCat() {
     setState(() {});
     if (!getPhotoCatState | !getPhotoBaseState) {
@@ -459,7 +457,6 @@ class _RandoMemeState extends State<RandoMeme> {
     }
     initPhotoSelected();
   }
-
   initPhotoSelected() {
 
     photoidSelected.clear();

@@ -19,9 +19,6 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 
 
-import 'package:gameover/phlcommons.dart';
-
-
 // Ici  On entre avec Un gamecode
 class GameHelp extends StatefulWidget {
   const GameHelp({Key? key}) : super(key: key);
@@ -39,10 +36,12 @@ String   monaide="help/Help110.png";
 
   @override
   Widget build(BuildContext context) {
+/*
     final myPerso = ModalRoute
         .of(context)!
         .settings
         .arguments as GameCommons;
+*/
 
     return MaterialApp(
       home: Scaffold(

@@ -192,7 +192,7 @@ class _MemolikeState extends State<Memolike> {
                             )
                           ],
                         )
-                      : Text('...'),
+                      : const Text('...'),
                   Center(
                       child:
                           Text('By ' + listMemoLike[cestCeluiLa].memolikeuser)),
@@ -240,7 +240,6 @@ class _MemolikeState extends State<Memolike> {
     var res = await http.post(url, body: data);
     var datamysql = jsonDecode(res.body) as List;
 
-    print (" OK for Create");
     setState(() {
       getMLVU();
       listCheckVote =
@@ -371,14 +370,14 @@ class _MemolikeState extends State<Memolike> {
      if (res.statusCode == 200 && (readMemolikeVoteError != 1000)) {
       var datamysql = jsonDecode(res.body) as List;
       setState(() {
-        print (" Avant decodage");
+
         listCheckVote =
             datamysql.map((xJson) => CheckVotePlus.fromJson(xJson)).toList();
         readMemolikeVoteState = true;
             thatAverage =
             (updateThisMli(listMemoLike[cestCeluiLa].memolikeid)).toDouble();
       });
-      print (" Apres decodage");
+
     }
   }
 

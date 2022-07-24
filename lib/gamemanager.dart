@@ -1,4 +1,4 @@
-import 'dart:async';
+
 import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
@@ -140,8 +140,8 @@ class _GameManagerState extends State<GameManager> {
                       ),
                       Visibility(
                         visible: isGameValidated,
-                        child: Text(" is READY",
-                            style: const TextStyle(
+                        child: const Text(" is READY",
+                            style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                               fontWeight: FontWeight.normal,

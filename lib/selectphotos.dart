@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
@@ -22,16 +22,35 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   double myHeight = 100;
   List<PhotoBase> listPhotoBase = [];
   List<PhotoBase> listPhotoBaseReduce = [];
+  List<PhotoBase> listPhotoBaseFiltered = [];
   List<GamePhotoSelect> listGamePhotoSelect = [];
+  int combienPhotos = 0;
   String thatGM = "xx";
   int thatGmid = 0;
-  int getGamePhotoSelectError  =0;
-  bool getGamePhotoSelectState =false;
-  GameCommons myPerso = GameCommons("xxxx", 0,0) ;
+  int getGamePhotoSelectError = 0;
+  bool getGamePhotoSelectState = false;
+  GameCommons myPerso = GameCommons("xxxx", 0, 0);
+
+  //*
+  List<int> photoidSelected = []; // retenues avec les Catégotire
+  List<PhotoCat> listPhotoCat = [];
+  bool getPhotoCatState = false;
+  int getPhotoCatError = 0;
+
+  //List<PhotoBase> listPhotoBase = [];
+  bool getPhotoBaseState = false;
+  int nbPhotoRandom = 0;
+  int nbPhotoCat = 0;
+  List<Icon> selIcon = [];
+  Icon catIcon = const Icon(Icons.remove);
+  bool boolCategory = false;
+  int cestCeluiLa = 0;
+
+  //
   @override
   Widget build(BuildContext context) {
     mafoto = 'assets/oursmacron.png';
-   myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
+    myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
     thatGmid = myPerso.myUid;
     thatGM = myPerso.myPseudo;
     return MaterialApp(
@@ -68,20 +87,38 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
       body: SafeArea(
         child: Row(children: <Widget>[
           getListView(),
-          getListViewSelected(),
+          !boolCategory ? getListViewSelected() : getViewPhotoCat()
 
           //   getListView(),
         ]),
       ),
-      bottomNavigationBar: IconButton(
-          icon: const Icon(Icons.save),
-          iconSize: 35,
-          color: Colors.red,
-          tooltip: 'Save Selection',
-          onPressed: () {
-            PhlCommons.nbFotosGame = listPhotoBaseReduce.length;
-            updateSelection();
-          }),
+      bottomNavigationBar: Row(
+        children: [
+          IconButton(
+              icon: const Icon(Icons.save),
+              iconSize: 35,
+              color: Colors.red,
+              tooltip: 'Save Selection',
+              onPressed: () {
+                PhlCommons.nbFotosGame = listPhotoBaseReduce.length;
+                updateSelection();
+              }),
+          IconButton(
+              icon: const Icon(Icons.insert_photo),
+              iconSize: 35,
+              color: Colors.greenAccent,
+              tooltip: 'Categories',
+              onPressed: () {
+                setState(() {
+                  boolCategory = !boolCategory;
+                });
+              }),
+          Text(' ' +
+              combienPhotos.toString() +
+              '/' +
+              listPhotoBase.length.toString())
+        ],
+      ),
     ));
   }
 
@@ -93,31 +130,32 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
       //<TODO>
       "GAMECODE": PhlCommons.thisGameCode.toString(),
     };
-    getGamePhotoSelectState =false;
+    getGamePhotoSelectState = false;
     http.Response response = await http.post(url, body: data);
-    getGamePhotoSelectError  =0;
+    getGamePhotoSelectError = 0;
     if (response.body.toString() == 'ERR_1001') {
-
       getGamePhotoSelectError = 1001;
     }
 
-    if (response.statusCode == 200  && getGamePhotoSelectError ==0 )  {
+    if (response.statusCode == 200 && getGamePhotoSelectError == 0) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
-        getGamePhotoSelectState =true;
+        getGamePhotoSelectState = true;
         listGamePhotoSelect =
             datamysql.map((xJson) => GamePhotoSelect.fromJson(xJson)).toList();
-
       });
     } else {}
   }
 
   Expanded getListView() {
-    setState(() {});
+
 
     if (!feuVert) return (const Expanded(child: Text("Je Joue ........")));
+    setState(() {
+      combienPhotos = listPhotoBaseFiltered.length;
+    });
     var listView = ListView.builder(
-        itemCount: listPhotoBase.length,
+        itemCount: listPhotoBaseFiltered.length,
         controller: ScrollController(),
         itemBuilder: (context, index) {
           return ListTile(
@@ -129,29 +167,29 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
                         margin: const EdgeInsets.all(2.0),
                         padding: const EdgeInsets.all(2.0),
                         decoration: BoxDecoration(
-                            color: listPhotoBase[index].extraColor,
+                            color: listPhotoBaseFiltered[index].extraColor,
                             border: Border.all()),
-
-                        // child: Image.network(mafoto,
                         child: Image.network(
                           "upload/" +
-                              listPhotoBase[index].photofilename +
+                              listPhotoBaseFiltered[index].photofilename +
                               "." +
-                              listPhotoBase[index].photofiletype,
-                          width: (listPhotoBase[index].extraWidth) * 2.0,
-                          height: (listPhotoBase[index].extraHeight) * 2.0,
+                              listPhotoBaseFiltered[index].photofiletype,
+                          width:
+                              (listPhotoBaseFiltered[index].extraWidth) * 2.0,
+                          height:
+                              (listPhotoBaseFiltered[index].extraHeight) * 2.0,
                         )),
                   ),
                 ],
               ),
               onTap: () {
                 setState(() {
-                  listPhotoBase[index].isSelected =
-                      !listPhotoBase[index].isSelected;
-                  if (listPhotoBase[index].isSelected) {
-                    listPhotoBase[index].extraColor = Colors.green;
+                  listPhotoBaseFiltered[index].isSelected =
+                      !listPhotoBaseFiltered[index].isSelected;
+                  if (listPhotoBaseFiltered[index].isSelected) {
+                    listPhotoBaseFiltered[index].extraColor = Colors.green;
                   } else {
-                    listPhotoBase[index].extraColor = Colors.grey;
+                    listPhotoBaseFiltered[index].extraColor = Colors.grey;
                   }
                 });
               });
@@ -212,7 +250,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     return (Expanded(child: listView));
   }
 
-  Future getPhotoBase() async {
+  Future getPhotoBase_obsol() async {
     // Lire TABLE   PHOTOBASE et mettre dans  listPhotoBase
     Uri url = Uri.parse(pathPHP + "readPHOTOBASE.php");
     http.Response response = await http.get(url);
@@ -233,6 +271,9 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     getGamePhotoSelect();
 
     getPhotoBase();
+    selIcon.clear();
+    selIcon.add(const Icon(Icons.remove));
+    selIcon.add(const Icon(Icons.add));
   }
 
   void updateSelection() async {
@@ -246,11 +287,149 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     }
     Uri url = Uri.parse(pathPHP + "updateGAMEPHOTOSELECT.php");
     var data = {
-
       "GAMECODE": _gamecode.toString(),
       "GROUPSEL": thisParam,
     };
     await http.post(url, body: data);
     Navigator.pop(context);
+  }
+
+  Future getPhotoBase() async {
+    // Lire TABLE   PHOTOBASE et mettre dans  listPhotoBase
+    Uri url = Uri.parse(pathPHP + "readPHOTOBASE.php");
+    getPhotoBaseState = false;
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        listPhotoBase =
+            datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
+        getPhotoBaseState = true;
+        cestCeluiLa = Random().nextInt(listPhotoBase.length);
+        getPhotoCat();
+        feuVert = true;
+      });
+    } else {}
+  }
+
+  Future getPhotoCat() async {
+    Uri url = Uri.parse(pathPHP + "getPHOTOCAT.php");
+    getPhotoCatState = false;
+    getPhotoCatError = 0;
+
+    var data = {
+      "PHOTOCAT": "BDON",
+    };
+    http.Response response = await http.post(url, body: data);
+    if (response.body.toString() == 'ERR_1001') {
+      nbPhotoCat = 0;
+      getPhotoCatError = 1001; //Not Found
+    }
+    if (response.statusCode == 200 && (getPhotoCatError != 1001)) {
+      var datamysql = jsonDecode(response.body) as List;
+      setState(() {
+        getPhotoCatError = 0;
+        listPhotoCat =
+            datamysql.map((xJson) => PhotoCat.fromJson(xJson)).toList();
+        getPhotoCatState = true;
+
+        initPhotoCat(); // En cascade
+      });
+    } else {}
+  }
+
+  initPhotoCat() {
+    int _nbcat = 0;
+    int _thatid = 0;
+    for (PhotoCat _cathy in listPhotoCat) {
+      _nbcat = 0;
+      String _thatCode = _cathy.photocat;
+      for (PhotoBase _brocky in listPhotoBase) {
+        if (_brocky.photocat == _thatCode) {
+          _nbcat++;
+          _thatid = _brocky.photoid;
+        }
+      }
+      _cathy.setSelected(1);
+      _cathy.setNumber(_nbcat);
+      _cathy.setphotoid(_thatid);
+      _cathy.supMM();
+    }
+    initPhotoSelected();
+  }
+
+  initPhotoSelected() {
+    photoidSelected.clear();
+    listPhotoBaseFiltered.clear();
+    for (PhotoCat _fotocat in listPhotoCat) {
+      String _thatCode = _fotocat.photocat;
+
+      if (_fotocat.selected == 1) {
+        for (PhotoBase _fotobase in listPhotoBase) {
+          if (_fotobase.photocat == _thatCode) {
+            listPhotoBaseFiltered.add(_fotobase);
+
+            photoidSelected.add(_fotobase.photoid);
+          }
+        }
+      }
+    }
+    setState(() {
+      nbPhotoRandom = photoidSelected.length;
+    });
+  }
+
+  Expanded getViewPhotoCat() {
+    setState(() {});
+    if (!getPhotoCatState | !getPhotoBaseState) {
+      return (const Expanded(child: Text("............")));
+    }
+    var listView = ListView.builder(
+        itemCount: listPhotoCat.length,
+        controller: ScrollController(),
+        //scrollDirection:  Axis.horizontal,
+        itemBuilder: (context, index) {
+          return ListTile(
+              dense: true,
+              title: Row(
+                children: [
+                  Expanded(
+                      child: Row(
+                    children: [
+                      Text(listPhotoCat[index].photocast),
+                      selIcon[listPhotoCat[index].selected],
+                    ],
+                  )),
+                ],
+              ),
+              onTap: () {
+                setState(() {
+                  if (listPhotoCat[index].selected == 1) {
+                    listPhotoCat[index].selected = 0;
+                  } else {
+                    (listPhotoCat[index].selected = 1);
+                  }
+                  if (listPhotoCat[index].selected == 1) {
+                    catIcon = const Icon(Icons.add);
+                  } else {
+                    catIcon = const Icon(Icons.remove);
+                  }
+                  initPhotoSelected();
+                });
+              });
+        });
+
+    return (Expanded(child: listView));
+  }
+
+  getIndexFromPhotoId(_thatPhotoId) {
+    int index = 0;
+    for (PhotoBase _brocky in listPhotoBase) {
+      if (_brocky.photoid == _thatPhotoId) {
+        return (index);
+      }
+      index++;
+    }
+    return (0);
   }
 }

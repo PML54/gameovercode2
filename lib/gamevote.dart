@@ -199,8 +199,8 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 1)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             ),
                             Column(
@@ -213,8 +213,8 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 2)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             ),
                             Column(
@@ -227,8 +227,8 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 3)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             ),
                             Column(
@@ -241,8 +241,8 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 4)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             ),
                             Column(
@@ -255,8 +255,8 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 5)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             ),
                             Column(
@@ -269,19 +269,19 @@ class _GameVoteState extends State<GameVote> {
                                   ),
                                 ),
                                 (listGameLike[cestCeluiLa].mynote == 6)
-                                    ? Text("1")
-                                    : Text("0"),
+                                    ? const Text("1")
+                                    : const Text("0"),
                               ],
                             )
                           ],
                         )
-                      : Text('...'),
+                      : const Text('...'),
                   Center(
                       child: Text(
                           'By ' + listGameLike[cestCeluiLa].uid.toString())),
                 ]),
               )
-            : Text(''),
+            : const Text(''),
         bottomNavigationBar: Row(children: [
           IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -448,10 +448,11 @@ class _GameVoteState extends State<GameVote> {
 
   pressEmoticone(int _myUid, int lequel) {
     setState(() {
-      if (listGameLike[cestCeluiLa].mynote == lequel)
+      if (listGameLike[cestCeluiLa].mynote == lequel) {
         listGameLike[cestCeluiLa].mynote = 0;
-      else
+      } else {
         listGameLike[cestCeluiLa].mynote = lequel;
+      }
       createGameVote(_myUid, lequel);
       //nextPRL();
     });
@@ -489,11 +490,6 @@ class _GameVoteState extends State<GameVote> {
 
   Future readGameVote() async {
     Uri url = Uri.parse(pathPHP + "readGameVote.php");
-
-    var data = {
-      "GAMECODE": PhlCommons.thisGameCode.toString(),
-      "UID": PhlCommons.thatUid.toString()
-    };
 
     http.Response response = await http.post(url);
     if (response.body.toString() == 'ERR_1001') {}

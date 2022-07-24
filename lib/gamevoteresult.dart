@@ -16,7 +16,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
 import 'package:gameover/configgamephl.dart';
 import 'package:gameover/gamephlclass.dart';
@@ -119,7 +118,7 @@ class _GameVoteResultState extends State<GameVoteResult> {
                       )),
                 ]),
               )
-            : Text(''),
+            : const Text(''),
         bottomNavigationBar: Row(children: [
           IconButton(
               icon: const Icon(Icons.arrow_back),

@@ -10,7 +10,7 @@ import 'package:gameover/gameuser.dart';
 import 'package:gameover/gamevote.dart';
 import 'package:gameover/gamevoteresult.dart';
 import 'package:gameover/phlcommons.dart';
-import 'package:gameover/selectgamers.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -60,7 +60,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
 
   bool getGamePhotoSelectState = false;
   int getGamePhotoSelectError = -1;
-  List<PhotoBase> listPhotoBase = [];
+  List<PhotoBase> listPhotoBaseGame = [];
   bool getGamebyUidState = false;
   int getGamebyUidError = 0;
   List<GameByUser> myGames = [];
@@ -90,24 +90,13 @@ class _GameSupervisorState extends State<GameSupervisor> {
                             fontSize: 14,
                             backgroundColor: Colors.red,
                             fontWeight: FontWeight.bold)),
-                    child: Text(' Exit GAME '),
+                    child: const Text(' Exit GAME '),
                     onPressed: () {
                       changeStateGameUser(0);
 
                       Navigator.pop(context);
                     }),
-                /*  IconButton(
-                icon: const Icon(Icons.arrow_back),
-                color: Colors.red,
-                iconSize: 30.0,
-                tooltip: 'Home',
-                onPressed: () {
-                  _timer?.cancel();
 
-                  PhlCommons.thisGameCode = takeThisGameCode;
-                  Navigator.pop(context);
-                },
-              ),*/
                 Visibility(
                   visible: true,
                   child: ElevatedButton(
@@ -131,7 +120,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                             backgroundColor: Colors.green,
                             fontWeight: FontWeight.bold)),
                     child: Text(myPerso.myPseudo)),
-                //Text(greeting), <PML>
+
               ],
             ),
           ),
@@ -212,6 +201,16 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 },
               ),
             ),
+ /*    IconButton(
+                icon: const Icon(Icons.insert_photo),
+                iconSize: 35,
+                color: Colors.greenAccent,
+                tooltip: 'Categories',
+                onPressed: () {
+                  setState(() {
+                    boolCategory = !boolCategory;
+                  });
+                }),*/
           ],
         ),
       ),
@@ -260,10 +259,10 @@ class _GameSupervisorState extends State<GameSupervisor> {
       checkAudikaError = 0;
 
       // this Level compare with Reference
-      print("listAudika[0].lastid" + listAudika[0].lastid.toString());
+
 
       if (listAudika[0].lastid != myAudikaGMU.lastid) {
-        print("listAudika[0].lastid" + listAudika[0].lastid.toString());
+
       }
     } else {}
   }
@@ -308,7 +307,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
     if (response.statusCode == 200) {
       var datamysql = jsonDecode(response.body) as List;
       setState(() {
-        listPhotoBase =
+        listPhotoBaseGame =
             datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
       });
 
@@ -431,8 +430,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     }
                   } else {
                     myGames[index].extraColor = Colors.grey;
-                    if (PhlCommons.thisGameCode > 0)
-                      changeStateGameUser(0); // on cancel le dernier
+                    if (PhlCommons.thisGameCode > 0) {
+                      changeStateGameUser(0);
+                    } // on cancel le dernier
                     PhlCommons.thisGameCode = 0;
                   }
                 });
@@ -469,8 +469,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                                   fontSize: 14,
                                   color: Colors.black,
                                   backgroundColor: (Gamers[index].gustate == 1)
-                                      ? Colors.green
-                                      : Colors.grey,
+                                      ? Colors.green:Colors.grey,
+                                  //    : ((Gamers[index].gustatus >=2 ) ? Colors.blue:Colors.grey),
                                   fontWeight: FontWeight.bold)),
                           child: Text(
                               Gamers[index].uname +
@@ -483,8 +483,8 @@ class _GameSupervisorState extends State<GameSupervisor> {
                                   fontSize:
                                       (Gamers[index].gustate == 1) ? 14 : 14)),
                           onPressed: () {
-                            print("Gamers[index].gustate" +
-                                Gamers[index].gustate.toString());
+
+                                Gamers[index].gustate.toString();
                           },
                         ),
                       ],
@@ -514,7 +514,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
       return (const Expanded(child: Text(".............")));
     }
     var listView = ListView.builder(
-        itemCount: listPhotoBase.length,
+        itemCount: listPhotoBaseGame.length,
         controller: ScrollController(),
         itemBuilder: (context, index) {
           return ListTile(
@@ -525,9 +525,9 @@ class _GameSupervisorState extends State<GameSupervisor> {
                     child: Container(
                       child: Image.network(
                         "upload/" +
-                            listPhotoBase[index].photofilename +
+                            listPhotoBaseGame[index].photofilename +
                             "." +
-                            listPhotoBase[index].photofiletype,
+                            listPhotoBaseGame[index].photofiletype,
                       ),
                     ),
                   ),
@@ -543,6 +543,11 @@ class _GameSupervisorState extends State<GameSupervisor> {
   @override
   void initState() {
     super.initState();
+  /*  getPhotoBase();
+    selIcon.clear();
+    selIcon.add(const Icon(Icons.remove));
+    selIcon.add(const Icon(Icons.add));*/
+
     checkAudika();
     getGamebyUid();
     SetGuOffGames();
@@ -591,7 +596,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
               });
             }
           }
-          ;
+
         }
       }
     } else {}
@@ -667,4 +672,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
     }
 
   }
+
+
 }

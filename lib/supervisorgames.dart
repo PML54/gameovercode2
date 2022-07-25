@@ -113,15 +113,14 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 ElevatedButton(
                     onPressed: () => {null},
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
+                        primary: Colors.blue,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 5),
                         textStyle: TextStyle(
                             fontSize: 14,
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.blue,
                             fontWeight: FontWeight.bold)),
                     child: Text(myPerso.myPseudo)),
-
               ],
             ),
           ),
@@ -131,7 +130,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
             getListGame(),
             Visibility(
                 visible: takeThisGameCode > 0, child: getListGameUsers()),
-            getListView()
+            //getListView()
           ]),
         ),
         bottomNavigationBar: Row(
@@ -202,17 +201,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
                 },
               ),
             ),
- /*    IconButton(
-                icon: const Icon(Icons.insert_photo),
-                iconSize: 35,
-                color: Colors.greenAccent,
-                tooltip: 'Categories',
-                onPressed: () {
-                  setState(() {
-                    boolCategory = !boolCategory;
-                  });
-                }),*/
-          ],
+           ],
         ),
       ),
     );
@@ -258,10 +247,6 @@ class _GameSupervisorState extends State<GameSupervisor> {
 
       checkAudikaState = true;
       checkAudikaError = 0;
-
-      // this Level compare with Reference
-
-
       if (listAudika[0].lastid != myAudikaGMU.lastid) {
 
       }
@@ -391,18 +376,16 @@ class _GameSupervisorState extends State<GameSupervisor> {
                       || (myGames[index].gamestatus  == 5) &&  (PhlCommons.thatStatus  == 4),
 
                     child: IconButton(
-                        //   icon: const Icon(Icons.favorite_rounded),
+
                         icon: const Icon(Icons.directions_run_outlined),
-                        /*     showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);*/
+
                         iconSize: 25,
                         color: Colors.green,
-                        tooltip: 'Resultats',
+                        tooltip: 'Action requise',
                         onPressed: () {
                           quelleAction(myGames[index].gamestatus);
                         }),
-                  ), //  REsu
+                  ),
                 ],
               ),
               onTap: () {
@@ -543,12 +526,7 @@ class _GameSupervisorState extends State<GameSupervisor> {
   @override
   void initState() {
     super.initState();
-  /*  getPhotoBase();
-    selIcon.clear();
-    selIcon.add(const Icon(Icons.remove));
-    selIcon.add(const Icon(Icons.add));*/
-
-    checkAudika();
+      checkAudika();
     getGamebyUid();
     SetGuOffGames();
     plusGamebyUid(); // <PML> on laisse ici ?

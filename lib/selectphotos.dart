@@ -15,8 +15,8 @@ class SelectPhotosPhl extends StatefulWidget {
 }
 
 class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
-  String mafoto = 'assets/oursmacron.png';
-  bool myBool = false;
+
+
   bool feuVert = false;
   double myWidth = 100;
   double myHeight = 100;
@@ -37,7 +37,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   bool getPhotoCatState = false;
   int getPhotoCatError = 0;
 
-  //List<PhotoBase> listPhotoBase = [];
+
   bool getPhotoBaseState = false;
   int nbPhotoRandom = 0;
   int nbPhotoCat = 0;
@@ -49,7 +49,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   //
   @override
   Widget build(BuildContext context) {
-    mafoto = 'assets/oursmacron.png';
+
     myPerso = ModalRoute.of(context)!.settings.arguments as GameCommons;
     thatGmid = myPerso.myUid;
     thatGM = myPerso.myPseudo;
@@ -100,7 +100,8 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
               color: Colors.red,
               tooltip: 'Save Selection',
               onPressed: () {
-                PhlCommons.nbFotosGame = listPhotoBaseReduce.length;
+                //PhlCommons.nbFotosGame = listPhotoBaseReduce.length;
+                PhlCommons.nbFotosGame=0;
                 updateSelection();
               }),
           IconButton(
@@ -250,20 +251,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     return (Expanded(child: listView));
   }
 
-  Future getPhotoBase_obsol() async {
-    // Lire TABLE   PHOTOBASE et mettre dans  listPhotoBase
-    Uri url = Uri.parse(pathPHP + "readPHOTOBASE.php");
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      var datamysql = jsonDecode(response.body) as List;
-      setState(() {
-        listPhotoBase =
-            datamysql.map((xJson) => PhotoBase.fromJson(xJson)).toList();
 
-        feuVert = true;
-      });
-    } else {}
-  }
 
   @override
   void initState() {
@@ -278,10 +266,11 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
 
   void updateSelection() async {
     String thisParam = "";
-
+    PhlCommons.nbFotosGame=0;
     int _gamecode = PhlCommons.thisGameCode;
     for (PhotoBase _brocky in listPhotoBase) {
       if (_brocky.isSelected) {
+        PhlCommons.nbFotosGame++;
         thisParam = thisParam + "|" + _brocky.photoid.toString();
       }
     }
@@ -318,7 +307,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     getPhotoCatError = 0;
 
     var data = {
-      "PHOTOCAT": "BDON",
+      "PHOTOCAT": "BIDON",// Pas Utilisé
     };
     http.Response response = await http.post(url, body: data);
     if (response.body.toString() == 'ERR_1001') {
@@ -387,7 +376,6 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
     var listView = ListView.builder(
         itemCount: listPhotoCat.length,
         controller: ScrollController(),
-        //scrollDirection:  Axis.horizontal,
         itemBuilder: (context, index) {
           return ListTile(
               dense: true,

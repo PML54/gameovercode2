@@ -184,36 +184,22 @@ class _GameManagerState extends State<GameManager> {
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
                         children: [
-                          const Text('Public'),
-                          Checkbox(
-                            value: isPublic,
-                            onChanged: (value) {
-                              setState(() {
-                                isPublic = !isPublic;
-                              });
-                            },
-                          ),
-                          const Text('Private'),
-                          Checkbox(
-                            value: !isPublic,
-                            onChanged: (value) {
-                              setState(() {
-                                isPublic = !isPublic;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        children: [
-                          Text(dispNbFotosGame +
-                              '/' +
-                              nbPhotos.toString() +
-                              " Photos"),
-                          Slider(
+                          ElevatedButton(
+                              onPressed: () => {overSelectPhotosPhl()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child: const Text('Photos'   )),
+                          PhlCommons.nbFotosGame >0 ?   Text("  "+PhlCommons.nbFotosGame.toString() +
+                              " Photos Choisies",style: TextStyle(
+                              fontSize: 22
+                          ) ): Text (""),
+                     /*     Slider(
                             label: 'Photos ',
                             activeColor: Colors.blueGrey,
                             divisions: 10,
@@ -226,7 +212,7 @@ class _GameManagerState extends State<GameManager> {
                                 if (newValue != nbPhotos) nbPhotos = newValue;
                               });
                             },
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -235,11 +221,23 @@ class _GameManagerState extends State<GameManager> {
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
                         children: [
-                          Text(PhlCommons.nbGamersGame.toString() +
-                              '/' +
-                              nbGamers.toString() +
-                              " Gamers"),
-                          Slider(
+                          ElevatedButton(
+                              onPressed: () => {overSelectGamersPhl()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child: const Text('Gamers')),
+                         PhlCommons.nbGamersGame>0 ? Text("  "+ PhlCommons.nbGamersGame.toString() +
+
+                              " Gamers",style: TextStyle(
+                             fontSize: 22
+                         )): Text (""),
+                        /*  Slider(
                             label: 'Gamers ',
                             activeColor: Colors.orange,
                             divisions: 20,
@@ -252,7 +250,7 @@ class _GameManagerState extends State<GameManager> {
                                 if (newValue != nbGamers) nbGamers = newValue;
                               });
                             },
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -261,9 +259,20 @@ class _GameManagerState extends State<GameManager> {
                       padding: const EdgeInsets.all(5.0),
                       child: Row(
                         children: [
-                          Text(nbSecMeme.toString() + " Sec/Mem"),
+                          ElevatedButton(
+                              onPressed: () => {null},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child:  Text("Meming time = " + nbSecMeme.toString() + " s")),
+                       //   Text( "Meming time = " + nbSecMeme.toString() + " s"),
                           Slider(
-                            label: 'Sec/ Meme ',
+                            label: 'Temps en Sec  Pour créer TOUS  les Memes ',
                             activeColor: Colors.orange,
                             divisions: 20,
                             min: 20,
@@ -284,9 +293,20 @@ class _GameManagerState extends State<GameManager> {
                       padding: const EdgeInsets.all(10.0),
                       child: Row(
                         children: [
-                          Text(nbSecVote.toString() + " Sec /Vote"),
+                          ElevatedButton(
+                              onPressed: () => {null},
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      backgroundColor: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                              child:  Text("Voting Time = " + nbSecVote.toString() + " s")),
+
                           Slider(
-                            label: 'Votes ',
+                            label: 'Temps en Sec  Pour Voter pour TOUS  les Memes ',
                             activeColor: Colors.orange,
                             divisions: 20,
                             min: 10,
@@ -306,47 +326,28 @@ class _GameManagerState extends State<GameManager> {
                       visible: !isGameValidated,
                       child: Row(
                         children: [
-                          ElevatedButton(
-                              onPressed: () => {overSelectPhotosPhl()},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.red,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  textStyle: const TextStyle(
-                                      fontSize: 15,
-                                      backgroundColor: Colors.blue,
-                                      fontWeight: FontWeight.bold)),
-                              child: const Text('Photos')),
-                          ElevatedButton(
-                              onPressed: () => {overSelectGamersPhl()},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.red,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  textStyle: const TextStyle(
-                                      fontSize: 15,
-                                      backgroundColor: Colors.blue,
-                                      fontWeight: FontWeight.bold)),
-                              child: const Text('Gamers')),
+
                           Visibility(
                             visible: isValidatedOk(),
-                            child: ElevatedButton(
-                              onPressed: () => {newGame()},
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.green,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 10),
-                                  textStyle: const TextStyle(
-                                      fontSize: 10,
-                                      backgroundColor: Colors.green,
-                                      fontWeight: FontWeight.bold)),
-                              child: const Text('Valider',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.normal,
-                                  )),
+                            child: Center(
+                              child: ElevatedButton(
+                                onPressed: () => {newGame()},
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.green,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 10),
+                                    textStyle: const TextStyle(
+                                        fontSize: 10,
+                                        backgroundColor: Colors.green,
+                                        fontWeight: FontWeight.bold)),
+                                child: const Text('SAVE',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                              ),
                             ),
                             //createGameState
                           ),
@@ -439,6 +440,9 @@ class _GameManagerState extends State<GameManager> {
     setState(() {
       genCodeGame();
       PhlCommons.thisGameCode = thatGameCode;
+   PhlCommons.nbFotosGame =0;
+         PhlCommons.nbGamersGame =0;
+
       /*
       getGmGames();
       dispNbFotosGame = PhlCommons.nbFotosGame.toString();
@@ -451,8 +455,8 @@ class _GameManagerState extends State<GameManager> {
   bool isValidatedOk() {
     //PhlCommons.nbFotosGame
     bool _isOK = false;
-    _isOK = (nbPhotos == PhlCommons.nbFotosGame) &&
-        (nbGamers == PhlCommons.nbGamersGame) &&
+    _isOK = ( PhlCommons.nbFotosGame> 0) &&
+        ( PhlCommons.nbGamersGame > 0  ) &&
         !isGameValidated;
 
     return (_isOK);
@@ -568,7 +572,7 @@ class _GameManagerState extends State<GameManager> {
       ),
     ));
     setState(() {
-      dispNbFotosGame = PhlCommons.nbFotosGame.toString(); // <TODO>
+      dispNbFotosGame = PhlCommons.nbFotosGame.toString();// <TODO>
     });
   }
 
@@ -583,6 +587,7 @@ class _GameManagerState extends State<GameManager> {
       ),
     ));
     setState(() {
+
       dispNbFotosGame = PhlCommons.nbFotosGame.toString(); // <TODO>
     });
   }

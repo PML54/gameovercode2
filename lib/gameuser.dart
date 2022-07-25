@@ -89,7 +89,7 @@ class _GameUserState extends State<GameUser> {
                           fontSize: 14,
                           backgroundColor: Colors.red,
                           fontWeight: FontWeight.bold)),
-                  child: const Text(' Exit Lobby '),
+                  child: const Text('Save&Exit'),
                   onPressed: () {
                     stopTimer();
                     Navigator.pop(context);
@@ -137,7 +137,7 @@ class _GameUserState extends State<GameUser> {
               fontSize: 14,
               backgroundColor: Colors.red,
               fontWeight: FontWeight.bold)),
-            child: const Text(' Exit Lobby '),
+            child: const Text('Save&Exit'),
             onPressed: () {
               createMeme();
               stopTimer();

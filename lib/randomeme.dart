@@ -143,7 +143,7 @@ bool boolOptions=true;
         children: [
           IconButton(
               icon: const Icon(Icons.insert_photo),
-              iconSize: 35,
+              iconSize: 30,
               color: Colors.greenAccent,
               tooltip: 'Categories',
               onPressed: () {
@@ -153,7 +153,7 @@ bool boolOptions=true;
               }),
           IconButton(
               icon: const Icon(Icons.message_outlined),
-              iconSize: 35,
+              iconSize: 30,
               color: Colors.blue,
               tooltip: 'Caption',
               onPressed: () {
@@ -167,7 +167,7 @@ bool boolOptions=true;
               ),
           IconButton(
               icon: const Icon(Icons.gavel),
-              iconSize: 50,
+              iconSize: 30,
               color: Colors.red,
               tooltip: 'Photo Random',
               onPressed: () {
@@ -191,13 +191,10 @@ bool boolOptions=true;
                 });
               }
 
-
-
-
               ),
           IconButton(
               icon: const Icon(Icons.arrow_back),
-              iconSize: 35,
+              iconSize: 30,
               color: Colors.blue,
               tooltip: 'Prev',
               onPressed: () {
@@ -207,33 +204,27 @@ bool boolOptions=true;
               }),
           IconButton(
               icon: const Icon(Icons.arrow_forward),
-              iconSize: 35,
+              iconSize: 30,
               color: Colors.blue,
               tooltip: 'Next',
               onPressed: () {
                 nextPRL();
 
               }),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+          IconButton(
+              icon: const Icon(Icons.restaurant_menu),
+              iconSize: 30,
+              color: Colors.purpleAccent,
+              tooltip: 'Options Game',
+              onPressed: () {
+                setState(() {
+                  boolOptions = !boolOptions;
+                });
 
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.purpleAccent,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    textStyle: const TextStyle(
-                        fontSize: 14,
-                        backgroundColor: Colors.purpleAccent,
-                        fontWeight: FontWeight.bold)),
-                child: Text('Game Options: '  ),
-                onPressed: () {
-                  setState(() {
-                    boolOptions = !boolOptions;
-                  });
-                }
-            ),
-          ),
+              }
+
+              ),
+
         ],
       ),
     ));

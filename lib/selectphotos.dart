@@ -43,7 +43,7 @@ class _SelectPhotosPhlState extends State<SelectPhotosPhl> {
   int nbPhotoCat = 0;
   List<Icon> selIcon = [];
   Icon catIcon = const Icon(Icons.remove);
-  bool boolCategory = false;
+  bool boolCategory = true;
   int cestCeluiLa = 0;
 
   //

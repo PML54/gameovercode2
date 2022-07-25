@@ -23,7 +23,7 @@ class _RandoMemeState extends State<RandoMeme> {
   TextEditingController legendeController = TextEditingController();
   int totalSeconds = 100;
   bool timeOut = false;
-
+bool boolOptions=true;
  bool boolCategory = false;  int getPhotoCatError = -1;
   int nbPhotoCat = 0;
   int getPhotoBaseError = -1;
@@ -136,6 +136,7 @@ class _RandoMemeState extends State<RandoMeme> {
             child: getViewPhotoCat(),
           ),
           getget(),
+          dispParams(),
         ]),
       ),
       bottomNavigationBar: Row(
@@ -160,7 +161,10 @@ class _RandoMemeState extends State<RandoMeme> {
                   boolTexfield = !boolTexfield;
                 });
                 //stopTimer();
-              }),
+              }
+
+
+              ),
           IconButton(
               icon: const Icon(Icons.gavel),
               iconSize: 50,
@@ -170,7 +174,6 @@ class _RandoMemeState extends State<RandoMeme> {
                 setState(() {
                   int random = Random().nextInt(nbPhotoRandom); //Suppe 1
                   int randomMeme = Random().nextInt(listMemoto.length);
-
                   photoIdRandom = photoidSelected[random];
                   boolCategory = false;
                   if (!lockPhotoState) {
@@ -186,7 +189,12 @@ class _RandoMemeState extends State<RandoMeme> {
                   //legendeController.text =""; // Test
                   savePRL(); // Ajout pour toutes
                 });
-              }),
+              }
+
+
+
+
+              ),
           IconButton(
               icon: const Icon(Icons.arrow_back),
               iconSize: 35,
@@ -206,6 +214,26 @@ class _RandoMemeState extends State<RandoMeme> {
                 nextPRL();
 
               }),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.purpleAccent,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    textStyle: const TextStyle(
+                        fontSize: 14,
+                        backgroundColor: Colors.purpleAccent,
+                        fontWeight: FontWeight.bold)),
+                child: Text('Game Options: '  ),
+                onPressed: () {
+                  setState(() {
+                    boolOptions = !boolOptions;
+                  });
+                }
+            ),
+          ),
         ],
       ),
     ));
@@ -314,6 +342,157 @@ class _RandoMemeState extends State<RandoMeme> {
     )));
   }
 
+
+  dispParams() {
+
+    return
+      Expanded(
+        child: Visibility(
+          visible: boolOptions,
+          child: Container(
+            child: (Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purpleAccent,
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                backgroundColor: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold)),
+                        child: Text('    Random Meme        ' ),
+                          onPressed: () {
+                            setState(() {
+                              int random = Random().nextInt(nbPhotoRandom); //Suppe 1
+                              int randomMeme = Random().nextInt(listMemoto.length);
+
+                              photoIdRandom = photoidSelected[random];
+                              boolCategory = false;
+                              if (!lockPhotoState) {
+                                cestCeluiLa = getIndexFromPhotoId(photoIdRandom);
+                              }
+                              if (!lockMemeState) {
+                                memeLegende = listMemoto[randomMeme].memostock;
+                              }
+                              memoStockidRandom = listMemoto[randomMeme].memostockid;
+                              legendeController.text = memeLegendeUser;
+                              legendeController.text = memeLegende;
+                              visStar = true;
+                              //legendeController.text =""; // Test
+                              savePRL(); // Ajout pour toutes
+                            });
+                          }
+
+
+
+
+
+
+
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purpleAccent,
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                backgroundColor: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold)),
+                        child: Text('Category Filter: '  ),
+                          onPressed: () {
+                            setState(() {
+                              boolCategory = !boolCategory;
+                            });
+                          }
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purpleAccent,
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                backgroundColor: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold)),
+                        child: Text('Caption Perso: ' ),
+                          onPressed: () {
+                            setState(() {
+                              boolTexfield = !boolTexfield;
+                            });
+                            //stopTimer();
+                          }
+                      ),
+                    ),
+
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purpleAccent,
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                backgroundColor: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold)),
+                        child: Text('Caption Lock: '  ),
+                        onPressed: () {
+                          lockMeme();
+
+                        },
+
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purpleAccent,
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            textStyle: const TextStyle(
+                                fontSize: 14,
+                                backgroundColor: Colors.purpleAccent,
+                                fontWeight: FontWeight.bold)),
+                        child: Text('Template Lock: '  ),
+                          onPressed: () => { lockPhoto() }
+
+
+
+                    ),
+                    ),
+
+                  ],
+                ),
+              ],
+            )),
+          ),
+        ));
+  }
   getIndexFromPhotoId(_thatPhotoId) {
     int index = 0;
     for (PhotoBase _brocky in listPhotoBase) {
